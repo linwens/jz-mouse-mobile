@@ -1,0 +1,119 @@
+// cover some element-ui styles
+
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+}
+
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+
+// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+// refine element ui upload
+.upload-container {
+  .el-upload {
+    width: 100%;
+
+    .el-upload-dragger {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block
+  }
+}
+
+// to fix el-date-picker css style
+.el-range-separator {
+  box-sizing: content-box;
+}
+
+// 设置文字按钮的不同类型色
+.el-button--text.btn-text--danger{
+  color:#EB5444;
+  &:focus, &:hover{
+    color:#ef7669;
+  }
+  &:active{
+    color:#d44c3d;
+  }
+}
+.el-button--text.btn-text--black{
+  color:#333;
+  &:focus, &:hover{
+    color:#5c5c5c;
+  }
+  &:active{
+    color:#2e2e2e;
+  }
+}
+
+// 表格斑马纹 背景色
+.el-table .mouse__table--stripe {
+  background-color: #F0F0F0;
+}
+
+// 表单错误提示位置往上移
+.el-form-item__error {
+  padding-top: 0;
+}
+
+// 文字按钮 去掉上下padding
+.el-button--text {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+// tab不要底部边框
+.el-tabs__nav-wrap::after {
+  background: none;
+}
+
+// dialog头部左边距
+.el-dialog__header {
+  padding: 20px 20px 10px 34px;
+}
+
+.el-dialog__body {
+  padding: 16px 34px 16px 34px;
+}
+
+// form-item的label不设置padding-left, 改变字体颜色
+.el-form-item__label {
+  color: #333;
+  padding-right: 0;
+}
+
+// tag标签蓝色
+.el-tag {
+  color:#409EFF;
+  background-color:#ecf5ff;
+  border-color:#d9ecff;
+}
+.el-tag .el-tag__close {
+  color: #58A2FB;
+  &:hover{
+    color: #fff;
+    background-color: #409eff;
+  }
+}
