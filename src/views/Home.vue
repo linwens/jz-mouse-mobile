@@ -2,7 +2,7 @@
   <div class="home">
     <top-bar>
       <template>
-        slot
+        <xs-select />
       </template>
     </top-bar>
 
@@ -13,12 +13,14 @@
 <script>
 // @ is an alias to /src
 import TopBar from '@/components/TopBar/index.vue';
+import FormSelect from '@/components/Form/select.vue';
 import TabBar from '@/components/TabBar/index.vue';
 
 export default {
   name: 'Home',
   components: {
     TopBar,
+    'xs-select': FormSelect,
     TabBar,
   },
 };

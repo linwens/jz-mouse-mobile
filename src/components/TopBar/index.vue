@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar df s-aic s-jcsb">
-    <div>
-      <van-button type="default" @click="showSideBar">侧边栏</van-button>
-    </div>
+  <div class="sidebar df s-aic s-jcsb pl15 pr20">
+    <svg-icon icon-class="tab-open" class="fs20" @click="showSideBar"/>
     <slot></slot>
     <!-- 侧边栏 -->
     <van-popup v-model="show" position="left" :style="{ height: '100%' }">
-      <svg-icon icon-class="service" />
+      <div class="df s-jcfs s-aic p16">
+        <svg-icon icon-class="tab-close" class="fs20" />
+      </div>
       <van-sidebar v-model="activeKey">
         <van-sidebar-item title="首页" />
         <van-sidebar-item title="品系管理" />
@@ -22,7 +22,7 @@
 
 <script>
 import {
-  Button,
+  // Button,
   Sidebar,
   SidebarItem,
   Popup,
@@ -31,7 +31,7 @@ import {
 export default {
   name: 'TopBar',
   components: {
-    'van-button': Button,
+    // 'van-button': Button,
     'van-sidebar': Sidebar,
     'van-sidebar-item': SidebarItem,
     'van-popup': Popup,
