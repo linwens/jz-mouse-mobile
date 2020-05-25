@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar df s-aic s-jcsb pl15 pr20">
+  <div class="sidebar df s-aic pl15 pr20 h50">
     <svg-icon icon-class="tab-open" class="fs20" @click="showSideBar"/>
     <slot></slot>
     <!-- 侧边栏 -->

@@ -7,6 +7,7 @@ function resolve(dir) {
 module.exports = {
   parallel: false,
   outputDir: './dist',
+  lintOnSave: process.env.NODE_ENV !== 'production',
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   devServer: {
     port: 9527,

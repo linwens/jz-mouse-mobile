@@ -2,7 +2,7 @@
   <div class="home">
     <top-bar>
       <template>
-        <xs-select />
+        <xs-select class="ml17" />
       </template>
     </top-bar>
 
