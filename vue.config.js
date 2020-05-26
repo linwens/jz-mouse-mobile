@@ -1,7 +1,7 @@
-const path = require('path');
+const path = require('path')
 
 function resolve(dir) {
-  return path.join(__dirname, dir);
+  return path.join(__dirname, dir)
 }
 
 module.exports = {
@@ -13,20 +13,20 @@ module.exports = {
     port: 9527,
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: '<url>',
+        target: 'http://121.36.136.245:18016',
         changeOrigin: true,
         pathRewrite: {
-          [`^${process.env.VUE_APP_BASE_API}`]: `/${process.env.VUE_APP_BASE_API}`,
-        },
-      },
-    },
+          [`^${process.env.VUE_APP_BASE_API}`]: process.env.VUE_APP_BASE_API
+        }
+      }
+    }
   },
   chainWebpack(config) {
     // set svg-sprite-loader涉及svg转icon
     config.module
       .rule('svg')
       .exclude.add(resolve('src/icons'))
-      .end();
+      .end()
     config.module
       .rule('icons')
       .test(/\.svg$/)
@@ -35,8 +35,8 @@ module.exports = {
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .options({
-        symbolId: 'icon-[name]',
+        symbolId: 'icon-[name]'
       })
-      .end();
-  },
-};
+      .end()
+  }
+}

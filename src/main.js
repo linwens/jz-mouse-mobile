@@ -1,15 +1,16 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import 'amfe-flexible';
-import '@/icons'; // icon
-import '@/styles/index.scss'; // global css
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import 'amfe-flexible'
+import '@/icons' // icon
+import '@/styles/index.scss' // global css
+import '@/permission'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
-  render: (h) => h(App),
-}).$mount('#app');
+  render: (h) => h(App)
+}).$mount('#app')
