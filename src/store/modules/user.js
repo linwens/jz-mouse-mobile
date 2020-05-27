@@ -1,4 +1,4 @@
-import { login, loginUser, logout } from '@/api/user'
+import { login, tokenLogin, loginUser, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { setStorageItem, getStorageItem, removeStorageItem, setLocalStorageItem, getLocalStorageItem } from '@/utils/storage'
 import { resetRouter } from '@/router'
@@ -110,6 +110,28 @@ const actions = {
     })
   }, */
 
+  // 获取url的token
+  urlSetToken({ commit }, token) {
+    return new Promise((resolve, reject) => {
+      commit('SET_TOKEN', token)
+      setToken(token)
+      resolve()
+    })
+  },
+
+  // 登录获取用户信息
+  tokenLogin({ commit }) {
+    return new Promise((resolve, reject) => {
+      tokenLogin().then(response => {
+        const { data } = response
+        commit('SET_INFO', data)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -128,6 +150,7 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
+      commit('REMOVE_INFO')
       commit('RESET_STATE')
       resolve()
     })

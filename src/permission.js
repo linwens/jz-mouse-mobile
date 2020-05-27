@@ -1,5 +1,6 @@
 import router from './router'
 import store from './store'
+import { Toast } from 'vant'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
@@ -17,7 +18,12 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  const hasToken = getToken()
+  let hasToken = getToken()
+  // 更新token后，清理缓存
+  if (to.query.token && to.query.token !== hasToken) {
+    hasToken = null
+    store.dispatch('user/resetToken') // 清空用户缓存
+  }
 
   if (hasToken) {
     if (to.path === '/login') {
@@ -37,6 +43,20 @@ router.beforeEach(async(to, from, next) => {
     }
   } else {
     /* has no token*/
+    if (to.query.token) {
+      console.log('有token值', to, to.query.token)
+      store.dispatch('user/urlSetToken', to.query.token).then((res) => {
+        console.log('存了token值', getToken())
+        store.dispatch('user/tokenLogin').then(res => {
+          console.log('请求获取了用户信息')
+          next('/')
+          NProgress.done()
+        }).catch(() => {
+          Toast.fail('获取用户信息失败，请关闭后重试')
+        })
+      })
+      return
+    }
 
     if (whiteList.indexOf(to.path) !== -1) {
       // in the free login whitelist, go directly

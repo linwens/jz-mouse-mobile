@@ -38,6 +38,13 @@ export function login() { // 模拟admin用户
   })
 }
 
+export function tokenLogin() { // 作为子系统登录
+  return request({
+    url: '/token/login',
+    method: 'post'
+  })
+}
+
 export function logout() {
   return request({
     url: '/vue-admin-template/user/logout',
