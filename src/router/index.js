@@ -19,10 +19,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/delList',
+    name: 'DelList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DelList.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
-  }
+    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+  },
+
+  // 404 page must be placed at the end !!!
+  { path: '*', redirect: '/404' }
 ]
 
 const createRouter = () => new VueRouter({

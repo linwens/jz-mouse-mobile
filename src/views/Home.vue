@@ -33,6 +33,11 @@ export default {
     TopBar,
     TabBar,
     SumBar
+  },
+  data() {
+    return {
+      activeName: 'mine'
+    }
   }
 }
 </script>
