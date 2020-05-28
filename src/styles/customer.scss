@@ -134,3 +134,11 @@
 .cp {
   cursor: pointer;
 }
+
+// 字体按钮样式
+.txt-btn {
+  font-size: 14px;
+  &--green {
+    color: #00CB7C!important;
+  }
+}
