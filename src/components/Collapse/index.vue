@@ -61,6 +61,11 @@ export default {
       span {
         color: #333;
       }
+      &--multiple {
+        span:nth-child(1) {
+          min-width: 50%;
+        }
+      }
     }
 
     &__fotter {

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- 顶部栏 -->
-    <top-bar>
+    <top-bar :active-key="0">
       <template>
         <div class="w-100 df s-jcsb s-aic">
           <xs-select class="ml17" />

@@ -1,7 +1,9 @@
 <template>
   <div class="bottom-btn df s-jcsa s-aic">
-    <van-button class="w150" round color="#F6AC2D" size="small" type="info" @click="confirm">返回</van-button>
-    <van-button class="w150" round color="#32C985" size="small" type="info" @click="confirm">确定</van-button>
+    <van-button class="w150" round color="#F6AC2D" size="small" type="info" @click="goback">返回</van-button>
+    <slot name='confirm'>
+      <van-button class="w150" round color="#32C985" size="small" type="info" @click="confirm">确定</van-button>
+    </slot>
   </div>
 </template>
 

@@ -7,14 +7,14 @@
       <div class="df s-jcfs s-aic p16">
         <svg-icon icon-class="tab-close" class="fs20" />
       </div>
-      <van-sidebar v-model="activeKey">
-        <van-sidebar-item title="首页" />
-        <van-sidebar-item title="品系管理" />
+      <van-sidebar v-model="curItem">
+        <van-sidebar-item title="首页" url="/#/" />
+        <van-sidebar-item title="品系管理" url="/#/genesList" />
         <van-sidebar-item title="小鼠管理" />
         <van-sidebar-item title="实验管理" />
-        <van-sidebar-item title="繁育管理" />
-        <van-sidebar-item title="移除小鼠列表" />
-        <van-sidebar-item title="待处理事项" />
+        <van-sidebar-item title="繁育管理" url="/#/breedList" />
+        <van-sidebar-item title="移除小鼠列表" url="/#/delList" />
+        <!-- <van-sidebar-item title="待处理事项" /> -->
       </van-sidebar>
     </van-popup>
   </div>
@@ -36,10 +36,17 @@ export default {
     'van-sidebar-item': SidebarItem,
     'van-popup': Popup,
   },
+  props: {
+    activeKey: { // 标签索引
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
       show: false,
-      activeKey: 0, // 标签索引
+      curItem: this.activeKey
+      // activeKey: 0, // 标签索引
     };
   },
   methods: {

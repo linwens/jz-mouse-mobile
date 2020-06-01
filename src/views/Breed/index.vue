@@ -1,10 +1,10 @@
 <template>
   <div class="breed-list">
     <!-- 顶部栏 -->
-    <top-bar>
+    <top-bar :active-key="4">
       <template>
         <div class="w-100 df s-jcfe s-aic">
-          <van-button class="w90" hairline round size="small" color="#32C985" type="info" to="/breededit">新增实验组</van-button>
+          <van-button class="w90" hairline round size="small" color="#32C985" type="info" to="/breededit">新增繁育组</van-button>
         </div>
       </template>
     </top-bar>
@@ -13,8 +13,8 @@
       <template>
         <collapse>
           <template slot="title">
-            <div class="df s-aic del-list__item-title">
-              <span>实验组ADEG</span>
+            <div class="df s-aic">
+              <span>实验组ADEGss</span>
             </div>
           </template>
           <template slot="content">

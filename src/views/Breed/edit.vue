@@ -21,8 +21,8 @@
       <template>
         <collapse>
           <template slot="title">
-            <div class="df s-aic del-list__item-title">
-              <span>实验组ADEG</span>
+            <div class="df s-aic">
+              <span>实验组ADEsG</span>
             </div>
           </template>
           <template slot="content">

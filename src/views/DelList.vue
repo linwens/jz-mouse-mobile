@@ -1,7 +1,7 @@
 <template>
   <div class="del-list">
     <!-- 顶部栏 -->
-    <top-bar>
+    <top-bar :active-key="5">
       <template>
         <div class="w-100 df s-jcfe s-aic">
           <p class="del-list__sum fs15">总计：<span>{{ page.total }}条数据</span></p>
@@ -13,7 +13,7 @@
       <template>
         <collapse>
           <template slot="title">
-            <div class="df s-aic del-list__item-title">
+            <div class="df s-aic xs-collapse__content--multiple">
               <span>ER-334</span>
               <span>34-IO98</span>
             </div>
@@ -123,12 +123,6 @@ export default {
       text-align: right;
       > span {
         color: #333;
-      }
-    }
-
-    &__item-title {
-      span:nth-child(1) {
-        min-width: 50%;
       }
     }
   }
