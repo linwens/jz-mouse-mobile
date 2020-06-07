@@ -11,7 +11,7 @@
         <van-sidebar-item title="首页" url="/#/" />
         <van-sidebar-item title="品系管理" url="/#/genesList" />
         <van-sidebar-item title="小鼠管理" />
-        <van-sidebar-item title="实验管理" />
+        <van-sidebar-item title="实验管理" url="/#/exptList" />
         <van-sidebar-item title="繁育管理" url="/#/breedList" />
         <van-sidebar-item title="移除小鼠列表" url="/#/delList" />
         <!-- <van-sidebar-item title="待处理事项" /> -->

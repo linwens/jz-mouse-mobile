@@ -19,49 +19,60 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
 
+  // 实验管理
+  {
+    path: '/exptList',
+    name: 'ExperimentList',
+    component: () => import(/* webpackChunkName: "exptList" */ '../views/Experiment/index.vue')
+  },
+  {
+    path: '/exptEdit',
+    name: 'ExperimentEdit',
+    component: () => import(/* webpackChunkName: "exptEdit" */ '../views/Experiment/edit.vue')
+  },
 
+  // 删除小鼠列表
   {
     path: '/delList',
     name: 'DelList',
-    component: () => import(/* webpackChunkName: "about" */ '../views/DelList.vue')
+    component: () => import(/* webpackChunkName: "delList" */ '../views/DelList.vue')
   },
 
-
+  // 繁育管理
   {
     path: '/breedList',
     name: 'BreedList',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Breed/index.vue')
+    component: () => import(/* webpackChunkName: "breedList" */ '../views/Breed/index.vue')
   },
   {
     path: '/breedEdit',
     name: 'BreedEdit',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Breed/edit.vue')
+    component: () => import(/* webpackChunkName: "breedEdit" */ '../views/Breed/edit.vue')
   },
 
-
+  // 品系管理
   {
     path: '/genesList',
     name: 'GenesList',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Variety/index.vue')
+    component: () => import(/* webpackChunkName: "genesList" */ '../views/Variety/index.vue')
   },
   {
     path: '/varietyList',
     name: 'VarietyList',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Variety/list.vue')
+    component: () => import(/* webpackChunkName: "varietyList" */ '../views/Variety/list.vue')
   },
   {
     path: '/varietyEdit',
     name: 'VarietyEdit',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Variety/edit.vue')
+    component: () => import(/* webpackChunkName: "varietyEdit" */ '../views/Variety/edit.vue')
   },
 
-
+  // 登录
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
   },
-
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404' }

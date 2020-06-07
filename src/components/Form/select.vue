@@ -23,8 +23,8 @@ import {
   Button,
   Popup,
   Picker,
-  Toast,
-} from 'vant';
+  Toast
+} from 'vant'
 
 export default {
   name: 'FormSelect',
