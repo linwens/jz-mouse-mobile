@@ -19,6 +19,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
 
+  // 小鼠管理
+  {
+    path: '/mouseList',
+    name: 'MouseList',
+    component: () => import(/* webpackChunkName: "mouseList" */ '../views/Mouse/index.vue')
+  },
+
   // 实验管理
   {
     path: '/exptList',

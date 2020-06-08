@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar df s-aic pl15 pr20 h50">
-    <svg-icon icon-class="tab-open" class="fs20" @click="showSideBar"/>
-    <slot></slot>
+    <svg-icon icon-class="tab-open" class="fs20" @click="showSideBar" />
+    <slot />
     <!-- 侧边栏 -->
     <van-popup v-model="show" position="left" :style="{ height: '100%' }">
       <div class="df s-jcfs s-aic p16">
@@ -10,7 +10,7 @@
       <van-sidebar v-model="curItem">
         <van-sidebar-item title="首页" url="/#/" />
         <van-sidebar-item title="品系管理" url="/#/genesList" />
-        <van-sidebar-item title="小鼠管理" />
+        <van-sidebar-item title="小鼠管理" url="/#/mouseList" />
         <van-sidebar-item title="实验管理" url="/#/exptList" />
         <van-sidebar-item title="繁育管理" url="/#/breedList" />
         <van-sidebar-item title="移除小鼠列表" url="/#/delList" />
