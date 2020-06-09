@@ -51,29 +51,59 @@
             </div>
           </div>
         </van-swipe-item>
+        <van-swipe-item>
+          <div class="mouse__info1">
+            <h1 class="fs16">基本信息</h1>
+            <div class="df s-aic">
+              <p>系统编号：<span>{{ mouseInfo.miceNo }}</span></p>
+              <p>性别：<span>雄</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>出生日期：<span>2020-02-04</span></p>
+              <p>体重：<span>8g</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>笼位号：<span>8</span></p>
+              <p>周龄：<span>8</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>状态：<span>8</span></p>
+              <p>显示颜色：<span>8</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>标记：<span>21</span></p>
+              <p>附件：<span class="txt-btn--green">查看</span></p>
+            </div>
+            <div class="df s-aic pos-r">
+              <span class="mouse__info--span">标记:</span>
+              <i v-if="mouseInfo.position === 'custom'" class="mouse__info--i">{{ mouseInfo.sign }}</i>
+              <img v-else class="pos-a mouse__info-sign" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${mouseInfo.filePrefix}/${mouseInfo.sign}.jpg`" alt="">
+            </div>
+          </div>
+        </van-swipe-item>
       </van-swipe>
     </div>
     <!-- tabs -->
     <div class="mouse__tabs">
-      <van-tabs animated color="#00CB7C" line-width="50%">
-        <van-tab title="我的鼠笼">
+      <van-tabs v-model="activeName" animated color="#00CB7C" line-width="50%" @click="handleClick">
+        <van-tab title="我的鼠笼" name="myCage">
           <div class="mouse__btns df s-jcsb s-aic">
             <div class="df s-jcsb" style="width: 50%">
-              <van-button class="w75" round size="small" color="#00CB7C" plain type="primary">新增笼位</van-button>
-              <van-button class="w75 mr8" round size="small" color="#00CB7C" plain type="primary">移笼</van-button>
+              <add-cage-btn :disabled="isBuilding || isDeling" @done="getCageList" />
+              <van-button class="w75 mr8" round size="small" color="#00CB7C" plain type="primary" :disabled="isBuilding || isDeling" @click="moveCage()">{{ moveBtnText }}</van-button>
             </div>
             <div class="df s-jcsb" style="width: 50%">
-              <van-button class="w75 ml8" round size="small" color="#00CB7C" plain type="primary">新建小鼠</van-button>
-              <van-button class="w75" round size="small" color="#00CB7C" plain type="primary">新建子鼠</van-button>
+              <van-button class="w75 ml8" round size="small" color="#00CB7C" plain type="primary" :disabled="isMoving || isBuilding || isDeling" @click="goAdd()">新建小鼠</van-button>
+              <van-button class="w75" round size="small" color="#00CB7C" plain type="primary" :disabled="isMoving || isDeling" @click="goBuild()">{{ buildBtnText }}</van-button>
             </div>
           </div>
           <div class="mouse__btns df s-jcsb s-aic">
             <div class="df s-jcsb" style="width: 50%">
-              <van-button class="w75" round size="small" color="#00CB7C" plain type="primary">移除小鼠</van-button>
-              <van-button class="w75 mr8" round size="small" color="#00CB7C" plain type="primary">编辑</van-button>
+              <van-button class="w75" round size="small" color="#00CB7C" plain type="primary" :disabled="isMoving || isBuilding" @click="goDel()">{{ delBtnText }}</van-button>
+              <van-button class="w75 mr8" round size="small" color="#00CB7C" plain type="primary" :disabled="isMoving || isBuilding || isDeling || (!curMouseId && !choosedCage)" @click="goEdit()">编辑</van-button>
             </div>
             <div class="df s-jcfe" style="width: 50%">
-              <van-button class="w75" round size="small" color="#EB5444" plain type="primary">取消</van-button>
+              <van-button class="w75" round size="small" color="#EB5444" plain type="primary" @click="cancel()">取消</van-button>
             </div>
           </div>
           <div class="mouse__cages">
@@ -94,7 +124,7 @@
             />
           </div>
         </van-tab>
-        <van-tab title="其他鼠笼">
+        <van-tab title="其他鼠笼" name="otherCage">
           <div class="mouse__cages">
             <mouse-cage
               v-for="(item, index) in cageList"
@@ -121,12 +151,15 @@
 <script>
 import TopBar from '@/components/TopBar/index.vue'
 import MouseCage from '@/components/MouseCage/index.vue'
+import AddCageBtn from '@/components/Dialogs/AddCage'
 import {
   Swipe,
   SwipeItem,
   Tab,
   Tabs,
-  Button
+  Button,
+  Dialog,
+  Toast
 } from 'vant'
 import { transferCage, editCage, delMiceByMiceId, fetchCageList, getMouseExpInfo } from '@/api/mouse'
 
@@ -138,6 +171,7 @@ export default {
     'van-swipe-item': SwipeItem,
     'van-tab': Tab,
     'van-tabs': Tabs,
+    AddCageBtn,
     TopBar,
     MouseCage
   },
@@ -294,7 +328,7 @@ export default {
             id: this.choosedCage,
             operator: userId
           })).then((res) => {
-            this.$message.success('编辑鼠笼成功')
+            Toast.success('编辑鼠笼成功')
           })
         } else {
           return false
@@ -355,7 +389,9 @@ export default {
       }
       // 选中了鼠笼后
       if (this.choosedCage && this.choicedList.length > 0) {
-        this.$confirm('是否确认移笼?', '警告', {
+        Dialog.confirm({
+          title: '警告',
+          message: '是否确认移笼?',
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -368,8 +404,7 @@ export default {
 
       const noMouse = this.cageList.length === 0
       if (noMouse) { // 当前没老鼠
-        this.$message({
-          type: 'error',
+        Toast.fail({
           message: '系统中没有小鼠，请添加小鼠后进行操作'
         })
       } else {
@@ -383,14 +418,12 @@ export default {
         if (this.transStep === 1 && this.choicedList.length > 0) {
           this.isChoosingCage = true
           this.transStep = 2
-          this.$message({
-            type: 'info',
+          Toast.fail({
             message: '请选择鼠笼'
           })
         }
         if (this.transStep === 1 && this.choicedList.length === 0) {
-          this.$message({
-            type: 'error',
+          Toast.fail({
             message: '请选择小鼠'
           })
         }
@@ -438,8 +471,7 @@ export default {
       // 如果没有选中鼠笼
       console.log(this.choosedCage, this.curCageMouseList, this.cageList, this.cacheChoicedList)
       if (!this.choosedCage) {
-        this.$message({
-          type: 'error',
+        Toast.fail({
           message: '请先选择鼠笼'
         })
       } else {
@@ -448,8 +480,7 @@ export default {
           return el.id === this.choosedCage
         })[0].miceInfoByMiceCageQueryVO.length === 0
         if (thisCageNoMouse) {
-          this.$message({
-            type: 'error',
+          Toast.fail({
             message: '当前鼠笼中没有小鼠，请添加小鼠后进行操作'
           })
           return
@@ -467,8 +498,7 @@ export default {
             return el.gender
           })
           if (genders.length !== 2 || genders[0] === genders[1]) {
-            this.$message({
-              type: 'error',
+            Toast.fail({
               message: '请选择两只不同性别的小鼠'
             })
             return false
@@ -489,8 +519,7 @@ export default {
         }
 
         if (this.buildStep === 1 && this.choicedList.length === 0) {
-          this.$message({
-            type: 'error',
+          Toast.fail({
             message: '请选择小鼠'
           })
         }
@@ -506,7 +535,9 @@ export default {
             return el.miceInfoId
           })
           console.log(miceIds)
-          this.$confirm('是否确认删除小鼠?', '警告', {
+          Dialog.confirm({
+            title: '警告',
+            message: '是否确认删除小鼠?',
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -515,15 +546,14 @@ export default {
             delMiceByMiceId({
               miceId: miceIds
             }).then((res) => {
-              this.$message.success('删除小鼠成功')
+              Toast.success('删除小鼠成功')
               this.getCageList()
             })
             this.cancel()
           }).catch(function() {
           })
         } else {
-          this.$message({
-            type: 'error',
+          Toast.fail({
             message: '没有选中小鼠，请添加小鼠后进行操作'
           })
         }
@@ -572,7 +602,7 @@ export default {
         color:#333
       }
 
-      p:nth-child(1) {
+      p {
         min-width: 47%;
         line-height: 1.6;
         color: #969799;
@@ -580,6 +610,14 @@ export default {
       span {
         color: #333;
       }
+    }
+
+    &__info-sign {
+      top: 0;
+      left: 0;
+      width: 142px;
+      height: 80px;
+      border: 1px solid #eee;
     }
   }
 </style>

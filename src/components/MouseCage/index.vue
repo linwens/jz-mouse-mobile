@@ -40,7 +40,7 @@
               :class="{'isChoiced': (item.miceInfoId == curMouseId)}"
             >
               <div class="pos-r">
-                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :label="item" />
+                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
                 <div @click.stop="taggle(item.miceInfoId)">
                   <svg-icon icon-class="mouse" class="fs40" :style="{ 'color': item.color }" />
                   <p>{{ item.geneName }}</p>
@@ -59,7 +59,7 @@
               :class="{'isChoiced': (item.miceInfoId == curMouseId)}"
             >
               <div class="pos-r">
-                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :label="item" />
+                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
                 <div @click.stop="taggle(item.miceInfoId)">
                   <svg-icon icon-class="mouse" class="fs40" :style="{ 'color': item.color }" />
                   <p>{{ item.geneName }}</p>
@@ -75,6 +75,20 @@
     <!-- 选择笼位时的蒙版 -->
     <div v-if="isChoosingCage" class="mouse-cage__mark pos-a" />
     <!-- 更换负责人弹窗 -->
+    <van-dialog
+      v-model="manDialog"
+      title="更换负责人"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="changeMan"
+    >
+      <p class="cl-black fs14" style="padding: 8px 14px;">当前负责人: {{ allData.operatorName }}</p>
+      <van-form ref="mansForm" class="mb20">
+        <van-select :cur-man.sync="mansForm.userId" btn-text="更换为" :columns="persons" :placeholder.sync="mansForm.placeholder" />
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 
@@ -82,18 +96,25 @@
 import { getMouseInfo, getMouseExpInfo } from '@/api/mouse'
 import { getUsers } from '@/api/home'
 import { changeOperator } from '@/api/cmn'
+import VanSelect from '@/components/Form/VanSelect.vue'
 import {
   Button,
+  Form,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  Dialog,
+  Toast
 } from 'vant'
 
 export default {
   name: 'MouseCage',
   components: {
     'van-button': Button,
+    'van-form': Form,
     'van-checkbox': Checkbox,
-    'van-checkbox-group': CheckboxGroup
+    'van-checkbox-group': CheckboxGroup,
+    [Dialog.Component.name]: Dialog.Component,
+    VanSelect
   },
   props: {
     // 需要的状态needType
@@ -178,7 +199,8 @@ export default {
       // 更换负责人
       manDialog: false,
       mansForm: {
-        userId: ''
+        placeholder: '请输入新的负责人',
+        userId: null
       },
       persons: [], // 负责人选择项
       // 鼠笼checkbox
@@ -287,9 +309,9 @@ export default {
         newData.operatorName = curOperator.userName
         newData.operator = curOperator.userId
         this.$emit('update:allData', newData)
-        this.$message.success('切换负责人成功')
+        Toast.success('切换负责人成功')
         this.manDialog = false
-        this.$refs['mansForm'].resetFields()
+        this.$refs['mansForm'].resetValidation()
         this.$emit('refresh')
       })
     },
@@ -300,7 +322,7 @@ export default {
       // 如果是添加繁育组时选择实验组小鼠
       if (this.needType === 'noBreed' && newOne && newOne.miceStatus === 3) {
         const _self = this
-        this.$confirm('该小鼠处于实验中，添加进繁育列表后将会从实验组中移除，是否继续操作？', '警告', {
+        Dialog.confirm('该小鼠处于实验中，添加进繁育列表后将会从实验组中移除，是否继续操作？', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { Button, Dialog, Form, Field } from 'vant';
+import { Button, Dialog, Form, Field } from 'vant'
 
 export default {
   name: 'AddVariety',

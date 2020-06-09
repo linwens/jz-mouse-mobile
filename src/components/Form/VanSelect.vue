@@ -9,15 +9,11 @@
       placeholder="点击选择城市"
       @click="showPicker = true"
     /> -->
-    <van-cell class="time-select__placeholder" :title="btnText" is-link @click="showPicker = true">
-      <template #default>
-        <slot name="placeholder" />
-      </template>
-    </van-cell>
-    <van-popup v-model="showPicker" position="bottom">
+    <van-cell class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
+    <van-popup v-model="showPicker" position="bottom" get-container="body">
       <van-picker
         show-toolbar
-        :columns="columns"
+        :columns="formatCol"
         @confirm="onConfirm"
         @cancel="showPicker = false"
       />
@@ -42,6 +38,20 @@ export default {
     'van-picker': Picker
   },
   props: {
+    curMan: {
+      type: Number,
+      default: null
+    },
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    columns: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
     btnText: {
       type: String,
       default: '时间选择'
@@ -50,13 +60,31 @@ export default {
   data() {
     return {
       value: '',
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      formatCol: [],
       showPicker: false
+    }
+  },
+  watch: {
+    columns(n, o) {
+      console.log('n=====', n)
+      const names = n.map((el) => {
+        return el.userName
+      })
+      console.log(names)
+      this.$set(this, 'formatCol', names)
     }
   },
   methods: {
     onConfirm(value) {
+      console.log('============', value)
       this.value = value
+      this.$emit('update:placeholder', value)
+      const choicedOne = this.columns.filter((el) => {
+        console.log(el.userName)
+        return el.userName === value
+      })
+      this.$emit('update:curMan', choicedOne[0].userId)
+      console.log(choicedOne, this.curMan)
       this.showPicker = false
     }
   }
