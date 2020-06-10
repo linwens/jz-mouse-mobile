@@ -86,7 +86,14 @@
     >
       <p class="cl-black fs14" style="padding: 8px 14px;">当前负责人: {{ allData.operatorName }}</p>
       <van-form ref="mansForm" class="mb20">
-        <van-select :cur-man.sync="mansForm.userId" btn-text="更换为" :columns="persons" :placeholder.sync="mansForm.placeholder" />
+        <van-select
+          :cur-val.sync="mansForm.userId"
+          btn-text="更换为"
+          :columns="persons"
+          key-text="userName"
+          val-text="userId"
+          :placeholder.sync="mansForm.placeholder"
+        />
       </van-form>
     </van-dialog>
   </div>

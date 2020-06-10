@@ -1,8 +1,8 @@
 <template>
   <div class="bottom-btn df s-jcsa s-aic">
-    <van-button class="w150" round color="#F6AC2D" size="small" type="info" @click="goback">返回</van-button>
-    <slot name='confirm'>
-      <van-button class="w150" round color="#32C985" size="small" type="info" @click="confirm">确定</van-button>
+    <van-button :class="btnWidthClass" round color="#F6AC2D" size="small" type="info" @click="goback">{{ leftBtnText }}</van-button>
+    <slot name="confirm">
+      <van-button :class="btnWidthClass" round color="#32C985" size="small" type="info" @click="confirm">{{ rightBtnText }}</van-button>
     </slot>
   </div>
 </template>
@@ -14,6 +14,20 @@ export default {
   name: 'BottomBtn',
   components: {
     'van-button': Button
+  },
+  props: {
+    btnWidthClass: {
+      type: String,
+      default: 'w150'
+    },
+    leftBtnText: {
+      type: String,
+      default: '返回'
+    },
+    rightBtnText: {
+      type: String,
+      default: '确定'
+    }
   },
   methods: {
     goback() {

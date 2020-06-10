@@ -25,6 +25,26 @@ const routes = [
     name: 'MouseList',
     component: () => import(/* webpackChunkName: "mouseList" */ '../views/Mouse/index.vue')
   },
+  {
+    path: '/mouseEdit',
+    name: 'MouseEdit',
+    component: () => import(/* webpackChunkName: "mouseEdit" */ '../views/Mouse/edit.vue')
+  },
+  {
+    path: '/mouseCage',
+    name: 'MouseCage',
+    component: () => import(/* webpackChunkName: "mouseCage" */ '../views/Mouse/cage.vue')
+  },
+  {
+    path: '/addMouse',
+    name: 'MouseAddMouse',
+    component: () => import(/* webpackChunkName: "mouseAddMouse" */ '../views/Mouse/addMouse.vue')
+  },
+  {
+    path: '/addChild',
+    name: 'MouseAddChild',
+    component: () => import(/* webpackChunkName: "mouseAddChild" */ '../views/Mouse/addChild.vue')
+  },
 
   // 实验管理
   {
@@ -79,6 +99,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+  },
+
+  // 查看文件
+  {
+    path: '/viewFiles',
+    name: 'ViewFiles',
+    component: () => import(/* webpackChunkName: "viewFiles" */ '../components/ViewFiles/page.vue')
   },
 
   // 404 page must be placed at the end !!!

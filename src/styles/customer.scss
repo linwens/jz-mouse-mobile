@@ -145,3 +145,15 @@
     color: #EB5444!important;
   }
 }
+
+// 不可编辑表单样式
+.file--span {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 16px;
+  overflow: hidden;
+  color: #323233;
+  line-height: 24px;
+  background-color: #fff;
+}

@@ -38,8 +38,8 @@ export default {
     'van-picker': Picker
   },
   props: {
-    curMan: {
-      type: Number,
+    curVal: {
+      type: Number || String,
       default: null
     },
     placeholder: {
@@ -55,6 +55,14 @@ export default {
     btnText: {
       type: String,
       default: '时间选择'
+    },
+    keyText: { // 键字段名
+      type: String,
+      default: 'label'
+    },
+    valText: { // 值字段名
+      type: String,
+      default: 'value'
     }
   },
   data() {
@@ -68,7 +76,7 @@ export default {
     columns(n, o) {
       console.log('n=====', n)
       const names = n.map((el) => {
-        return el.userName
+        return el[this.keyText]
       })
       console.log(names)
       this.$set(this, 'formatCol', names)
@@ -80,11 +88,11 @@ export default {
       this.value = value
       this.$emit('update:placeholder', value)
       const choicedOne = this.columns.filter((el) => {
-        console.log(el.userName)
-        return el.userName === value
+        console.log(el[this.keyText])
+        return el[this.keyText] === value
       })
-      this.$emit('update:curMan', choicedOne[0].userId)
-      console.log(choicedOne, this.curMan)
+      this.$emit('update:curVal', choicedOne[0][this.valText])
+      console.log(choicedOne, this.curVal)
       this.showPicker = false
     }
   }

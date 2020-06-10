@@ -1,6 +1,6 @@
 <template>
   <div class="add-cage">
-    <van-button class="w75" round size="small" color="#00CB7C" plain type="primary" @click="clickGetNum">{{ btnText }}</van-button>
+    <van-button :class="btnWidthClass" round size="small" color="#00CB7C" :plain="plain" type="primary" @click="clickGetNum">{{ btnText }}</van-button>
     <!-- 新增笼位弹窗 -->
     <van-dialog
       v-model="cageDialog"
@@ -53,6 +53,14 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    plain: {
+      type: Boolean,
+      default: true
+    },
+    btnWidthClass: {
+      type: String,
+      default: 'w75'
     },
     btnText: {
       type: String,

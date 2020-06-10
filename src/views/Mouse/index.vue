@@ -353,14 +353,15 @@ export default {
       }
       if (this.curMouseId) { // 跳转小鼠编辑页
         const id = this.curMouseId
-        this.$router.push({ name: 'mouseEdit', params: { id, canEdit: 1 }})
+        this.$router.push({ name: 'MouseEdit', params: { id, canEdit: 1 }})
       }
     },
     // 新增小鼠
     goAdd(row) {
-      this.goPage('addMouse', { id: 1 })
+      this.goPage('MouseAddMouse', { id: 1 })
     },
     goPage(r, obj) {
+      console.log('跳转啊', r, obj)
       this.$router.push({ name: r, params: obj })
     },
     handleClick(tab, event) {
