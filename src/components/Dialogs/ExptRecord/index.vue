@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button round :size="size" color="#00CB7C" type="primary" @click="showList">{{ btnText }}</van-button>
+    <van-button :class="btnWidthClass" round :size="size" color="#333" plain type="primary" @click="showList">{{ btnText }}</van-button>
     <!-- 文件列表弹窗 -->
     <van-popup
       v-model="recordDialog"
@@ -53,6 +53,10 @@ export default {
     id: {
       type: Number,
       default: null
+    },
+    btnWidthClass: {
+      type: String,
+      default: 'w75'
     },
     btnText: {
       type: String,

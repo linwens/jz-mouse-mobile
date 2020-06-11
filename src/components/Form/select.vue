@@ -79,6 +79,9 @@ export default {
 
 <style lang="scss" scoped>
   .form-select {
+    .van-button__content {
+      width: 100%;
+    }
     .van-button__text {
       width: 100%;
       display: flex;

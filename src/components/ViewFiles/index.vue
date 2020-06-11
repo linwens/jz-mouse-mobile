@@ -1,6 +1,7 @@
 <template>
   <div>
-    <van-button class="w-100" hairline round size="small" color="#32C985" type="info" @click="goViewFiles">查看文件</van-button>
+    <span v-if="btnType === 'text'" class="txt-btn--green fs14">{{ btnText }}</span>
+    <van-button v-else class="w-100" hairline round size="small" color="#32C985" type="info" @click="goViewFiles">{{ btnText }}</van-button>
   </div>
 </template>
 
@@ -15,15 +16,34 @@ export default {
   },
   mixins: [goPage],
   props: {
+    btnType: {
+      type: String,
+      default: 'button'
+    },
+    btnText: {
+      type: String,
+      default: '查看文件'
+    },
     id: {
       type: Number,
       default: null
+    },
+    bizType: { // 上传文件对应的业务类型
+      type: String,
+      default: ''
+    },
+    cacheList: {
+      type: Array,
+      default: function() {
+        return []
+      }
     }
   },
   methods: {
     goViewFiles() {
       this.goPage({ name: 'ViewFiles', params: {
-        id: this.id
+        bizId: this.id,
+        bizType: this.bizType
       }
       })
     }

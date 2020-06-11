@@ -28,13 +28,13 @@
               <p>更改位置时间：<span>{{ mouseInfo.miceUpdateTime * 1000 | timeFormat('yyyy年MM月dd日 hh:mm:ss') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠家谱：<show-family v-if="curMouseId" :mice-id="curMouseId" /></p>
+              <p>小鼠家谱：<show-family v-if="curMouseId" :mice-id="curMouseId" btn-type="text" /></p>
             </div>
           </div>
         </van-swipe-item>
         <van-swipe-item>
           <div class="mouse__info1">
-            <h1 class="fs16">实验信息</h1>
+            <h1 class="fs16 mb5">实验信息</h1>
             <div class="df s-aic">
               <p>实验组名称：<span>{{ mouseExptInfo.experimentName }}</span></p>
               <p>分组名称：<span>{{ mouseExptInfo.sampleGroupName }}</span></p>
@@ -45,33 +45,35 @@
             <div class="df s-aic">
               <p>处理：<span>{{ mouseExptInfo.eventName }}</span></p>
             </div>
-            <h1 class="fs16">实验进度</h1>
-            <div class="df s-aic">
+            <h1 class="fs16 mt5 mb5">实验进度</h1>
+            <div>
               <p class="df">
-                <span class="mouse__info--span">检测试验结果:</span>
-                <view-files v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" biz-type="experiment" />
-                <upload-btn v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" biz-type="experiment" class="dib" />
-              </p>
-              <p>
-                <i class="mouse__info--i mr20">
-                  <svg-icon icon-class="circle" class="fs12 cl-green" />
-                  处理时间
-                </i>
-                <i class="mouse__info--i">
-                  <svg-icon icon-class="circle" class="fs12 cl-yellow" />
-                  检测时间
-                </i>
+                检测实验结果:
+                <view-files v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml10 mr15" btn-type="text" btn-text="查看" biz-type="experiment" />
+                <upload-btn v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" btn-text="上传" biz-type="experiment" class="dib" />
               </p>
             </div>
-            <div class="df s-aic">
+            <div class="mt20 mb20">
               <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
-                <van-progress :percentage="Number(percentage)" :stroke-width="24" color="#58A2FB" />
+                <van-progress :percentage="Number(percentage)" :stroke-width="16" color="#58A2FB" text-color="#fff" />
               </div>
-              <div class="df s-jcc s-aic mt30">
+            </div>
+            <div class="df s-jcc s-aic">
+              <p>
+                <i class="fs10 mr10">
+                  <svg-icon icon-class="circle" class="fs10 cl-green" />
+                  处理时间
+                </i>
+                <i class="fs10">
+                  <svg-icon icon-class="circle" class="fs10 cl-yellow" />
+                  检测时间
+                </i>
+              </p>
+              <div class="df s-jcc s-aic">
                 <set-time v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" @done="setProgress" />
-                <expt-record v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml16 w100" />
+                <expt-record v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml10" />
               </div>
             </div>
           </div>
@@ -81,28 +83,30 @@
             <h1 class="fs16">基本信息</h1>
             <div class="df s-aic">
               <p>系统编号：<span>{{ mouseInfo.miceNo }}</span></p>
+            </div>
+            <div class="df s-aic">
               <p>性别：<span>{{ mouseInfo.gender >= 0 ? (mouseInfo.gender === 0 ? '雄' : '雌') : '' }}</span></p>
-            </div>
-            <div class="df s-aic">
               <p>出生日期：<span>{{ mouseInfo.birthDate * 1000 | timeFormat('yyyy-MM-dd') }}</span></p>
+            </div>
+            <div class="df s-aic">
               <p>体重：<span>{{ mouseInfo.weight }}</span></p>
-            </div>
-            <div class="df s-aic">
               <p>笼位号：<span>{{ mouseInfo.cageNo }}</span></p>
+            </div>
+            <div class="df s-aic">
               <p>周龄：<span>{{ mouseInfo.birthDate ? `${weekAge}周${dayAge}天` : '' }}</span></p>
-            </div>
-            <div class="df s-aic">
               <p>状态：<span>{{ mouseInfo.miceStatusDesc }}</span></p>
-              <p>显示颜色：<i class="mouse__info--i dib" :style="{'width': '16px', 'height': '16px', 'backgroundColor': mouseInfo.miceColor}" /></p>
             </div>
             <div class="df s-aic">
-              <p>标记：<span>21</span></p>
+              <p class="df s-aic">显示颜色：<i class="mouse__info--i dib" :style="{'width': '16px', 'height': '16px', 'backgroundColor': mouseInfo.miceColor}" /></p>
               <p>附件：<span class="txt-btn--green">查看</span></p>
             </div>
             <div class="df s-aic pos-r">
-              <span class="mouse__info--span">标记:</span>
-              <i v-if="mouseInfo.position === 'custom'" class="mouse__info--i">{{ mouseInfo.sign }}</i>
-              <img v-else class="pos-a mouse__info-sign" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${mouseInfo.filePrefix}/${mouseInfo.sign}.jpg`" alt="">
+              <p>标记：<span>21</span></p>
+              <p class="pos-r">
+                <span class="mouse__info--span">标记:</span>
+                <i v-if="mouseInfo.position === 'custom'" class="mouse__info--i">{{ mouseInfo.sign }}</i>
+                <img v-else class="pos-a mouse__info-sign" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${mouseInfo.filePrefix}/${mouseInfo.sign}.jpg`" alt="">
+              </p>
             </div>
           </div>
         </van-swipe-item>
@@ -181,6 +185,7 @@ import ViewFiles from '@/components/ViewFiles'
 import UploadBtn from '@/components/Dialogs/Upload'
 import ExptRecord from '@/components/Dialogs/ExptRecord'
 import SetTime from '@/components/Dialogs/SetTime'
+import ShowFamily from '@/components/Dialogs/ShowFamily'
 import {
   Swipe,
   SwipeItem,
@@ -188,7 +193,8 @@ import {
   Tabs,
   Button,
   Dialog,
-  Toast
+  Toast,
+  Progress
 } from 'vant'
 import { transferCage, editCage, delMiceByMiceId, fetchCageList, getMouseExpInfo } from '@/api/mouse'
 import { dateTimeFormatter } from '@/utils'
@@ -201,8 +207,10 @@ export default {
     'van-swipe-item': SwipeItem,
     'van-tab': Tab,
     'van-tabs': Tabs,
+    'van-progress': Progress,
     ExptRecord,
     SetTime,
+    ShowFamily,
     AddCageBtn,
     TopBar,
     UploadBtn,

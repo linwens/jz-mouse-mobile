@@ -1,6 +1,7 @@
 <template>
   <div class="dib">
-    <van-button round :size="btnSize" color="#00CB7C" :plain="plain" type="primary" @click="showFamily">{{ btnText }}</van-button>
+    <span v-if="btnType==='text'" class="txt-btn--green" @click="dialogVisible = true">{{ btnText }}</span>
+    <van-button v-else round :size="btnSize" color="#00CB7C" type="primary" @click="showFamily">{{ btnText }}</van-button>
     <!-- 家谱弹窗 -->
     <van-popup
       v-model="dialogVisible"

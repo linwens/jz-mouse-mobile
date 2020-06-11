@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button :class="btnWidthClass" round :size="size" color="#00CB7C" :plain="plain" type="primary" @click="setTimeDialog = true">{{ btnText }}</van-button>
+    <van-button :class="btnWidthClass" round :size="size" color="#333" plain type="primary" @click="setTimeDialog = true">{{ btnText }}</van-button>
     <!-- 设置时间弹窗 -->
     <van-dialog
       v-model="setTimeDialog"
@@ -43,7 +43,7 @@
 <script>
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
-import { Button, Form, Toast } from 'vant'
+import { Button, Form, Toast, Dialog } from 'vant'
 import { setExptTime } from '@/api/experiment'
 
 export default {
@@ -51,6 +51,7 @@ export default {
   components: {
     'van-button': Button,
     'van-form': Form,
+    [Dialog.Component.name]: Dialog.Component,
     VanSelect,
     TimeSelect
   },

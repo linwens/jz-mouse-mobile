@@ -53,6 +53,10 @@ export default {
       type: String,
       default: null
     },
+    curValNum: { // 数字类型
+      type: Number,
+      default: null
+    },
     placeholder: {
       type: String,
       default: ''
@@ -102,8 +106,12 @@ export default {
       })
       const rslt = choicedOne[0][this.valText]
       console.log(this.valText, choicedOne)
-
-      this.$emit('update:curVal', typeof rslt === 'object' ? JSON.stringify(rslt) : String(rslt))
+      if (this.curVal) {
+        this.$emit('update:curVal', typeof rslt === 'object' ? JSON.stringify(rslt) : String(rslt))
+      }
+      if (this.curValNum) {
+        this.$emit('update:curValNum', typeof rslt === 'object' ? JSON.stringify(rslt) : Number(rslt))
+      }
       if (this.btnType === 'button') {
         this.curBtnLabel = choicedOne[0][this.keyText]
       }
@@ -117,9 +125,12 @@ export default {
 
 <style lang="scss">
   .van-select {
-    .van-button__text {
+    .van-button__content {
       width: 100%;
+    }
+    .van-button__text {
       display: flex;
+      width: 100%;
       justify-content: space-between;
       align-items: center;
     }
