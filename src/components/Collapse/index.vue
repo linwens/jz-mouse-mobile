@@ -8,7 +8,7 @@
         <div class="xs-collapse__content">
           <slot name="content" />
         </div>
-        <div class="xs-collapse__fotter h50 df s-aic s-jcfe">
+        <div v-if="footer" class="xs-collapse__fotter h50 df s-aic s-jcfe">
           <slot name="footer" />
         </div>
       </van-collapse-item>
@@ -25,6 +25,12 @@ export default {
     'van-collapse': Collapse,
     'van-collapse-item': CollapseItem
   },
+  props: {
+    footer: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       activeNames: ['1']
@@ -36,8 +42,10 @@ export default {
 <style lang="scss">
   .xs-collapse {
     .van-collapse  {
-      width: 90%;
-      margin: 0 auto;
+      box-sizing: border-box;
+      padding: 0 14px;
+      width: 100%;
+      margin: 10px auto 0;
     }
     .van-collapse-item {
       border: 1px solid #D6D6D6;

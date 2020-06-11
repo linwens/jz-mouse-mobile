@@ -198,7 +198,7 @@ import TimeSelect from '@/components/Form/TimeSelect.vue'
 // import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
 // import UploadBtn from '@/components/Dialogs/Upload'
 // import GenesChoose from '@/components/Dialogs/GenesChoose'
-// import ViewFiles from '@/components/Dialogs/ViewFiles'
+// import ViewFiles from '@/components/ViewFiles'
 import { getMouseInfo, getMouseExpInfo, getCageInfo, editMouse } from '@/api/mouse'
 import { Button, Form, Field, Cell, Toast } from 'vant'
 

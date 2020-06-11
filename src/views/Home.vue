@@ -12,7 +12,7 @@
     <!-- bar -->
     <sum-bar id="1" :show="activeName === 'mine'" :type="barType" />
     <!-- 列表筛选 -->
-    <div class="home__filters df s-jcsb s-aic">
+    <div class="home__filters df s-fww s-jcsb s-aic">
       <van-button type="primary" size="small" class="w70" @click="reset">重置</van-button>
       <van-select
         btn-type="button"
@@ -101,7 +101,7 @@
       />
       <van-select
         btn-type="button"
-        :cur-val.sync="weekRange"
+        :cur-val.sync="JSON.stringify(weekRange)"
         btn-text="周龄"
         :columns="[
           {
@@ -129,35 +129,44 @@
       />
       <span v-if="weekRange === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
     </div>
-    <p class="mt12 fs14 cl-grey-9">总计：<span class="cl-black">{{ page.total }} 条数据</span></p>
+    <p class="mt12 ml14 fs14 cl-grey-9">总计：<span class="cl-black">{{ page.total }} 条数据</span></p>
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse v-for="item in tableData" :key="item.id">
+        <collapse v-for="item in tableData" :key="item.id" :footer="false">
           <template slot="title">
-            <div class="df s-aic s-jcsb">
-              <span>实验组ADEGss</span>
-              <i class="cl-grey-9">2020.02.04-2020.02.04</i>
+            <div class="df s-aic xs-collapse__content--multiple">
+              <span>{{ item.varietiesName }}</span>
+              <span>{{ item.geneName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>实验组数量：<span>8</span></p>
-              <p>小鼠数量：<span>8</span></p>
+              <p>编号：<span>{{ item.miceNo }}</span></p>
+              <p>负责人：<span>{{ item.operator }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>最新检测时间：<span>2020-02-04 20:02:22 </span></p>
+              <p>纯/杂合子：<span>{{ item.pureHeterozygote }}</span></p>
+              <p>性别：<span>{{ item.gender }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>最新处理时间：<span>2020-02-04 20:02:22 </span><span class="txt-btn--green ml14">操作记录</span></p>
+              <p>周龄：<span>{{ item.birthDate }}</span></p>
+              <p>状态：
+                <span v-if="item.status === 1" class="isIdle">闲置</span>
+                <span v-else-if="item.status === 2" class="isBreed">繁育</span>
+                <span v-else-if="item.status === 3" class="isExpt">实验</span>
+                <span v-else-if="item.status === 4">手动处死</span>
+                <span v-else-if="item.status === 5">实验处死</span>
+                <span v-else>无</span>
+              </p>
             </div>
             <div class="df s-aic">
-              <p>建模检测结果：<span class="txt-btn--green">查看</span><span class="txt-btn--green ml18">上传</span></p>
+              <p>笼位号：<span>{{ item.cageNo }}</span></p>
+              <p>家谱记录：<span class="txt-btn--green">查看</span></p>
             </div>
-          </template>
-          <template slot="footer">
-            <van-button class="mr10" plain hairline round size="small" color="#333" type="info">查看家谱</van-button>
-            <van-button class="mr10" plain hairline round size="small" color="#333" type="info">查看文件</van-button>
+            <div class="df s-aic">
+              <p>检测结果：<span class="txt-btn--green">查看</span></p>
+            </div>
           </template>
         </collapse>
       </template>
@@ -166,30 +175,32 @@
 </template>
 
 <script>
-import {
-  Icon
-} from 'vant'
 // @ is an alias to /src
+import MainList from '@/components/List/index.vue'
+import Collapse from '@/components/Collapse/index.vue'
 import TopBar from '@/components/TopBar/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import FormSelect from '@/components/Form/select.vue'
 import SumBar from '@/components/Charts/SumBar'
-import ViewFiles from '@/components/Dialogs/ViewFiles'
+import ViewFiles from '@/components/ViewFiles'
 import { fetchList, getUsers } from '@/api/home'
 import { varietiesList } from '@/api/variety'
 import { getLisByVariety } from '@/api/genes'
 import { mapGetters } from 'vuex'
-import { Toast } from 'vant'
+import { Icon, Button, Toast } from 'vant'
 
 export default {
   name: 'Home',
   components: {
+    'van-button': Button,
     'van-icon': Icon,
     'xs-select': FormSelect,
     VanSelect,
     TopBar,
     SumBar,
-    ViewFiles
+    ViewFiles,
+    Collapse,
+    MainList
   },
   data() {
     return {
@@ -424,5 +435,23 @@ export default {
     width: 200px;
     height: 50px;
     background-color: red;
+  }
+  .isIdle{
+    &::before {
+      content: '●';
+      color: #F6AC2D
+    }
+  }
+  .isExpt{
+    &::before {
+      content: '●';
+      color: #58A2FB;
+    }
+  }
+  .isBreed{
+    &::before {
+      content: '●';
+      color: #00CB7C;
+    }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="van-select">
     <!-- <van-field
       readonly
       clickable
@@ -9,11 +9,11 @@
       placeholder="点击选择城市"
       @click="showPicker = true"
     /> -->
-    <van-button v-if="type === 'button'" type="default" size="small" class="df s-jcsb w150" @click="showPicker = true">
-      <i>{{ btnText }}</i>
+    <van-button v-if="btnType === 'button'" type="default" size="small" class="df s-jcsb w150" @click="showPicker = true">
+      <i>{{ curBtnLabel || btnText }}</i>
       <svg-icon icon-class="select-icon" class="fs10" />
     </van-button>
-    <van-cell v-if="type === 'cell'" class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
+    <van-cell v-if="btnType === 'cell'" class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
     <!-- 弹窗 -->
     <van-popup v-model="showPicker" position="bottom" get-container="body">
       <van-picker
@@ -29,6 +29,7 @@
 <script>
 import {
   Cell,
+  Button,
   // Field,
   Popup,
   Picker
@@ -37,6 +38,7 @@ import {
 export default {
   name: 'VanSelect',
   components: {
+    'van-button': Button,
     'van-cell': Cell,
     // 'van-field': Field,
     'van-popup': Popup,
@@ -48,7 +50,7 @@ export default {
       default: 'cell'
     },
     curVal: {
-      type: Number || String,
+      type: String,
       default: null
     },
     placeholder: {
@@ -78,30 +80,33 @@ export default {
     return {
       value: '',
       formatCol: [],
-      showPicker: false
+      showPicker: false,
+      curBtnLabel: ''
     }
   },
+  created() {},
   watch: {
     columns(n, o) {
-      console.log('n=====', n)
       const names = n.map((el) => {
         return el[this.keyText]
       })
-      console.log(names)
       this.$set(this, 'formatCol', names)
     }
   },
   methods: {
     onConfirm(value) {
-      console.log('============', value)
       this.value = value
       this.$emit('update:placeholder', value)
       const choicedOne = this.columns.filter((el) => {
-        console.log(el[this.keyText])
         return el[this.keyText] === value
       })
-      this.$emit('update:curVal', choicedOne[0][this.valText])
-      console.log(choicedOne, this.curVal)
+      const rslt = choicedOne[0][this.valText]
+      console.log(this.valText, choicedOne)
+
+      this.$emit('update:curVal', typeof rslt === 'object' ? JSON.stringify(rslt) : String(rslt))
+      if (this.btnType === 'button') {
+        this.curBtnLabel = choicedOne[0][this.keyText]
+      }
       this.showPicker = false
 
       this.$emit('done')
@@ -111,5 +116,12 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .van-select {
+    .van-button__text {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 </style>

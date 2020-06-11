@@ -132,7 +132,7 @@ export default {
           },
           axisLabel: {
             interval: 0,
-            rotate: 50
+            rotate: 30
           },
           data: xData
         }],
@@ -179,6 +179,7 @@ export default {
           borderColor: '#90979c'
         }, {
           type: 'inside',
+          disabled: true,
           show: true,
           height: 15,
           start: 1,
