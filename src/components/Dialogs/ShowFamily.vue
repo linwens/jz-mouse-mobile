@@ -1,26 +1,25 @@
 <template>
   <div class="dib">
-    <el-button :type="btnType" :size="btnSize" @click="showFamily()">{{ btnText }}</el-button>
+    <van-button round :size="btnSize" color="#00CB7C" :plain="plain" type="primary" @click="showFamily">{{ btnText }}</van-button>
     <!-- 家谱弹窗 -->
-    <el-dialog
-      :style="{'margin-top': dupCount ? `-${20 * dupCount}px` : 0, 'left': 20 * dupCount + 'px'}"
-      title="家谱记录"
-      :visible.sync="dialogVisible"
-      append-to-body
-      width="70%"
+    <van-popup
+      v-model="dialogVisible"
+      get-container="body"
+      :style="{width: '80%', height: '90%', 'margin-top': dupCount ? `-${20 * dupCount}px` : 0, 'left': 20 * dupCount + 'px'}"
     >
       <family-tree v-if="dialogVisible" :num="dupCount" :mice-id="miceId" />
-    </el-dialog>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import FamilyTree from '@/components/Charts/FamilyTree'
-console.log('====4444=', FamilyTree)
+import { Popup } from 'vant'
 
 export default {
   name: 'ShowFamily',
   components: {
+    'van-popup': Popup,
     FamilyTree
   },
   props: {

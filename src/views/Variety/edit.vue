@@ -99,7 +99,7 @@ export default {
       console.log('this.optType', this.optType)
       const apiType = this.optType === 'modify' ? editGenes : addNewGenes
       const { miceGeneId: id, source, geneName, miceCondition, status, color, area, state } = this.genesForm
-      
+
       apiType({
         id,
         source,

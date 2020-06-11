@@ -1,14 +1,20 @@
 <template>
   <div>
-    <el-button
-      v-if="btnText"
-      type="text"
-      class="btn-text--black"
-      @click="dialogVisible = true"
-    >{{ btnText }}</el-button>
+    <span v-if="btnText" class="txt-btn--green" @click="dialogVisible = true">{{ btnText }}</span>
     <svg-icon v-else icon-class="upload" class="cp" @click="dialogVisible = true" />
     <!-- 上传 -->
-    <el-dialog
+    <van-popup
+      v-model="dialogVisible"
+      get-container="body"
+      position="bottom"
+    >
+      <van-uploader
+        v-model="fileList"
+        multiple
+        max-count="5"
+      />
+    </van-popup>
+    <!-- <el-dialog
       title="上传文件"
       :visible.sync="dialogVisible"
       width="30%"
@@ -35,39 +41,20 @@
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
         <div slot="tip" class="el-upload__tip">可上传jpg/png、pdf、Excel、Word文件</div>
       </el-upload>
-    </el-dialog>
-    <!-- <el-upload
-      class="upload-demo"
-      :action="actionUrl"
-      :headers="{
-        Authorization: getToken()
-      }"
-      name="files"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :before-remove="beforeRemove"
-      multiple
-      :show-file-list="false"
-      :limit="5"
-      :on-exceed="handleExceed"
-      :on-success="handleSuccess"
-    >
-      <el-button
-        v-if="btnText"
-        type="text"
-        class="btn-text--black"
-      >{{ btnText }}</el-button>
-      <svg-icon v-else icon-class="upload" class="cp" />
-    </el-upload> -->
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
-import { Message } from 'element-ui';
+import { Button, Popup, Toast, Uploader, Dialog } from 'vant'
 import { getToken } from '@/utils/auth'
 
 export default {
   name: 'UploadFile',
+  components: {
+    'van-uploader': Uploader,
+    'van-popup': Popup
+  },
   props: {
     id: {
       type: Number,
@@ -110,11 +97,11 @@ export default {
       console.log(file)
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      Toast.fail(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     handleSuccess(response, file, fileList) {
-      Message.closeAll()
-      Message.success('文件上传成功')
+      Toast.clear()
+      Toast.success('文件上传成功')
       console.log('上传成功返回...', this.id, response)
       console.log(response, file, fileList)
       if (!this.id && response.data.length > 0) {
@@ -136,7 +123,13 @@ export default {
       }
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+      return Dialog.confirm({
+        message: `确定移除 ${file.name}？`,
+      }).then(() => {
+        return true
+      }).catch(() => {
+        return false
+      })
     }
   }
 }

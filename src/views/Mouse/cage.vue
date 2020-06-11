@@ -147,7 +147,9 @@ export default {
         this.$router.back()
         return
       }
-      this.$confirm(`当前仍有${this.mouseData.femaleMiceNum + this.mouseData.maleMiceNum}只小鼠尚未放入鼠笼，是否继续返回？`, '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `当前仍有${this.mouseData.femaleMiceNum + this.mouseData.maleMiceNum}只小鼠尚未放入鼠笼，是否继续返回？`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

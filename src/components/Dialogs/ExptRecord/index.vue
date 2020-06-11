@@ -1,43 +1,53 @@
 <template>
   <div>
-    <el-button :type="type" :size="size" @click="showList()">{{ btnText }}</el-button>
+    <van-button round :size="size" color="#00CB7C" type="primary" @click="showList">{{ btnText }}</van-button>
     <!-- 文件列表弹窗 -->
-    <el-dialog
-      title="查看记录"
-      :visible.sync="recordDialog"
-      width="850px"
+    <van-popup
+      v-model="recordDialog"
+      position="bottom"
+      :style="{ height: '50%' }"
+      get-container="body"
     >
-      <merge-table
-        ref="crud"
-        :page="page"
-        :data="recordList"
-        :table-option="recordOption"
-        :table-loading="recordLoading"
-      >
-        <template slot="menu" slot-scope="{scope}">
-          <el-button
-            type="text"
-            size="mini"
-            class="btn-text--danger"
-            @click="rowItemDel(scope.row)"
-          >
-            删除
-          </el-button>
+      <main-list>
+        <template>
+          <collapse v-for="item in recordList" :key="item.id">
+            <template slot="title">
+              <div class="df s-aic s-jcsb">
+                <span>实验记录</span>
+              </div>
+            </template>
+            <template slot="content">
+              <div class="df s-aic">
+                <p>饲养条件：<span>饲养条件巴拉啦</span></p>
+                <p>负责人：<span>小勾</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
+              </div>
+            </template>
+            <template slot="footer">
+              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
+            </template>
+          </collapse>
         </template>
-      </merge-table>
-    </el-dialog>
+      </main-list>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import MergeTable from '@/components/MergeTable'
-import { recordOption } from './table'
+import MainList from '@/components/List/index.vue'
+import Collapse from '@/components/Collapse/index.vue'
+import { Button, Popup, Toast, Dialog } from 'vant'
 import { getExptRecord, delExptRecord } from '@/api/experiment'
 
 export default {
   name: 'ExptRecord',
   components: {
-    MergeTable
+    'van-button': Button,
+    'van-popup': Popup,
+    MainList,
+    Collapse
   },
   props: {
     id: {
@@ -62,7 +72,6 @@ export default {
       isAdmin: false,
       // 基因型列表
       recordDialog: false,
-      recordOption,
       recordLoading: false,
       recordList: [],
       page: {
@@ -80,7 +89,7 @@ export default {
     showList() {
       console.log(this.id)
       if (!this.id) {
-        this.$message.warning('请先选中小鼠')
+        Toast.fail('请先选中小鼠')
         return
       }
       this.getList()
@@ -107,10 +116,12 @@ export default {
     rowItemDel: function(row) {
       const _this = this
       if (!(row.own || this.isAdmin)) { // 不是自己的信息无权删除
-        this.$message.warning('无权限删除他人记录')
+        Toast.fail('无权限删除他人记录')
         return
       }
-      this.$confirm('是否确认删除实验记录' + row.id + '?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除实验记录 ${row.id}?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -118,11 +129,7 @@ export default {
         return delExptRecord(row.id)
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(function() {
       })
     }

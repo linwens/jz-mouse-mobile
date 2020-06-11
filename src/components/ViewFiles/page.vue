@@ -2,7 +2,7 @@
   <div class="view-files">
     <main-list>
       <template>
-        <collapse>
+        <collapse v-for="item in filesData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>小鼠文件</span>
@@ -36,7 +36,7 @@ import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import { delFile, getFilesList } from '@/api/cmn'
-import { Button } from 'vant'
+import { Button, Toast, Dialog } from 'vant'
 
 export default {
   name: 'ViewFiles',
@@ -122,10 +122,12 @@ export default {
     rowItemDel: function(scope) {
       const _this = this
       if (!(scope.row.own || this.isAdmin)) { // 不是自己的信息无权删除
-        this.$message.warning('无权限删除他人负责的小鼠的文件')
+        Toast.fail('无权限删除他人负责的小鼠的文件')
         return
       }
-      this.$confirm('是否确认删除数据为"' + scope.row.fileName + '"的文件吗?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除数据为${scope.row.fileName}的文件吗?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -138,11 +140,7 @@ export default {
         }
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(function() {
       })
     }

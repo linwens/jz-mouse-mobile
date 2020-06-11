@@ -11,7 +11,7 @@
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse>
+        <collapse v-for="item in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
               <span>ER-334</span>
@@ -49,7 +49,7 @@ import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import { delDelMouse, fetchList } from '@/api/delList'
-import { Button } from 'vant'
+import { Button, Toast, Dialog } from 'vant'
 
 export default {
   name: 'DelList',
@@ -80,8 +80,9 @@ export default {
     },
     // 删除
     rowItemDel: function(row) {
-      const _this = this
-      this.$confirm('是否确认删除小鼠："' + row.miceId + '"的数据?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除小鼠：${row.miceId}的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -91,11 +92,7 @@ export default {
         })
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(function() {
       })
     },

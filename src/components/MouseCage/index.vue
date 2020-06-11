@@ -329,7 +329,9 @@ export default {
       // 如果是添加繁育组时选择实验组小鼠
       if (this.needType === 'noBreed' && newOne && newOne.miceStatus === 3) {
         const _self = this
-        Dialog.confirm('该小鼠处于实验中，添加进繁育列表后将会从实验组中移除，是否继续操作？', '警告', {
+        Dialog.confirm({
+          title: '警告',
+          message: '该小鼠处于实验中，添加进繁育列表后将会从实验组中移除，是否继续操作？',
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

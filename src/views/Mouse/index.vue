@@ -9,26 +9,26 @@
           <div class="mouse__info1">
             <h1 class="fs16">品系信息</h1>
             <div class="df s-aic">
-              <p>品系：<span>8</span></p>
-              <p>毛色：<span>8</span></p>
+              <p>品系：<span>{{ mouseInfo.varietiesName }}</span></p>
+              <p>毛色：<span>{{ mouseInfo.geneColor }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>基因型：<span>8</span></p>
+              <p>基因型：<span>{{ mouseInfo.geneName }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>饲养条件：<span>8</span></p>
+              <p>饲养条件：<span>{{ mouseInfo.miceCondition }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>健康状况：<span>8</span></p>
+              <p>健康状况：<span>{{ mouseInfo.geneStatus }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>应用领域：<span>2020-02-04 20:02:22 </span></p>
+              <p>应用领域：<span>{{ mouseInfo.area }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>更改位置时间：<span>2020-02-04 20:02:22 </span></p>
+              <p>更改位置时间：<span>{{ mouseInfo.miceUpdateTime * 1000 | timeFormat('yyyy年MM月dd日 hh:mm:ss') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠家谱：<span class="txt-btn--green">查看</span></p>
+              <p>小鼠家谱：<show-family v-if="curMouseId" :mice-id="curMouseId" /></p>
             </div>
           </div>
         </van-swipe-item>
@@ -36,18 +36,43 @@
           <div class="mouse__info1">
             <h1 class="fs16">实验信息</h1>
             <div class="df s-aic">
-              <p>实验组名称：<span>8</span></p>
-              <p>分组名称：<span>8</span></p>
+              <p>实验组名称：<span>{{ mouseExptInfo.experimentName }}</span></p>
+              <p>分组名称：<span>{{ mouseExptInfo.sampleGroupName }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>起止时间：<span>2020.02.04-2020.02.04</span></p>
+              <p>起止时间：<span>{{ mouseExptInfo.startTime * 1000 | timeFormat('yyyy.M.dd') }}-{{ mouseExptInfo.endTime * 1000 | timeFormat('yyyy.M.dd') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>处理：<span>8</span></p>
+              <p>处理：<span>{{ mouseExptInfo.eventName }}</span></p>
             </div>
             <h1 class="fs16">实验进度</h1>
             <div class="df s-aic">
-              <p>小鼠家谱：<span class="txt-btn--green">查看</span><span class="txt-btn--green ml18">上传</span></p>
+              <p class="df">
+                <span class="mouse__info--span">检测试验结果:</span>
+                <view-files v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" biz-type="experiment" />
+                <upload-btn v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" biz-type="experiment" class="dib" />
+              </p>
+              <p>
+                <i class="mouse__info--i mr20">
+                  <svg-icon icon-class="circle" class="fs12 cl-green" />
+                  处理时间
+                </i>
+                <i class="mouse__info--i">
+                  <svg-icon icon-class="circle" class="fs12 cl-yellow" />
+                  检测时间
+                </i>
+              </p>
+            </div>
+            <div class="df s-aic">
+              <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
+                <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
+                <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
+                <van-progress :percentage="Number(percentage)" :stroke-width="24" color="#58A2FB" />
+              </div>
+              <div class="df s-jcc s-aic mt30">
+                <set-time v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" @done="setProgress" />
+                <expt-record v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml16 w100" />
+              </div>
             </div>
           </div>
         </van-swipe-item>
@@ -56,19 +81,19 @@
             <h1 class="fs16">基本信息</h1>
             <div class="df s-aic">
               <p>系统编号：<span>{{ mouseInfo.miceNo }}</span></p>
-              <p>性别：<span>雄</span></p>
+              <p>性别：<span>{{ mouseInfo.gender >= 0 ? (mouseInfo.gender === 0 ? '雄' : '雌') : '' }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>出生日期：<span>2020-02-04</span></p>
-              <p>体重：<span>8g</span></p>
+              <p>出生日期：<span>{{ mouseInfo.birthDate * 1000 | timeFormat('yyyy-MM-dd') }}</span></p>
+              <p>体重：<span>{{ mouseInfo.weight }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>笼位号：<span>8</span></p>
-              <p>周龄：<span>8</span></p>
+              <p>笼位号：<span>{{ mouseInfo.cageNo }}</span></p>
+              <p>周龄：<span>{{ mouseInfo.birthDate ? `${weekAge}周${dayAge}天` : '' }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>状态：<span>8</span></p>
-              <p>显示颜色：<span>8</span></p>
+              <p>状态：<span>{{ mouseInfo.miceStatusDesc }}</span></p>
+              <p>显示颜色：<i class="mouse__info--i dib" :style="{'width': '16px', 'height': '16px', 'backgroundColor': mouseInfo.miceColor}" /></p>
             </div>
             <div class="df s-aic">
               <p>标记：<span>21</span></p>
@@ -152,6 +177,10 @@
 import TopBar from '@/components/TopBar/index.vue'
 import MouseCage from '@/components/MouseCage/index.vue'
 import AddCageBtn from '@/components/Dialogs/AddCage'
+import ViewFiles from '@/components/Dialogs/ViewFiles'
+import UploadBtn from '@/components/Dialogs/Upload'
+import ExptRecord from '@/components/Dialogs/ExptRecord'
+import SetTime from '@/components/Dialogs/SetTime'
 import {
   Swipe,
   SwipeItem,
@@ -162,6 +191,7 @@ import {
   Toast
 } from 'vant'
 import { transferCage, editCage, delMiceByMiceId, fetchCageList, getMouseExpInfo } from '@/api/mouse'
+import { dateTimeFormatter } from '@/utils'
 
 export default {
   name: 'MouseIndex',
@@ -171,8 +201,12 @@ export default {
     'van-swipe-item': SwipeItem,
     'van-tab': Tab,
     'van-tabs': Tabs,
+    ExptRecord,
+    SetTime,
     AddCageBtn,
     TopBar,
+    UploadBtn,
+    ViewFiles,
     MouseCage
   },
   data() {
@@ -304,6 +338,10 @@ export default {
     this.getCageList()
   },
   methods: {
+    showTips(val) {
+      const time = dateTimeFormatter(val, 'yyyy-MM-dd hh:mm')
+      Toast(time)
+    },
     setHandleTimeScale(time) {
       const start = this.mouseExptInfo.startTime * 1000
       const end = this.mouseExptInfo.endTime * 1000
@@ -610,6 +648,17 @@ export default {
       }
       span {
         color: #333;
+      }
+    }
+
+    &__progrTag {
+      position: absolute;
+      z-index: 1;
+      &--g{
+        top: -12px;
+      }
+      &--y{
+        bottom: -12px;
       }
     }
 

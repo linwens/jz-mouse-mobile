@@ -1,15 +1,21 @@
 <template>
   <div>
-    <el-select
-      v-model="treeType"
-      placeholder="请选择类型"
-      size="mini"
-      class="w100"
-    >
-      <el-option label="父母记录" :value="0" />
-      <el-option label="子鼠记录" :value="1" />
-    </el-select>
-    <el-button size="mini" icon="el-icon-search" @click="goDetail()">查看详情</el-button>
+    <van-select
+      btn-type="button"
+      :cur-val.sync="treeType"
+      btn-text="请选择类型"
+      :columns="[
+        {
+          label: '父母记录',
+          value: 0
+        },
+        {
+          label: '子鼠记录',
+          value: 1
+        }
+      ]"
+    />
+    <van-button round size="mini" color="#00CB7C" type="primary" @click="goDetail">查看详情</van-button>
     <div :id="miceId" :class="className" :style="{height:height,width:width, 'min-height': '500px'}" />
   </div>
 </template>
@@ -17,7 +23,9 @@
 <script>
 import echarts from 'echarts'
 import resize from './mixins/resize'
+import VanSelect from '@/components/Form/VanSelect.vue'
 import { getMouseTree, getMouseChildrenTree, getMouseState } from '@/api/mouse'
+import { Button, Toast } from 'vant'
 
 // 根据当前后端返回的数据结构，递归家谱树
 function recur(data, parent) { // data是对象
@@ -50,6 +58,11 @@ function recur(data, parent) { // data是对象
 }
 
 export default {
+  name: 'FamilyTree',
+  components: {
+    'van-button': Button,
+    VanSelect
+  },
   mixins: [resize],
   props: {
     className: {
@@ -117,12 +130,12 @@ export default {
     goDetail() {
       if (this.curMouse) {
         if (this.curMouseStatus) {
-          this.$message.warning('小鼠已删除')
+          Toast.fail('小鼠已删除')
         } else {
           this.$router.push({ name: 'mouseEdit', params: { id: this.curMouse }})
         }
       } else {
-        this.$message.warning('请先点击小鼠')
+        Toast.fail('请先点击小鼠')
       }
     },
     // 获取子集鼠信息

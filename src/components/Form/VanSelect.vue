@@ -9,7 +9,12 @@
       placeholder="点击选择城市"
       @click="showPicker = true"
     /> -->
-    <van-cell class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
+    <van-button v-if="type === 'button'" type="default" size="small" class="df s-jcsb w150" @click="showPicker = true">
+      <i>{{ btnText }}</i>
+      <svg-icon icon-class="select-icon" class="fs10" />
+    </van-button>
+    <van-cell v-if="type === 'cell'" class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
+    <!-- 弹窗 -->
     <van-popup v-model="showPicker" position="bottom" get-container="body">
       <van-picker
         show-toolbar
@@ -24,7 +29,7 @@
 <script>
 import {
   Cell,
-  Field,
+  // Field,
   Popup,
   Picker
 } from 'vant'
@@ -38,6 +43,10 @@ export default {
     'van-picker': Picker
   },
   props: {
+    btnType: {
+      type: String,
+      default: 'cell'
+    },
     curVal: {
       type: Number || String,
       default: null
@@ -94,6 +103,8 @@ export default {
       this.$emit('update:curVal', choicedOne[0][this.valText])
       console.log(choicedOne, this.curVal)
       this.showPicker = false
+
+      this.$emit('done')
     }
   }
 }

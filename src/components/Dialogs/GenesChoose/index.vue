@@ -1,38 +1,57 @@
 <template>
   <div>
-    <el-button type="primary" size="mini" class="w60" @click="showList()">{{ btnText }}</el-button>
-    <!-- 文件列表弹窗 -->
-    <el-dialog title="选择基因型" width="70%" :visible.sync="genesRecordVisible">
-      <merge-table
-        ref="crud"
-        :data="genesData"
-        :table-option="genesOption"
-        :table-loading="genesLoading"
-        @refresh-change="handleRefreshChange"
-      >
-        <template slot="menu" slot-scope="{scope}">
-          <el-button
-            type="text"
-            size="mini"
-            @click="choice(scope.row)"
-          >
-            选择
-          </el-button>
+    <van-button round size="small" color="#00CB7C" type="primary" @click="showList">{{ btnText }}</van-button>
+    <!-- 基因型列表弹窗 -->
+    <van-popup
+      v-model="genesRecordVisible"
+      position="bottom"
+      :style="{ height: '50%' }"
+      get-container="body"
+    >
+      <main-list>
+        <template>
+          <collapse v-for="item in genesData" :key="item.id">
+            <template slot="title">
+              <div class="df s-aic s-jcsb">
+                <span>基因型</span>
+              </div>
+            </template>
+            <template slot="content">
+              <div class="df s-aic">
+                <p>饲养条件：<span>饲养条件巴拉啦</span></p>
+                <p>负责人：<span>小勾</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>健康状况：<span>健康</span></p>
+                <p>毛色：<span>灰色</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
+              </div>
+            </template>
+            <template slot="footer">
+              <van-button class="mr10" plain hairline round size="small" color="#333" type="info" @click="choice(item)">选择</van-button>
+            </template>
+          </collapse>
         </template>
-      </merge-table>
-    </el-dialog>
+      </main-list>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import MergeTable from '@/components/MergeTable'
-import { genesOption } from './table'
+import MainList from '@/components/List/index.vue'
+import Collapse from '@/components/Collapse/index.vue'
+import { Button, Popup } from 'vant'
 import { getLisByVariety } from '@/api/genes'
 
 export default {
   name: 'GenesChoose',
   components: {
-    MergeTable
+    'van-button': Button,
+    'van-popup': Popup,
+    MainList,
+    Collapse
   },
   props: {
     id: {
@@ -52,7 +71,6 @@ export default {
     return {
       // 基因型列表
       genesRecordVisible: false,
-      genesOption,
       genesLoading: false,
       genesData: []
     }

@@ -1,81 +1,71 @@
 <template>
   <div class="dib">
-    <el-button type="primary" size="mini" class="w60" @click="addGenesDialog = true">{{ btnText }}</el-button>
+    <van-button :class="btnWidthClass" round size="small" color="#00CB7C" :plain="plain" type="primary" @click="addGenesDialog = true">{{ btnText }}</van-button>
     <!-- 新增基因弹窗 -->
-    <el-dialog
+    <van-dialog
+      v-model="addGenesDialog"
       title="新增基因型"
-      :visible.sync="addGenesDialog"
-      width="450px"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="doAddGenes"
     >
-      <div>
-        <el-form ref="addGensForm" :model="addGensForm" label-width="90px" label-position="left" size="mini">
-          <el-form-item label="品系名称:" label-width="80.56px" style="padding-left: 9.44px;" class="mb0">
-            <span>{{ varietiesName }}</span>
-          </el-form-item>
-          <el-form-item
-            label="基因型名称:"
-            prop="geneName"
-            class="mb18"
-            :rules="[
-              { required: true, message: '基因型名称不能为空', trigger: 'change' }
-            ]">
-            <!-- <el-input v-model="addGensForm.geneName" /> -->
-            <el-autocomplete
-              v-model="addGensForm.geneName"
-              :fetch-suggestions="history('geneName')"
-              placeholder="请输入基因型名称"
-            />
-          </el-form-item>
-          <el-form-item label="饲养条件:" label-width="80.56px" style="padding-left: 9.44px;" class="mb18">
-            <!-- <el-input v-model="addGensForm.miceCondition" /> -->
-            <el-autocomplete
-              v-model="addGensForm.miceCondition"
-              :fetch-suggestions="history('miceCondition')"
-              placeholder="请输入饲养条件"
-            />
-          </el-form-item>
-          <el-form-item label="健康状态:" label-width="80.56px" style="padding-left: 9.44px;" class="mb18">
-            <!-- <el-input v-model="addGensForm.status" /> -->
-            <el-autocomplete
-              v-model="addGensForm.status"
-              :fetch-suggestions="history('status')"
-              placeholder="请输入健康状态"
-            />
-          </el-form-item>
-          <el-form-item label="毛色:" label-width="80.56px" style="padding-left: 9.44px;" class="mb18">
-            <!-- <el-input v-model="addGensForm.color" /> -->
-            <el-autocomplete
-              v-model="addGensForm.color"
-              :fetch-suggestions="history('color')"
-              placeholder="请输入毛色"
-            />
-          </el-form-item>
-          <el-form-item label="应用领域:" label-width="80.56px" style="padding-left: 9.44px;" class="mb0">
-            <!-- <el-input v-model="addGensForm.area" type="textarea" /> -->
-            <el-autocomplete
-              v-model="addGensForm.area"
-              :fetch-suggestions="history('area')"
-              placeholder="请输入应用领域"
-            />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addGenesDialog = false">取 消</el-button>
-        <el-button type="primary" size="small" @click="doAddGenes()">确 定</el-button>
-      </div>
-    </el-dialog>
+      <van-form class="mt20 mb20">
+        <van-field
+          v-model="addGensForm.geneName"
+          label="基因型名称"
+          placeholder="请输入基因型名称"
+          :rules="[{ required: true, message: '基因型名称不能为空' }]"
+        />
+        <van-field
+          v-model="addGensForm.miceCondition"
+          label="饲养条件"
+          placeholder="请输入饲养条件"
+        />
+        <van-field
+          v-model="addGensForm.status"
+          label="健康状态"
+          placeholder="请输入健康状态"
+        />
+        <van-field
+          v-model="addGensForm.color"
+          label="毛色"
+          placeholder="请输入毛色"
+        />
+        <van-field
+          v-model="addGensForm.area"
+          label="应用领域"
+          placeholder="请输入应用领域"
+        />
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 
 <script>
 import { addNewGenes } from '@/api/genes'
 import { inputRemenber } from '@/components/Mixins/history'
+import { Button, Dialog, Form, Field } from 'vant'
 
 export default {
   name: 'VarietyEdit',
+  components: {
+    'van-button': Button,
+    'van-form': Form,
+    'van-field': Field,
+    [Dialog.Component.name]: Dialog.Component
+  },
   mixins: [inputRemenber],
   props: {
+    plain: {
+      type: Boolean,
+      default: true
+    },
+    btnWidthClass: {
+      type: String,
+      default: 'w75'
+    },
     btnText: {
       type: String,
       default: '新增'
@@ -128,14 +118,6 @@ export default {
             console.log(res)
             this.addGensForm.id = res.data
             this.$emit('update:genesData', JSON.stringify(this.addGensForm))
-            // 存储输入过的值
-            this.$store.dispatch('user/setInputHistory', {
-              geneName,
-              miceCondition,
-              status,
-              color,
-              area
-            })
           })
         } else {
           return false

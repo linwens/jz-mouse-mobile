@@ -46,7 +46,7 @@ export default {
       show: false,
       btnText: '',
       columns: ['我的小鼠', '实验室小鼠', '实验室人员']
-    };
+    }
   },
   created() {
     this.btnText = this.columns[0] // 默认展示第一个选项的内容

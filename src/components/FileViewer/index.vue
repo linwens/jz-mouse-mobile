@@ -1,44 +1,30 @@
 <template>
   <div class="dib">
-    <el-button type="text" size="mini" @click="dialogVisible = true">{{ btnText }}</el-button>
+    <van-button round size="small" color="#00CB7C" :plain="plain" type="primary" @click="dialogVisible = true">{{ btnText }}</van-button>
     <div v-if="type === 'pdf'">
-      <el-dialog
+      <van-dialog
+        v-model="dialogVisible"
         title="pdf文件查看"
-        append-to-body
-        fullscreen
-        custom-class="mouse__preview"
-        :visible.sync="dialogVisible"
-        width="30%"
+        get-container="body"
+        confirm-button-text="确定"
+        confirm-button-color="#FF6358"
       >
         <embed
           :src="fileUrl"
           style="width: 100%; height: 100%"
         >
-      </el-dialog>
+      </van-dialog>
     </div>
     <div v-if="type === 'img'">
-      <el-dialog
-        title="图片查看"
-        append-to-body
-        fullscreen
-        custom-class="mouse__preview"
-        :visible.sync="dialogVisible"
-        width="30%"
-      >
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="fileUrl"
-          :preview-src-list="[fileUrl]"
-        />
-      </el-dialog>
+      <van-image-preview v-model="dialogVisible" :images="fileUrl" />
     </div>
     <div v-if="type === 'office'">
-      <el-dialog
+      <van-dialog
+        v-model="dialogVisible"
         title="office文件查看"
-        fullscreen
-        :visible.sync="dialogVisible"
-        width="30%"
-        custom-class="mouse__preview"
+        get-container="body"
+        confirm-button-text="确定"
+        confirm-button-color="#FF6358"
       >
         <iframe
           frameborder="0"
@@ -46,13 +32,19 @@
           width="100%"
           height="100%"
         />
-      </el-dialog>
+      </van-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import { Dialog, ImagePreview } from 'vant'
 export default {
+  name: 'FileViewer',
+  components: {
+    [ImagePreview.Component.name]: ImagePreview.Component,
+    [Dialog.Component.name]: Dialog.Component
+  },
   props: {
     btnText: {
       type: String,
