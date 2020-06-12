@@ -1,19 +1,221 @@
 <template>
-  <div></div>
+  <div class="add-child">
+    <van-form>
+      <van-field v-model="form.fatherId" label="父鼠编号" />
+      <van-field v-model="form.motherId" label="母鼠编号" />
+      <van-field
+        v-model="varietiesName"
+        label="品系"
+        disabled
+        placeholder="请选择品系"
+        :rules="[{ required: true, message: '请选择品系' }]"
+      >
+        <template #button>
+          <choose-variety :cur-variety.sync="curVariety" />
+        </template>
+      </van-field>
+      <div class="genes-box">
+        <van-field
+          v-model="currentGene.geneName"
+          label="基因型"
+          placeholder="请输入基因型名称"
+          :rules="[{ required: true, message: '请输入基因型名称' }]"
+        />
+        <van-field
+          v-model="currentGene.miceCondition"
+          label="饲养条件"
+          placeholder="请输入饲养条件"
+          :rules="[{ required: true, message: '请输入饲养条件' }]"
+        />
+        <van-field
+          v-model="currentGene.status"
+          label="健康状态"
+          placeholder="请输入健康状态"
+          :rules="[{ required: true, message: '请输入健康状态' }]"
+        />
+        <van-field
+          v-model="currentGene.color"
+          label="毛色"
+          placeholder="请输入毛色"
+          :rules="[{ required: true, message: '请输入毛色' }]"
+        />
+        <van-field
+          v-model="currentGene.area"
+          label="应用领域"
+          placeholder="请输入应用领域"
+          rows="2"
+          autosize
+          type="textarea"
+          :rules="[{ required: true, message: '请输入应用领域' }]"
+        />
+        <div class="df s-jcfe s-aic pb10">
+          <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">选择</van-button>
+          <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">新增</van-button>
+        </div>
+      </div>
+      <van-field v-model="form.miceNo" label="编号" />
+      <div class="file--span fs14">
+        <span>状态 闲置</span>
+      </div>
+      <van-field v-model="form.weight" label="数量">
+        <template #extra>
+          <span>只(雌)</span>
+        </template>
+      </van-field>
+      <van-field v-model="form.weight">
+        <template #extra>
+          <span>只(雄)</span>
+        </template>
+      </van-field>
+      <van-field v-model="form.weight" label="体重">
+        <template #extra>
+          <span>g</span>
+        </template>
+      </van-field>
+      <time-select btn-text="出生日期" :time.sync="form.birthDate">
+        <template slot="placeholder">
+          <p>请选择出生日期</p>
+        </template>
+      </time-select>
+      <div class="df s-aic">
+        <van-field v-model="weekAge" label="周龄">
+          <template #extra>
+            <span>周</span>
+          </template>
+        </van-field>
+        <van-field v-model="dayAge">
+          <template #extra>
+            <span>天</span>
+          </template>
+        </van-field>
+      </div>
+      <van-select
+        :cur-val-num.sync="form.pureHeterozygote"
+        btn-text="纯/杂合子"
+        :columns="[
+          {
+            label: '纯合子',
+            value: 0
+          },
+          {
+            label: '杂合子',
+            value: 1
+          },
+          {
+            label: '未测试',
+            value: 2
+          }
+        ]"
+      >
+        <template slot="placeholder">
+          <p></p>
+        </template>
+      </van-select>
+      <div class="file--span fs14">
+        <span>展示颜色：00000</span>
+      </div>
+      <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
+        <template slot="placeholder">
+          <p>请选择分笼时间</p>
+        </template>
+      </time-select>
+      <van-select
+        btn-text="分笼提醒"
+        :cur-val-num.sync="form.separateCageRemindFlag"
+        :columns="[
+          {
+            label: '是',
+            value: 0
+          },
+          {
+            label: '否',
+            value: 1
+          }
+        ]"
+      >
+        <template slot="placeholder">
+          <p>是否开启处理时间提醒</p>
+        </template>
+      </van-select>
+      <time-select btn-text="表型鉴定时间" :time.sync="form.phenotypicIdentificationRemindTime">
+        <template slot="placeholder">
+          <p>请选择表型鉴定时间</p>
+        </template>
+      </time-select>
+      <van-select
+        btn-text="表型鉴定提醒"
+        :cur-val-num.sync="form.phenotypicIdentificationRemindFlag"
+        :columns="[
+          {
+            label: '是',
+            value: 0
+          },
+          {
+            label: '否',
+            value: 1
+          }
+        ]"
+      >
+        <template slot="placeholder">
+          <p>是否开启表型鉴定时间提醒</p>
+        </template>
+      </van-select>
+      <van-field
+        v-model="currentGene.geneName"
+        label="笼位号"
+        placeholder="请输入笼位号名称"
+      />
+      <div class="cage-box">
+        <van-field
+          v-model="currentGene.geneName"
+          label="笼位号"
+          placeholder="请输入笼位号名称"
+        />
+        <van-field
+          v-model="currentGene.miceCondition"
+          label="房间号"
+          placeholder="请输入房间号"
+        />
+        <van-field
+          v-model="currentGene.status"
+          label="架号"
+          placeholder="请输入架号"
+        />
+      </div>
+      <div class="file--span fs14">
+        <p>附件：<span class="txt-btn--green">查看附件</span><span class="txt-btn--green ml18">上传附件</span></p>
+      </div>
+    </van-form>
+    <bottom-btn @confirm="goChoose">
+      <template slot="confirm">
+        <van-button class="w150" round size="small" color="#32C985" type="info">下一步(去选笼子)</van-button>
+      </template>
+    </bottom-btn>
+  </div>
 </template>
 
 <script>
+import BottomBtn from '@/components/BottomBtn/index.vue'
+import VanSelect from '@/components/Form/VanSelect.vue'
+import TimeSelect from '@/components/Form/TimeSelect.vue'
 import ViewFiles from '@/components/ViewFiles'
 import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import AddGenesBtn from '@/components/Dialogs/AddGenes'
 import UploadBtn from '@/components/Dialogs/Upload'
+import { Button, Form, Field, Toast } from 'vant'
 import { addMouse } from '@/api/mouse'
 import { getLisByGeneId, getLisByVariety } from '@/api/genes'
 
 export default {
   name: 'AddChild',
   components: {
+    'van-button': Button,
+    'van-form': Form,
+    'van-field': Field,
+    BottomBtn,
     ChooseVariety,
+    VanSelect,
+    TimeSelect,
     ViewFiles,
     UploadBtn,
     AddGenesBtn
@@ -219,7 +421,7 @@ export default {
         vid: this.varietiesId
       })
       addMouse(params).then(res => {
-        this.$message.success('新增子鼠成功')
+        Toast.success('新增子鼠成功')
         this.$store.dispatch('app/clearChildMouses')
         this.goBack()
       })
@@ -228,6 +430,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  .add-child {
+    margin-bottom: 80px;
+  }
+  .genes-box, .cage-box {
+    width: 90%;
+    margin: 0 auto;
+    background-color: #F6F6F6;
+    .van-cell {
+      background-color: #F6F6F6;
+    }
+  }
 
 </style>

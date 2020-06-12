@@ -58,6 +58,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "exptEdit" */ '../views/Experiment/edit.vue')
   },
   {
+    path: '/exptAdd',
+    name: 'ExperimentAdd',
+    component: () => import(/* webpackChunkName: "exptAdd" */ '../views/Experiment/add.vue')
+  },
+  {
     path: '/exptAddMouse',
     name: 'ExptAddMouse',
     component: () => import(/* webpackChunkName: "exptAddMouse" */ '../views/Experiment/addMouse.vue')

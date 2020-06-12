@@ -13,9 +13,9 @@
       </template>
     </top-bar>
     <!-- 列表 -->
-    <main-list>
+    <main-list :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>
-        <collapse>
+        <collapse v-for="item in tableData" :key="item.miceGeneId">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
               <span>ER-334</span>
@@ -53,7 +53,7 @@ import AddVariety from '@/components/Dialogs/AddVariety.vue'
 import { goPage } from '@/components/Mixins/goPage'
 import { fetchList } from '@/api/variety'
 import { delGenes } from '@/api/genes'
-import { Button } from 'vant'
+import { Button, Toast } from 'vant'
 
 export default {
   name: 'GenesList',
@@ -69,10 +69,11 @@ export default {
     return {
       isAdmin: false,
       tableLoading: false,
+      noMore: false,
       page: {
         total: 0, // 总页数
         page: 1, // 当前页数
-        limit: 10 // 每页显示多少条
+        limit: 5 // 每页显示多少条
       },
       tableData: []
     }
@@ -82,14 +83,13 @@ export default {
   },
   methods: {
     goGenes() {
-      this.goPage('varietyEdit', { type: 'add' })
+      this.goPage('VarietyEdit', { type: 'add' })
     },
     goList() {
-      this.goPage('varietyList', { type: 'list' })
+      this.goPage('VarietyList', { type: 'list' })
     },
     goEdit(row) {
-      console.log('row---==', row)
-      this.goPage('varietyEdit', row)
+      this.goPage('VarietyEdit', row)
     },
     goPage(r, obj) {
       this.$router.push({ name: r, params: obj })
@@ -113,24 +113,26 @@ export default {
         return delGenes(miceGeneId)
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(() => {
       })
     },
     // 获取列表
-    getList() {
+    getList(page) {
       this.tableLoading = true
+      if (this.noMore) return false
       fetchList(Object.assign({
-        current: this.page.page,
+        current: page || this.page.page,
         size: this.page.limit
       })).then(response => {
-        this.tableData = response.data.records
+        this.tableData = this.tableData.concat(response.data.records)
+        this.page.page = response.data.current + 1
+        if (this.page.page > response.data.pages) {
+          this.noMore = true
+        }
         this.page.total = response.data.total
       }).finally(() => {
+        console.log('结束')
         this.tableLoading = false
       })
     }

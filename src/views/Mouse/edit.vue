@@ -183,6 +183,28 @@
               <p>是否开启表型鉴定时间提醒</p>
             </template>
           </van-select>
+          <van-field
+            v-model="currentGene.geneName"
+            label="笼位号"
+            placeholder="请输入笼位号名称"
+          />
+          <div class="cage-box">
+            <van-field
+              v-model="currentGene.geneName"
+              label="笼位号"
+              placeholder="请输入笼位号名称"
+            />
+            <van-field
+              v-model="currentGene.miceCondition"
+              label="房间号"
+              placeholder="请输入房间号"
+            />
+            <van-field
+              v-model="currentGene.status"
+              label="架号"
+              placeholder="请输入架号"
+            />
+          </div>
           <div class="file--span fs14">
             <p>附件：<span class="txt-btn--green">查看附件</span><span class="txt-btn--green ml18">上传附件</span></p>
           </div>
@@ -569,7 +591,7 @@ export default {
   .mouse-edit {
     margin-bottom: 80px;
   }
-  .genes-box {
+  .genes-box, .cage-box {
     width: 90%;
     margin: 0 auto;
     background-color: #F6F6F6;

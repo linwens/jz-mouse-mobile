@@ -4,14 +4,14 @@
     <top-bar :active-key="4">
       <template>
         <div class="w-100 df s-jcfe s-aic">
-          <van-button class="w90" hairline round size="small" color="#32C985" type="info" to="/exptEdit">新增实验组</van-button>
+          <van-button class="w90" hairline round size="small" color="#32C985" type="info" to="/exptAdd">新增实验组</van-button>
         </div>
       </template>
     </top-bar>
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse>
+        <collapse v-for="item in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>实验组ADEGss</span>
@@ -50,7 +50,7 @@ import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import { delExptObj, fetchList, endExpt } from '@/api/experiment'
-import { Button } from 'vant'
+import { Button, Toast } from 'vant'
 
 export default {
   name: 'ExperimentIndex',
@@ -99,11 +99,7 @@ export default {
         return delExptObj(row.id)
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(function() {
       })
     },

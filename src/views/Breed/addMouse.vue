@@ -1,12 +1,174 @@
 <template>
-  <div></div>
+  <div class="mouse">
+    <!-- info -->
+    <div>
+      <van-swipe :show-indicators="false" :loop="false">
+        <van-swipe-item>
+          <div class="mouse__info1">
+            <h1 class="fs16">品系信息</h1>
+            <div class="df s-aic">
+              <p>品系：<span>{{ mouseInfo.varietiesName }}</span></p>
+              <p>毛色：<span>{{ mouseInfo.geneColor }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>基因型：<span>{{ mouseInfo.geneName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>饲养条件：<span>{{ mouseInfo.miceCondition }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>健康状况：<span>{{ mouseInfo.geneStatus }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>应用领域：<span>{{ mouseInfo.area }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>更改位置时间：<span>{{ mouseInfo.miceUpdateTime * 1000 | timeFormat('yyyy年MM月dd日 hh:mm:ss') }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>小鼠家谱：<show-family v-if="curMouseId" :mice-id="curMouseId" btn-type="text" /></p>
+            </div>
+          </div>
+        </van-swipe-item>
+        <van-swipe-item>
+          <div class="mouse__info1">
+            <h1 class="fs16 mb5">实验信息</h1>
+            <div class="df s-aic">
+              <p>实验组名称：<span>{{ mouseExptInfo.experimentName }}</span></p>
+              <p>分组名称：<span>{{ mouseExptInfo.sampleGroupName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>起止时间：<span>{{ mouseExptInfo.startTime * 1000 | timeFormat('yyyy.M.dd') }}-{{ mouseExptInfo.endTime * 1000 | timeFormat('yyyy.M.dd') }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>处理：<span>{{ mouseExptInfo.eventName }}</span></p>
+            </div>
+            <h1 class="fs16 mt5 mb5">实验进度</h1>
+            <div>
+              <p class="df">
+                检测实验结果:
+                <view-files v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml10 mr15" btn-type="text" btn-text="查看" biz-type="experiment" />
+                <upload-btn v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" btn-text="上传" biz-type="experiment" class="dib" />
+              </p>
+            </div>
+            <div class="mt20 mb20">
+              <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
+                <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
+                <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
+                <van-progress :percentage="Number(percentage)" :stroke-width="16" color="#58A2FB" text-color="#fff" />
+              </div>
+            </div>
+            <div class="df s-jcc s-aic">
+              <p>
+                <i class="fs10 mr10">
+                  <svg-icon icon-class="circle" class="fs10 cl-green" />
+                  处理时间
+                </i>
+                <i class="fs10">
+                  <svg-icon icon-class="circle" class="fs10 cl-yellow" />
+                  检测时间
+                </i>
+              </p>
+              <div class="df s-jcc s-aic">
+                <set-time v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" @done="setProgress" />
+                <expt-record v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml10" />
+              </div>
+            </div>
+          </div>
+        </van-swipe-item>
+        <van-swipe-item>
+          <div class="mouse__info1">
+            <h1 class="fs16">基本信息</h1>
+            <div class="df s-aic">
+              <p>系统编号：<span>{{ mouseInfo.miceNo }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>性别：<span>{{ mouseInfo.gender >= 0 ? (mouseInfo.gender === 0 ? '雄' : '雌') : '' }}</span></p>
+              <p>出生日期：<span>{{ mouseInfo.birthDate * 1000 | timeFormat('yyyy-MM-dd') }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>体重：<span>{{ mouseInfo.weight }}</span></p>
+              <p>笼位号：<span>{{ mouseInfo.cageNo }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>周龄：<span>{{ mouseInfo.birthDate ? `${weekAge}周${dayAge}天` : '' }}</span></p>
+              <p>状态：<span>{{ mouseInfo.miceStatusDesc }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p class="df s-aic">显示颜色：<i class="mouse__info--i dib" :style="{'width': '16px', 'height': '16px', 'backgroundColor': mouseInfo.miceColor}" /></p>
+              <p>附件：<span class="txt-btn--green">查看</span></p>
+            </div>
+            <div class="df s-aic pos-r">
+              <p>标记：<span>21</span></p>
+              <p class="pos-r">
+                <span class="mouse__info--span">标记:</span>
+                <i v-if="mouseInfo.position === 'custom'" class="mouse__info--i">{{ mouseInfo.sign }}</i>
+                <img v-else class="pos-a mouse__info-sign" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${mouseInfo.filePrefix}/${mouseInfo.sign}.jpg`" alt="">
+              </p>
+            </div>
+          </div>
+        </van-swipe-item>
+      </van-swipe>
+    </div>
+    <div class="mouse__cages">
+      <mouse-cage
+        v-for="(item, index) in cageList"
+        :key="index"
+        :need-type="needType"
+        :all-data="item"
+        :is-active="true"
+        :choiced-list.sync="curCageMouseList"
+        :is-choosing-cage="isChoosingCage"
+        :cage-id="item.id"
+        :choosed-cage.sync="choosedCage"
+        :cur-mouse-id.sync="curMouseId"
+        :cur-mouse.sync="mouseInfo"
+        :cur-mouse-expt.sync="mouseExptInfo"
+      />
+    </div>
+    <bottom-btn @confirm="goAdd">
+      <template slot="confirm">
+        <van-button class="w150" round size="small" color="#32C985" type="info">确认添加</van-button>
+      </template>
+    </bottom-btn>
+  </div>
 </template>
 
 <script>
-import { Toast, Dialog } from 'vant'
+import BottomBtn from '@/components/BottomBtn/index.vue'
+import MouseCage from '@/components/MouseCage/index.vue'
+import AddCageBtn from '@/components/Dialogs/AddCage'
+import ViewFiles from '@/components/ViewFiles'
+import UploadBtn from '@/components/Dialogs/Upload'
+import ExptRecord from '@/components/Dialogs/ExptRecord'
+import SetTime from '@/components/Dialogs/SetTime'
+import ShowFamily from '@/components/Dialogs/ShowFamily'
+import {
+  Swipe,
+  SwipeItem,
+  Button,
+  Dialog,
+  Toast,
+  Progress
+} from 'vant'
+import { fetchCageList } from '@/api/mouse'
 
 export default {
   name: 'BreedAddMouse',
+  components: {
+    'van-button': Button,
+    'van-swipe': Swipe,
+    'van-swipe-item': SwipeItem,
+    'van-progress': Progress,
+    BottomBtn,
+    ExptRecord,
+    SetTime,
+    ShowFamily,
+    AddCageBtn,
+    UploadBtn,
+    ViewFiles,
+    MouseCage
+  },
   data() {
     return {
       curMouseId: null, // 当前选中小鼠的id
@@ -237,6 +399,62 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  .mouse {
+    margin-bottom: 80px;
+    .van-swipe-item {
+      padding: 10px 15px;
+      background-color: #F6F6F6;
+    }
 
+    &__btns {
+      padding: 7px 15px;
+    }
+
+    &__cages {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0 15px;
+      margin-top: 20px;
+    }
+
+    &__info1 {
+      height: 252px;
+      padding: 10px 15px;
+      background-color: #fff;
+      font-size: 14px;
+
+      h6 {
+        color:#333
+      }
+
+      p {
+        min-width: 47%;
+        line-height: 1.6;
+        color: #969799;
+      }
+      span {
+        color: #333;
+      }
+    }
+
+    &__progrTag {
+      position: absolute;
+      z-index: 1;
+      &--g{
+        top: -12px;
+      }
+      &--y{
+        bottom: -12px;
+      }
+    }
+
+    &__info-sign {
+      top: 0;
+      left: 0;
+      width: 142px;
+      height: 80px;
+      border: 1px solid #eee;
+    }
+  }
 </style>

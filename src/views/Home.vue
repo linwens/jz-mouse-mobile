@@ -5,7 +5,6 @@
       <template>
         <div class="w-100 df s-jcsb s-aic">
           <xs-select class="ml17" />
-          <van-icon name="chat-o" dot />
         </div>
       </template>
     </top-bar>
@@ -13,11 +12,9 @@
     <sum-bar id="1" :show="activeName === 'mine'" :type="barType" />
     <!-- 列表筛选 -->
     <div class="home__filters df s-fww s-jcsb s-aic">
-      <van-button plain type="info" @click="filterDialog = true">
-        更多<van-icon name="filter-o" />
-      </van-button>
       <van-select
         btn-type="button"
+        btn-width-class="w80"
         :cur-val.sync="myMouseForm.operator"
         btn-text="负责人"
         :columns="persons"
@@ -26,6 +23,7 @@
       />
       <van-select
         btn-type="button"
+        btn-width-class="w80"
         :cur-val.sync="myMouseForm.varietiesId"
         btn-text="品系"
         :columns="varietiesOpts"
@@ -34,102 +32,16 @@
       />
       <van-select
         btn-type="button"
+        btn-width-class="w80"
         :cur-val.sync="myMouseForm.genotypes"
         btn-text="基因型"
         :columns="genesOpts"
         key-text="geneName"
         val-text="id"
       />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.pureHeterozygote"
-        btn-text="纯/杂合子"
-        :columns="[
-          {
-            label: '纯合子',
-            value: 0
-          },
-          {
-            label: '杂合子',
-            value: 1
-          },
-          {
-            label: '未测试',
-            value: 2
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.gender"
-        btn-text="性别"
-        :columns="[
-          {
-            label: '雌',
-            value: 1
-          },
-          {
-            label: '雄',
-            value: 0
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.status"
-        btn-text="状态"
-        :columns="[
-          {
-            label: '闲置',
-            value: 1
-          },
-          {
-            label: '繁育',
-            value: 2
-          },
-          {
-            label: '实验',
-            value: 3
-          },
-          {
-            label: '手动处死',
-            value: 4
-          },
-          {
-            label: '实验处死',
-            value: 5
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="JSON.stringify(weekRange)"
-        btn-text="周龄"
-        :columns="[
-          {
-            label: '4周以下',
-            value: JSON.stringify([null, 4])
-          },
-          {
-            label: '4-8周',
-            value: JSON.stringify([4, 8])
-          },
-          {
-            label: '8-12周',
-            value: JSON.stringify([8, 12])
-          },
-          {
-            label: '12周以上',
-            value: JSON.stringify([12, null])
-          },
-          {
-            label: '自定义',
-            value: 'custom'
-          }
-        ]"
-        @done="selectWeekRange"
-      />
-      <span v-if="weekRange === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
+      <van-button plain size="small" type="info" @click="filterDialog = true">
+        <van-icon name="filter-o" />更多
+      </van-button>
     </div>
     <p class="mt12 ml14 fs14 cl-grey-9">总计：<span class="cl-black">{{ page.total }} 条数据</span></p>
     <!-- 列表 -->
@@ -175,129 +87,148 @@
     </main-list>
     <!-- 更多筛选项 -->
     <van-popup
+      title="筛选"
       v-model="filterDialog"
       position="bottom"
-      :style="{ height: '80%' }"
+      :style="{ height: '40%' }"
       closeable
       get-container="body"
     >
-      <van-button type="primary" size="small" class="w70" @click="reset">重置</van-button>
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.operator"
-        btn-text="负责人"
-        :columns="persons"
-        key-text="userName"
-        val-text="userId"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.varietiesId"
-        btn-text="品系"
-        :columns="varietiesOpts"
-        key-text="varietiesName"
-        val-text="id"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.genotypes"
-        btn-text="基因型"
-        :columns="genesOpts"
-        key-text="geneName"
-        val-text="id"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.pureHeterozygote"
-        btn-text="纯/杂合子"
-        :columns="[
-          {
-            label: '纯合子',
-            value: 0
-          },
-          {
-            label: '杂合子',
-            value: 1
-          },
-          {
-            label: '未测试',
-            value: 2
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.gender"
-        btn-text="性别"
-        :columns="[
-          {
-            label: '雌',
-            value: 1
-          },
-          {
-            label: '雄',
-            value: 0
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="myMouseForm.status"
-        btn-text="状态"
-        :columns="[
-          {
-            label: '闲置',
-            value: 1
-          },
-          {
-            label: '繁育',
-            value: 2
-          },
-          {
-            label: '实验',
-            value: 3
-          },
-          {
-            label: '手动处死',
-            value: 4
-          },
-          {
-            label: '实验处死',
-            value: 5
-          }
-        ]"
-      />
-      <van-select
-        btn-type="button"
-        :cur-val.sync="JSON.stringify(weekRange)"
-        btn-text="周龄"
-        :columns="[
-          {
-            label: '4周以下',
-            value: JSON.stringify([null, 4])
-          },
-          {
-            label: '4-8周',
-            value: JSON.stringify([4, 8])
-          },
-          {
-            label: '8-12周',
-            value: JSON.stringify([8, 12])
-          },
-          {
-            label: '12周以上',
-            value: JSON.stringify([12, null])
-          },
-          {
-            label: '自定义',
-            value: 'custom'
-          }
-        ]"
-        @done="selectWeekRange"
-      />
+      <div class="filter-popup df s-fww s-jcc s-aic">
+        <div class="w-100 df s-jcsb filter__col">
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.operator"
+            btn-text="负责人"
+            :columns="persons"
+            key-text="userName"
+            val-text="userId"
+          />
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.varietiesId"
+            btn-text="品系"
+            :columns="varietiesOpts"
+            key-text="varietiesName"
+            val-text="id"
+          />
+        </div>
+        <div class="w-100 df s-jcsb filter__col">
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.genotypes"
+            btn-text="基因型"
+            :columns="genesOpts"
+            key-text="geneName"
+            val-text="id"
+          />
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.pureHeterozygote"
+            btn-text="纯/杂合子"
+            :columns="[
+              {
+                label: '纯合子',
+                value: 0
+              },
+              {
+                label: '杂合子',
+                value: 1
+              },
+              {
+                label: '未测试',
+                value: 2
+              }
+            ]"
+          />
+        </div>
+        <div class="w-100 df s-jcsb filter__col">
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.gender"
+            btn-text="性别"
+            :columns="[
+              {
+                label: '雌',
+                value: 1
+              },
+              {
+                label: '雄',
+                value: 0
+              }
+            ]"
+          />
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="myMouseForm.status"
+            btn-text="状态"
+            :columns="[
+              {
+                label: '闲置',
+                value: 1
+              },
+              {
+                label: '繁育',
+                value: 2
+              },
+              {
+                label: '实验',
+                value: 3
+              },
+              {
+                label: '手动处死',
+                value: 4
+              },
+              {
+                label: '实验处死',
+                value: 5
+              }
+            ]"
+          />
+
+        </div>
+        <div class="w-100 df s-jcsb filter__col">
+          <van-select
+            btn-type="button"
+            btn-width-class="w150"
+            :cur-val.sync="JSON.stringify(weekRange)"
+            btn-text="周龄"
+            :columns="[
+              {
+                label: '4周以下',
+                value: JSON.stringify([null, 4])
+              },
+              {
+                label: '4-8周',
+                value: JSON.stringify([4, 8])
+              },
+              {
+                label: '8-12周',
+                value: JSON.stringify([8, 12])
+              },
+              {
+                label: '12周以上',
+                value: JSON.stringify([12, null])
+              },
+              {
+                label: '自定义',
+                value: 'custom'
+              }
+            ]"
+            @done="selectWeekRange"
+          />
+          <span v-if="weekRange === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
+        </div>
+      </div>
       <div class="bottom-btn df s-jcsa s-aic">
-        <van-button class="w70" round color="#F6AC2D" size="small" type="info" @click="filterDialog = false">返回</van-button>
-        <van-button class="w70" round color="#32C985" size="small" type="info" @click="search">搜索</van-button>
+        <van-button class="w150" round color="#F6AC2D" type="info" size="small" @click="reset">重置</van-button>
+        <van-button class="w150" round color="#32C985" size="small" type="info" @click="filterDialog = false">搜索</van-button>
       </div>
     </van-popup>
   </div>
@@ -316,13 +247,13 @@ import { fetchList, getUsers } from '@/api/home'
 import { varietiesList } from '@/api/variety'
 import { getLisByVariety } from '@/api/genes'
 import { mapGetters } from 'vuex'
-import { Icon, Button, Toast } from 'vant'
+import { Button, Toast, Popup } from 'vant'
 
 export default {
   name: 'Home',
   components: {
     'van-button': Button,
-    'van-icon': Icon,
+    'van-popup': Popup,
     'xs-select': FormSelect,
     VanSelect,
     TopBar,
@@ -562,6 +493,16 @@ export default {
 }
 </script>
 <style lang="scss">
+  .home__filters {
+    padding: 8px 14px;
+  }
+
+  .filter-popup {
+    margin-top: 40px;
+    div.filter__col {
+      padding: 8px 14px;
+    }
+  }
   .test-box{
     width: 200px;
     height: 50px;

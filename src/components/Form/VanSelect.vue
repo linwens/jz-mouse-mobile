@@ -9,11 +9,11 @@
       placeholder="点击选择城市"
       @click="showPicker = true"
     /> -->
-    <van-button v-if="btnType === 'button'" type="default" size="small" class="df s-jcsb w150" @click="showPicker = true">
+    <van-button v-if="btnType === 'button'" type="default" size="small" class="df s-jcsb" :class="btnWidthClass" @click="showPicker = true">
       <i>{{ curBtnLabel || btnText }}</i>
       <svg-icon icon-class="select-icon" class="fs10" />
     </van-button>
-    <van-cell v-if="btnType === 'cell'" class="time-select__placeholder" :title="btnText" :value="placeholder" is-link @click="showPicker = true" />
+    <van-cell v-if="btnType === 'cell'" class="time-select__placeholder" :title="btnText" :value="value" is-link @click="showPicker = true" />
     <!-- 弹窗 -->
     <van-popup v-model="showPicker" position="bottom" get-container="body">
       <van-picker
@@ -61,6 +61,10 @@ export default {
       type: String,
       default: ''
     },
+    btnWidthClass: {
+      type: String,
+      default: 'w75'
+    },
     columns: {
       type: Array,
       default() {
@@ -88,7 +92,8 @@ export default {
       curBtnLabel: ''
     }
   },
-  created() {},
+  created() {
+  },
   watch: {
     columns(n, o) {
       const names = n.map((el) => {
@@ -99,6 +104,10 @@ export default {
   },
   methods: {
     onConfirm(value) {
+      if (!value) {
+        this.showPicker = false
+        return false
+      }
       this.value = value
       this.$emit('update:placeholder', value)
       const choicedOne = this.columns.filter((el) => {
@@ -114,10 +123,12 @@ export default {
       }
       if (this.btnType === 'button') {
         this.curBtnLabel = choicedOne[0][this.keyText]
+      } else {
+        this.value = choicedOne[0][this.keyText]
       }
       this.showPicker = false
 
-      this.$emit('done')
+      this.$emit('confirm')
     }
   }
 }

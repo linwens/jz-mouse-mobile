@@ -60,7 +60,7 @@ import BottomBtn from '@/components/BottomBtn/index.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
 import { addBreed, getbreedDetail, editBreed } from '@/api/breed'
 import { calcWeek } from '@/components/Mixins/calcWeek'
-import { Button, Form, Field } from 'vant'
+import { Button, Form, Field, Toast } from 'vant'
 
 export default {
   name: 'BreedEdit',
@@ -180,11 +180,7 @@ export default {
         })
         console.log(newList)
         this.$set(this.breedForm, 'miceIds', newList)
-        _this.$message({
-          showClose: true,
-          message: '删除成功，确认提交后生效',
-          type: 'success'
-        })
+        Toast.success('删除成功，确认提交后生效')
       }).catch(function() {
       })
     },
@@ -216,7 +212,7 @@ export default {
         if (valid) {
           console.log(this.breedForm)
           if (this.breedForm.miceIds.length === 0) {
-            this.$message.error('请添加小鼠')
+            Toast.fail('请添加小鼠')
             return false
           }
           const miceArr = this.breedForm.miceIds.map((el) => {
@@ -248,7 +244,7 @@ export default {
     // 新增
     doAdd(params) {
       addBreed(params).then((res) => {
-        this.$message.success('新增繁育组成功')
+        Toast.success('新增繁育组成功')
         this.$store.dispatch('app/clearMouses')
         this.$store.dispatch('app/clearBreed')
         this.goBack()
@@ -257,7 +253,7 @@ export default {
     // 编辑
     doEdit(params) {
       editBreed(params).then((res) => {
-        this.$message.success('编辑信息成功')
+        Toast.success('编辑信息成功')
         this.$store.dispatch('app/clearMouses')
         this.$store.dispatch('app/clearBreed')
         this.goBack()

@@ -43,7 +43,7 @@ import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import { delDelMouse, fetchList } from '@/api/delList'
-import { Button } from 'vant'
+import { Button, Toast } from 'vant'
 
 export default {
   name: 'BreedList',
@@ -92,11 +92,7 @@ export default {
         return delBreedGroup(row.id)
       }).then(() => {
         this.getList()
-        _this.$message({
-          showClose: true,
-          message: '删除成功',
-          type: 'success'
-        })
+        Toast.success('删除成功')
       }).catch(function() {
       })
     },
