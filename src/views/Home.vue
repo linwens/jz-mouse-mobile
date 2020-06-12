@@ -13,7 +13,9 @@
     <sum-bar id="1" :show="activeName === 'mine'" :type="barType" />
     <!-- 列表筛选 -->
     <div class="home__filters df s-fww s-jcsb s-aic">
-      <van-button type="primary" size="small" class="w70" @click="reset">重置</van-button>
+      <van-button plain type="info" @click="filterDialog = true">
+        更多<van-icon name="filter-o" />
+      </van-button>
       <van-select
         btn-type="button"
         :cur-val.sync="myMouseForm.operator"
@@ -171,6 +173,133 @@
         </collapse>
       </template>
     </main-list>
+    <!-- 更多筛选项 -->
+    <van-popup
+      v-model="filterDialog"
+      position="bottom"
+      :style="{ height: '80%' }"
+      closeable
+      get-container="body"
+    >
+      <van-button type="primary" size="small" class="w70" @click="reset">重置</van-button>
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.operator"
+        btn-text="负责人"
+        :columns="persons"
+        key-text="userName"
+        val-text="userId"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.varietiesId"
+        btn-text="品系"
+        :columns="varietiesOpts"
+        key-text="varietiesName"
+        val-text="id"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.genotypes"
+        btn-text="基因型"
+        :columns="genesOpts"
+        key-text="geneName"
+        val-text="id"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.pureHeterozygote"
+        btn-text="纯/杂合子"
+        :columns="[
+          {
+            label: '纯合子',
+            value: 0
+          },
+          {
+            label: '杂合子',
+            value: 1
+          },
+          {
+            label: '未测试',
+            value: 2
+          }
+        ]"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.gender"
+        btn-text="性别"
+        :columns="[
+          {
+            label: '雌',
+            value: 1
+          },
+          {
+            label: '雄',
+            value: 0
+          }
+        ]"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="myMouseForm.status"
+        btn-text="状态"
+        :columns="[
+          {
+            label: '闲置',
+            value: 1
+          },
+          {
+            label: '繁育',
+            value: 2
+          },
+          {
+            label: '实验',
+            value: 3
+          },
+          {
+            label: '手动处死',
+            value: 4
+          },
+          {
+            label: '实验处死',
+            value: 5
+          }
+        ]"
+      />
+      <van-select
+        btn-type="button"
+        :cur-val.sync="JSON.stringify(weekRange)"
+        btn-text="周龄"
+        :columns="[
+          {
+            label: '4周以下',
+            value: JSON.stringify([null, 4])
+          },
+          {
+            label: '4-8周',
+            value: JSON.stringify([4, 8])
+          },
+          {
+            label: '8-12周',
+            value: JSON.stringify([8, 12])
+          },
+          {
+            label: '12周以上',
+            value: JSON.stringify([12, null])
+          },
+          {
+            label: '自定义',
+            value: 'custom'
+          }
+        ]"
+        @done="selectWeekRange"
+      />
+      <div class="bottom-btn df s-jcsa s-aic">
+        <van-button class="w70" round color="#F6AC2D" size="small" type="info" @click="filterDialog = false">返回</van-button>
+        <van-button class="w70" round color="#32C985" size="small" type="info" @click="search">搜索</van-button>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -204,6 +333,8 @@ export default {
   },
   data() {
     return {
+      // 筛选相关
+      filterDialog: false,
       // 关于周龄
       weekRange: [],
       weekRangeDialog: false,
