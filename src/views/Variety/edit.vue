@@ -9,7 +9,7 @@
         :rules="[{ required: true, message: '请选择品系' }]"
       >
         <template #button>
-          <choose-variety :cur-variety.sync="choicedVariety"></choose-variety>
+          <choose-variety :cur-variety.sync="choicedVariety" />
         </template>
       </van-field>
       <van-field
@@ -55,12 +55,11 @@ import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import { goBack } from '@/components/Mixins/goPage'
 import { addNewGenes, editGenes } from '@/api/genes'
-import { Button, Form, Field, Toast } from 'vant'
+import { Form, Field, Toast } from 'vant'
 
 export default {
   name: 'VarietyEdit',
   components: {
-    'van-button': Button,
     'van-form': Form,
     'van-field': Field,
     BottomBtn,

@@ -11,7 +11,7 @@
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse>
+        <collapse v-for="item in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic">
               <span>实验组ADEGss</span>
@@ -54,9 +54,66 @@ export default {
     TopBar
   },
   data() {
-    return {}
-  }
+    return {
+      tableLoading: false,
+      page: {
+        total: 0, // 总页数
+        page: 1, // 当前页数
+        limit: 10 // 每页显示多少条
+      },
+      tableData: []
+    }
+  },
+  created() {
 
+  },
+  methods: {
+    goAdd() {
+      this.goPage({ type: 'add', id: 0 })
+    },
+    goEdit(row) {
+      const id = row.id
+      this.goPage({ type: 'edit', id: id })
+    },
+    goPage(obj) {
+      this.$router.push({ name: 'breedEdit', params: obj })
+    },
+    handleRefreshChange() {
+      this.getList()
+    },
+    // 删除
+    rowItemDel: function(row) {
+      const _this = this
+      this.$confirm('是否确认删除繁育组："' + row.name + '"的数据?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delBreedGroup(row.id)
+      }).then(() => {
+        this.getList()
+        _this.$message({
+          showClose: true,
+          message: '删除成功',
+          type: 'success'
+        })
+      }).catch(function() {
+      })
+    },
+    // 获取列表
+    getList() {
+      this.tableLoading = true
+      fetchList(Object.assign({
+        current: this.page.page,
+        size: this.page.limit
+      })).then(response => {
+        this.tableData = response.data.records
+        this.page.total = response.data.total
+      }).finally(() => {
+        this.tableLoading = false
+      })
+    }
+  }
 }
 </script>
 

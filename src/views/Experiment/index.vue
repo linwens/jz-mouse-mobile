@@ -49,7 +49,7 @@
 import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
-import { delDelMouse, fetchList } from '@/api/delList'
+import { delExptObj, fetchList, endExpt } from '@/api/experiment'
 import { Button } from 'vant'
 
 export default {
@@ -61,7 +61,82 @@ export default {
     TopBar
   },
   data() {
-    return {}
+    return {
+      tableLoading: false,
+      page: {
+        total: 0, // 总页数
+        page: 1, // 当前页数
+        limit: 10 // 每页显示多少条
+      },
+      tableData: []
+    }
+  },
+  created() {
+
+  },
+  methods: {
+    goAdd() {
+      this.goPage('experimentAdd', { type: 'add' })
+    },
+    goEdit(row) {
+      const id = row.id
+      this.$router.push({ name: 'experimentEdit', params: { id }})
+    },
+    goPage(r, obj) {
+      this.$router.push({ name: r, params: obj })
+    },
+    handleRefreshChange() {
+      this.getList()
+    },
+    // 删除
+    rowItemDel: function(row) {
+      const _this = this
+      this.$confirm(`是否确认删除实验组: ${row.name}吗?`, '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delExptObj(row.id)
+      }).then(() => {
+        this.getList()
+        _this.$message({
+          showClose: true,
+          message: '删除成功',
+          type: 'success'
+        })
+      }).catch(function() {
+      })
+    },
+    // 获取列表
+    getList() {
+      this.tableLoading = true
+      fetchList(Object.assign({
+        current: this.page.page,
+        size: this.page.limit
+      })).then(response => {
+        this.tableData = response.data.records
+        this.page.total = response.data.total
+      }).finally(() => {
+        this.tableLoading = false
+      })
+    },
+    // 手动结束
+    doEnd(id) {
+      const _self = this
+      this.$confirm('是否确认结束当前实验组', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.getList()
+        endExpt({
+          experimentId: id
+        }).then((res) => {
+          _self.$message.success('手动结束实验成功')
+        })
+      }).catch(function() {
+      })
+    }
   }
 }
 </script>

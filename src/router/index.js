@@ -57,6 +57,11 @@ const routes = [
     name: 'ExperimentEdit',
     component: () => import(/* webpackChunkName: "exptEdit" */ '../views/Experiment/edit.vue')
   },
+  {
+    path: '/exptAddMouse',
+    name: 'ExptAddMouse',
+    component: () => import(/* webpackChunkName: "exptAddMouse" */ '../views/Experiment/addMouse.vue')
+  },
 
   // 删除小鼠列表
   {
@@ -75,6 +80,11 @@ const routes = [
     path: '/breedEdit',
     name: 'BreedEdit',
     component: () => import(/* webpackChunkName: "breedEdit" */ '../views/Breed/edit.vue')
+  },
+  {
+    path: '/breedAddMouse',
+    name: 'BreedAddMouse',
+    component: () => import(/* webpackChunkName: "breedAddMouse" */ '../views/Breed/addMouse.vue')
   },
 
   // 品系管理
