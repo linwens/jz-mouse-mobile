@@ -138,7 +138,7 @@ import TimeSelect from '@/components/Form/TimeSelect.vue'
 import { getExptInfoById, updateExptInfo } from '@/api/experiment'
 import { getMouseInfoByIds } from '@/api/mouse'
 import { calcWeek } from '@/components/Mixins/calcWeek'
-import { Button, Form, Field, Tag, Cell, Toast } from 'vant'
+import { Button, Form, Field, Tag, Cell, Toast, Dialog } from 'vant'
 
 export default {
   name: 'ExperimentEdit',
@@ -234,7 +234,9 @@ export default {
     rowItemDel: function(scope) {
       console.log(scope)
       const _this = this
-      this.$confirm('是否确认删除实验分组："' + scope.row.experimentGroupName + '"?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除实验分组："${scope.row.experimentGroupName}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -248,7 +250,9 @@ export default {
     delMouse: function(scope) {
       console.log(scope)
       const _this = this
-      this.$confirm('是否确认删除小鼠"' + scope.row.miceNo + '"的数据?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除小鼠"${scope.row.miceNo}"的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

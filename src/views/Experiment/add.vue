@@ -108,9 +108,9 @@
       <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="addNewGroup()">新增分组</van-button>
     </div>
     <!-- 列表 -->
-    <main-list>
+    <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @refresh="getList(1)">
       <template>
-        <collapse v-for="item in tableData" :key="item.id">
+        <collapse v-for="(item, index) in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>实验组ADEsG</span>
@@ -127,7 +127,7 @@
             <div class="df s-aic">
               <p>小鼠：
                 <span class="txt-btn--green" @click="showMouses(item)">查看小鼠</span>
-                <span class="txt-btn--green ml18" @click="goAddMouse(item)">添加小鼠</span>
+                <span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span>
               </p>
             </div>
           </template>
@@ -276,6 +276,7 @@ export default {
       },
       tableData: [],
       tableLoading: false,
+      noMore: false,
       page: {
         total: 0, // 总页数
         page: 1, // 当前页数
@@ -318,8 +319,9 @@ export default {
       })
     },
     goAddMouse(scope) {
-      this.setStorageInfo(scope.$index)
-      this.goPage('experimentAddMouse', { type: 'noExpt', index: scope.$index })
+      console.log(scope)
+      this.setStorageInfo(scope.index)
+      this.goPage('experimentAddMouse', { type: 'noExpt', index: scope.index })
     },
     goPage(r, obj) {
       this.$router.push({ name: r, params: obj })
@@ -334,7 +336,9 @@ export default {
     rowItemDel: function(scope) {
       console.log(scope)
       const _this = this
-      this.$confirm('是否确认删除实验分组："' + scope.row.experimentGroupName + '"?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除实验分组："${scope.row.experimentGroupName}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -348,7 +352,9 @@ export default {
     delMouse: function(scope) {
       console.log(scope)
       const _this = this
-      this.$confirm('是否确认删除小鼠"' + scope.row.miceId + '"的数据?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除小鼠"${scope.row.miceId}"的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -365,14 +371,23 @@ export default {
       })
     },
     // 获取列表
-    getList() {
+    getList(page) {
+      if (page === 1) { // 如果展示第一页，先清列表
+        this.noMore = false
+        this.tableData = []
+      }
       this.tableLoading = true
       getGroupSampleList(Object.assign({
-        current: this.page.page,
+        current: page || this.page.page,
         size: this.page.limit
-      })).then(response => {
-        this.tableData = response.data.records
-        this.page.total = response.data.total
+      })).then(res => {
+        this.tableData = this.tableData.concat(res.data.records)
+        if (this.page.page > res.data.pages) {
+          this.noMore = true
+        } else {
+          this.page.page = res.data.current + 1
+        }
+        this.page.total = res.data.total
       }).finally(() => {
         this.tableLoading = false
       })

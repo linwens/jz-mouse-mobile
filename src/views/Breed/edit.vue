@@ -19,7 +19,7 @@
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse v-for="item in tableData" :key="item.id">
+        <collapse v-for="(item, index) in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic">
               <span>实验组ADEsG</span>
@@ -39,7 +39,7 @@
               <p>健康状况：<span>健康无异常</span></p>
             </div>
             <div class="df s-aic">
-              <p>受孕时间：<span class="txt-btn--green">设置</span></p>
+              <p>受孕时间：<span class="txt-btn--green" @click="setPregTime({item, index})">设置</span></p>
             </div>
           </template>
           <template slot="footer">
@@ -60,7 +60,7 @@ import BottomBtn from '@/components/BottomBtn/index.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
 import { addBreed, getbreedDetail, editBreed } from '@/api/breed'
 import { calcWeek } from '@/components/Mixins/calcWeek'
-import { Button, Form, Field, Toast } from 'vant'
+import { Button, Form, Field, Toast, Dialog } from 'vant'
 
 export default {
   name: 'BreedEdit',
@@ -136,7 +136,9 @@ export default {
     goAdd() {
       // 每次添加都先删除原有小鼠
       if (this.breedForm.miceIds.length > 0) {
-        this.$confirm('当前繁育组已有小鼠，是否要重新添加小鼠?', '警告', {
+        Dialog.confirm({
+          title: '警告',
+          message: '当前繁育组已有小鼠，是否要重新添加小鼠?',
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -169,8 +171,9 @@ export default {
     rowItemDel: function(row) {
       console.log('row=====', row)
       console.log('miceIds==', this.breedForm.miceIds)
-      const _this = this
-      this.$confirm('是否确认删除小鼠："' + row.miceInfoId + '"?', '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除小鼠："${row.miceInfoId}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -262,7 +265,7 @@ export default {
     // 设置受孕时间
     setPregTime(scope) {
       console.log(scope)
-      this.mouseIndex = scope.$index
+      this.mouseIndex = scope.index
       this.dialogVisible = true
       this.breedTime.date = scope.row.pregnantTime === 0 ? null : scope.row.pregnantTime
     },

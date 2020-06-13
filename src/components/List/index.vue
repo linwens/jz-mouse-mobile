@@ -1,9 +1,10 @@
 <template>
-  <div class="pb20">
+  <div class="main-list pb20">
     <van-pull-refresh v-model="loading" @refresh="onRefresh">
       <van-list
         v-model="loading"
         :finished="finished"
+        :offset="offset"
         finished-text="没有更多了"
         @load="onLoad"
       >
@@ -23,15 +24,17 @@ export default {
     'van-list': List
   },
   props: {
+    offset: {
+      type: Number,
+      default: 200
+    },
     isLoading: {
       type: Boolean,
       default: false
-    }
-  },
-  watch: {
-    isLoading(n, o) {
-      console.log('关闭啊！', n)
-      this.loading = n
+    },
+    isFinished: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -40,6 +43,15 @@ export default {
       loading: false,
       finished: false,
       refreshing: false
+    }
+  },
+  watch: {
+    isLoading(n, o) {
+      console.log('关闭啊！', n)
+      this.loading = n
+    },
+    isFinished(n, o) {
+      this.finished = n
     }
   },
   methods: {
@@ -59,7 +71,6 @@ export default {
       //     this.finished = true;
       //   }
       // }, 1000);
-      console.log(this.loading)
       this.$emit('load')
     },
     onRefresh() {
@@ -77,4 +88,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .main-list {
+    min-height: 30px;
+    .van-pull-refresh {
+      // padding-bottom: 20px;
+    }
+  }
 </style>

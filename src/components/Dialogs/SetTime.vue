@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button :class="btnWidthClass" round :size="size" color="#333" plain type="primary" @click="setTimeDialog = true">{{ btnText }}</van-button>
+    <van-button :class="btnWidthClass" hairline round :size="size" color="#333" plain type="primary" @click="setTimeDialog = true">{{ btnText }}</van-button>
     <!-- 设置时间弹窗 -->
     <van-dialog
       v-model="setTimeDialog"

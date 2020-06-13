@@ -53,7 +53,7 @@ import AddVariety from '@/components/Dialogs/AddVariety.vue'
 import { goPage } from '@/components/Mixins/goPage'
 import { fetchList } from '@/api/variety'
 import { delGenes } from '@/api/genes'
-import { Button, Toast } from 'vant'
+import { Button, Toast, Dialog } from 'vant'
 
 export default {
   name: 'GenesList',
@@ -102,8 +102,9 @@ export default {
     // 删除
     rowItemDel: function(row) {
       console.log(row)
-      const _this = this
-      this.$confirm(`是否确认删除品系"${row.varietiesName}"的"${row.geneName}"基因型?`, '警告', {
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除品系"${row.varietiesName}"的"${row.geneName}"基因型?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
