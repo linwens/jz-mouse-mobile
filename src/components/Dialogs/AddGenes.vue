@@ -101,27 +101,21 @@ export default {
   },
   methods: {
     doAddGenes() {
-      this.$refs['addGensForm'].validate((valid) => {
-        if (valid) {
-          this.addGenesDialog = false
-          const { source, geneName, miceCondition, status, color, area } = this.addGensForm
-          addNewGenes({
-            area,
-            color,
-            createUser: this.$store.getters.info.id,
-            geneName,
-            miceCondition,
-            source,
-            status,
-            varietiesId: this.varietiesId
-          }).then((res) => {
-            console.log(res)
-            this.addGensForm.id = res.data
-            this.$emit('update:genesData', JSON.stringify(this.addGensForm))
-          })
-        } else {
-          return false
-        }
+      this.addGenesDialog = false
+      const { source, geneName, miceCondition, status, color, area } = this.addGensForm
+      addNewGenes({
+        area,
+        color,
+        createUser: this.$store.getters.info.id,
+        geneName,
+        miceCondition,
+        source,
+        status,
+        varietiesId: this.varietiesId
+      }).then((res) => {
+        console.log(res)
+        this.addGensForm.id = res.data
+        this.$emit('update:genesData', JSON.stringify(this.addGensForm))
       })
     }
   }

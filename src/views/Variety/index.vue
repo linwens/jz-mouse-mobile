@@ -5,7 +5,7 @@
       <template>
         <div class="w-100 df s-jcsb s-aic">
           <div>
-            <add-variety class="w90 ml10" />
+            <add-variety class="w90 ml10" @done="getList(1)" />
             <van-button class="w90 ml10" hairline round size="small" color="#32C985" type="info" to="/varietyEdit">新增基因型</van-button>
           </div>
           <span class="txt-btn--green fs14" @click="goList">查看品系列表</span>
@@ -18,8 +18,8 @@
         <collapse v-for="item in tableData" :key="item.miceGeneId">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
-              <span>{{ item.geneName }}</span>
-              <span>{{ item.varietiesName }}</span>
+              <span class="fs10" style="word-break:break-all;line-height: 1;">{{ item.varietiesName }}</span>
+              <span class="fs10" style="word-break:break-all;line-height: 1;">{{ item.geneName }}</span>
             </div>
           </template>
           <template slot="content">

@@ -1,8 +1,8 @@
 <template>
   <div class="dib">
-    <span class="txt-btn--green fs14" @click="show = true">选择品系</span>
+    <span v-if="!disabled" class="txt-btn--green fs14" @click="show = true">选择品系</span>
     <!-- 弹出 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
+    <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
       <van-picker
         title="选择品系"
         show-toolbar
@@ -30,6 +30,10 @@ export default {
     'van-picker': Picker
   },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     curVariety: {
       type: Object,
       default() {

@@ -9,7 +9,10 @@
       confirm-button-color="#FF6358"
       @confirm="fillVarity"
     >
-      <van-form class="mt20 mb20">
+      <van-form
+        ref="addVarietyForm"
+        class="mt20 mb20"
+      >
         <van-field
           v-model="addVarietyForm.varietiesName"
           label="品系名称"
@@ -23,7 +26,7 @@
 
 <script>
 import { addItemObj } from '@/api/variety'
-import { Button, Dialog, Form, Field } from 'vant'
+import { Button, Toast, Dialog, Form, Field } from 'vant'
 
 export default {
   name: 'AddVariety',
@@ -53,13 +56,10 @@ export default {
         userId
       }).then((res) => {
         if (res.data) {
-          // 存储输入过的值
-          this.$store.dispatch('user/setInputHistory', {
-            varietiesName
-          })
           this.$emit('done')
           this.addVarietyForm.varietiesName = ''
-          this.$refs['addVarietyForm'].resetFields() // 就为了没有错误提示
+          this.$refs['addVarietyForm'].resetValidation() // 就为了没有错误提示
+          Toast.success('新增品系成功')
         }
       })
     }
