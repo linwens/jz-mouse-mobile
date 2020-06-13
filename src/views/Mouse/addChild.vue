@@ -1,8 +1,8 @@
 <template>
   <div class="add-child">
     <van-form>
-      <van-field v-model="form.fatherId" label="父鼠编号" />
-      <van-field v-model="form.motherId" label="母鼠编号" />
+      <van-field v-model="form.fatherId" label="父鼠编号" readonly />
+      <van-field v-model="form.motherId" label="母鼠编号" readonly />
       <van-field
         v-model="varietiesName"
         label="品系"
@@ -177,16 +177,19 @@
       <div class="cage-box">
         <van-field
           v-model="currentGene.geneName"
+          readonly
           label="笼位号"
           placeholder="请输入笼位号名称"
         />
         <van-field
           v-model="currentGene.miceCondition"
+          readonly
           label="房间号"
           placeholder="请输入房间号"
         />
         <van-field
           v-model="currentGene.status"
+          readonly
           label="架号"
           placeholder="请输入架号"
         />
@@ -253,7 +256,7 @@ export default {
       },
       cacheFilesList: [],
       // 品系选择
-      curVariety: '',
+      curVariety: {},
       varietiesName: '',
       varietiesId: '',
       father: {},
@@ -292,7 +295,7 @@ export default {
   },
   watch: {
     curVariety(n, o) {
-      const newVariety = JSON.parse(n)
+      const newVariety = n
       this.varietiesName = newVariety.varietiesName
       this.varietiesId = newVariety.id
       if (this.genesType === 4) {

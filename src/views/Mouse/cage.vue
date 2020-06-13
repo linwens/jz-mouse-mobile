@@ -34,20 +34,17 @@
         <van-field
           v-model="putInForm.female"
           label="雌"
-          placeholder="0"
           :disabled="optType === 'breed' || optType === 'expt'"
           @input="changeNum(putInForm.female, 'female')"
         />
         <van-field
           v-model="putInForm.male"
           label="雄"
-          placeholder="0"
           :disabled="optType === 'breed' || optType === 'expt'"
           @input="changeNum(putInForm.male, 'male')"
         />
       </van-form>
     </van-dialog>
-  </div>
   </div>
 </template>
 
@@ -83,8 +80,8 @@ export default {
       choosedCage: 0, // 当前选中的鼠笼id
       putInVisible: false,
       putInForm: {
-        male: 0,
-        female: 0
+        male: null,
+        female: null
       },
       mouseData: {}, // 新增小鼠信息
       mouses: [] // 添加多个小鼠信息
@@ -134,10 +131,11 @@ export default {
   },
   methods: {
     changeNum(val, type) { // 限制放入小鼠数量的输入值
-      if (val < 0 || typeof val !== 'number') {
+      const value = Number(val)
+      if (value < 0 || typeof value !== 'number' || isNaN(value)) {
         this.putInForm[type] = 0
       }
-      if (val > this.mouseData[`${type}MiceNum`]) {
+      if (value > this.mouseData[`${type}MiceNum`]) {
         this.putInForm[type] = this.mouseData[`${type}MiceNum`]
         Toast.fail(`${type === 'female' ? '雌' : '雄'}鼠最多只能放入${this.mouseData[`${type}MiceNum`]}只`)
       }
