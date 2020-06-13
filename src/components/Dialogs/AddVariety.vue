@@ -46,10 +46,14 @@ export default {
   },
   methods: {
     fillVarity() {
-      this.varietyDialog = false
       // 提交成功后触发done
       const { varietiesName } = this.addVarietyForm
       const { id: operator, id: userId } = this.$store.getters.info
+      if (!varietiesName) {
+        Toast.fail('请输入品系名称')
+        return false
+      }
+      this.varietyDialog = false
       addItemObj({
         varietiesName,
         operator,

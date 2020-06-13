@@ -22,7 +22,7 @@
         </collapse>
       </template>
     </main-list>
-    <bottom-btn @confirm="submit">
+    <bottom-btn>
       <template slot="confirm">
         <add-variety class="w150" @done="getList(1)" />
       </template>
@@ -140,27 +140,25 @@ export default {
     },
     // 编辑品系
     doEdit() {
-      this.$refs['editVarietyForm'].validate((valid) => {
-        if (valid) {
-          this.varietyDialog = false
-          const { id, operator, state, varietiesName } = this.editVarietyForm
-          putItemObj({
-            id,
-            operator,
-            state,
-            varietiesName,
-            userId: this.$store.getters.info.id
-          }).then((res) => {
-            console.log(res)
-            // 存储输入过的值
-            this.$store.dispatch('user/setInputHistory', {
-              varietiesName
-            })
-            this.getList()
-          })
-        } else {
-          return false
-        }
+      this.varietyDialog = false
+      const { id, operator, state, varietiesName } = this.editVarietyForm
+      if (!varietiesName) {
+        Toast.fail('品系名称不能为空')
+        return false
+      }
+      putItemObj({
+        id,
+        operator,
+        state,
+        varietiesName,
+        userId: this.$store.getters.info.id
+      }).then((res) => {
+        console.log(res)
+        // 存储输入过的值
+        this.$store.dispatch('user/setInputHistory', {
+          varietiesName
+        })
+        this.getList(1)
       })
     }
   }

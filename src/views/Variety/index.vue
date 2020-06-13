@@ -112,7 +112,7 @@ export default {
         const { miceGeneId } = row
         return delGenes(miceGeneId)
       }).then(() => {
-        this.getList()
+        this.getList(1)
         Toast.success('删除成功')
       }).catch(() => {
       })

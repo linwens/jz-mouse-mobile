@@ -88,6 +88,7 @@ export default {
       if (newVariety.isSystem === 1) { // 渲染内置基因型
         this.$set(this, 'addGensForm', newVariety.miceGeneVO)
         this.$set(this.addGensForm, 'varietiesName', newVariety.varietiesName)
+        this.$set(this.addGensForm, 'geneName', '') // 基因型空掉
       } else {
         this.$set(this, 'addGensForm', newVariety)
       }
