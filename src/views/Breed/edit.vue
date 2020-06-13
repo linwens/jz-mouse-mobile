@@ -14,7 +14,7 @@
       </time-select>
     </van-form>
     <div class="add-btn df s-jcfe s-aic pt13 pb11">
-      <van-button class="w90" hairline round size="small" color="#32C985" type="info">添加</van-button>
+      <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="goAdd()">添加</van-button>
     </div>
     <!-- 列表 -->
     <main-list>
@@ -27,24 +27,29 @@
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>编号：<span>023</span></p>
-              <p>周龄：<span>0周6天</span></p>
+              <p>编号：<span>{{ item.miceNo }}</span></p>
+              <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>性别：<span>雄</span></p>
-              <p>体重：<span>10g</span></p>
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+              <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>毛色：<span>灰色</span></p>
-              <p>健康状况：<span>健康无异常</span></p>
+              <p>毛色：<span>{{ item.color }}</span></p>
+              <p>健康状况：<span>{{ item.status }}</span></p>
             </div>
-            <div class="df s-aic">
-              <p>受孕时间：<span class="txt-btn--green" @click="setPregTime({item, index})">设置</span></p>
+            <div v-if="item.gender === 1" class="df s-aic">
+              <p>受孕时间：
+                <span v-if="item.pregnantTime" class="txt-btn--green" @click="setPregTime({item, index})">
+                  {{ item.pregnantTime | timeFormat('yyyy-MM-dd') }}
+                </span>
+                <span v-else class="txt-btn--green" @click="setPregTime({item, index})">设置受孕时间</span>
+              </p>
             </div>
           </template>
           <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info">查看</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info">删除</van-button>
+            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goMouse(item)">查看</van-button>
+            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
           </template>
         </collapse>
       </template>

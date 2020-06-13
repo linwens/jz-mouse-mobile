@@ -2,62 +2,89 @@
   <div class="expt-edit">
     <van-form>
       <van-field
-        v-model="exptForm.name"
+        v-model="experimentForm.experimentName"
         label="实验组名称"
         placeholder="请输入实验组名称"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
       />
-      <time-select btn-text="开始时间" :time.sync="exptForm.exptTime">
+      <time-select btn-text="开始时间" :time.sync="experimentForm.startTime">
         <template slot="placeholder">
           <p>请选择开始时间</p>
         </template>
       </time-select>
-      <time-select btn-text="结束时间" :time.sync="exptForm.exptTime">
+      <time-select btn-text="结束时间" :time.sync="experimentForm.endTime">
         <template slot="placeholder">
           <p>请选择结束时间</p>
         </template>
       </time-select>
-      <time-select btn-text="处理时间" :time.sync="exptForm.exptTime">
-        <template slot="placeholder">
-          <p>请选择处理时间</p>
-        </template>
-      </time-select>
-      <van-select btn-text="处理时间提醒">
+      <van-select
+        btn-text="处理时间提醒"
+        :cur-val-num.sync="experimentForm.handleTimeFlag"
+        :columns="[
+          {
+            label: '是',
+            value: 0
+          },
+          {
+            label: '否',
+            value: 1
+          }
+        ]"
+      >
         <template slot="placeholder">
           <p>是否开启处理时间提醒</p>
         </template>
       </van-select>
-      <time-select btn-text="检测时间" :time.sync="exptForm.exptTime">
-        <template slot="placeholder">
-          <p>请选择检测时间</p>
-        </template>
-      </time-select>
-      <van-select btn-text="检测时间提醒">
+      <van-select
+        btn-text="检测时间提醒"
+        :cur-val-num.sync="experimentForm.testTimeFlag"
+        :columns="[
+          {
+            label: '是',
+            value: 0
+          },
+          {
+            label: '否',
+            value: 1
+          }
+        ]">
         <template slot="placeholder">
           <p>是否开启检测时间提醒</p>
         </template>
       </van-select>
-      <van-select btn-text="实验结束后小鼠状态">
-        <template slot="placeholder">
-          <p></p>
-        </template>
-      </van-select>
+      <van-select
+        btn-text="实验结束后小鼠状态"
+        :cur-val-num.sync="experimentForm.endMiceState"
+        :columns="[
+          {
+            label: '处死',
+            value: 5
+          },
+          {
+            label: '闲置',
+            value: 1
+          }
+        ]"
+      />
       <!-- 检测信息标签 -->
       <div>
         <van-cell title="检测信息" :border="false">
           <template #right-icon>
-            <span class="txt-btn--green">添加</span>
+            <span class="txt-btn--green" @click="tagDialog = true">添加</span>
           </template>
         </van-cell>
-        <div class="expt-edit__tags">
+        <div class="expt-add__tags">
           <van-tag
+            v-for="(item, index) in tags"
+            :key="index"
             plain
             color="#58A2FB"
             closeable
             size="medium"
             type="primary"
+            @close="handleClose(item)"
           >
-            标签dad签da签daa
+            {{ item.label }}
           </van-tag>
         </div>
       </div>
@@ -68,27 +95,26 @@
     <!-- 列表 -->
     <main-list>
       <template>
-        <collapse v-for="item in tableData" :key="item.id">
+        <collapse v-for="(item, index) in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
-              <span>实验组ADEsG</span>
-              <span>处理药物成分</span>
+              <span>{{ item.experimentGroupName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>检测：<span>检测信息-01</span>;<span>检测信息-01</span>;<span>检测信息-01</span>;<span>检测信息-01</span></p>
+              <p>检测：<span>{{ item.testName }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠数量：<span>20</span></p>
+              <p>小鼠数量：<span>{{ item.sum }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠：<span class="txt-btn--green">查看小鼠</span><span class="txt-btn--green ml18">添加小鼠</span></p>
+              <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
             </div>
           </template>
           <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info">编辑</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info">删除</van-button>
+            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
+            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
           </template>
         </collapse>
       </template>
@@ -107,16 +133,31 @@
           <collapse v-for="item in mouseList" :key="item.id">
             <template slot="title">
               <div class="df s-aic s-jcsb">
-                <span>实验记录</span>
+                <span>查看小鼠</span>
               </div>
             </template>
             <template slot="content">
-              <div class="df s-aic">
-                <p>饲养条件：<span>饲养条件巴拉啦</span></p>
-                <p>负责人：<span>小勾</span></p>
+              <div class="de s-aic">
+                <p>编号：<span>{{ item.miceNo }}</span></p>
+              </div>
+              <div class="de s-aic">
+                <p>基因型：<span>{{ item.geneName }}</span></p>
               </div>
               <div class="df s-aic">
-                <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
+                <p>笼位号：<span>{{ item.cageNo }}</span></p>
+                <p>标记：<span>{{ item.sign }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+                <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
+                <p>品系：<span>{{ item.varietiesName }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>健康状况：<span>{{ item.status }}</span></p>
+                <p>毛色：<span>{{ item.color }}</span></p>
               </div>
             </template>
             <template slot="footer">

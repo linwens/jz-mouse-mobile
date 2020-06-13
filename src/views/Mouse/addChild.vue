@@ -27,21 +27,18 @@
           readonly
           label="饲养条件"
           placeholder="请输入饲养条件"
-          :rules="[{ required: true, message: '请输入饲养条件' }]"
         />
         <van-field
           v-model="currentGene.status"
           readonly
           label="健康状态"
           placeholder="请输入健康状态"
-          :rules="[{ required: true, message: '请输入健康状态' }]"
         />
         <van-field
           v-model="currentGene.color"
           readonly
           label="毛色"
           placeholder="请输入毛色"
-          :rules="[{ required: true, message: '请输入毛色' }]"
         />
         <van-field
           v-model="currentGene.area"
@@ -51,7 +48,6 @@
           rows="2"
           autosize
           type="textarea"
-          :rules="[{ required: true, message: '请输入应用领域' }]"
         />
         <div class="df s-jcfe s-aic pb10">
           <genes-choose :id="varietiesId" btn-text="选择" class="mr16" :genes.sync="genes" />
@@ -170,25 +166,25 @@
         </template>
       </van-select>
       <van-field
-        v-model="currentGene.geneName"
+        v-model="cage.cageNo"
         label="笼位号"
         placeholder="请输入笼位号名称"
       />
       <div class="cage-box">
         <van-field
-          v-model="currentGene.geneName"
+          v-model="cage.cageNo"
           readonly
           label="笼位号"
           placeholder="请输入笼位号名称"
         />
         <van-field
-          v-model="currentGene.miceCondition"
+          v-model="cage.roomNo"
           readonly
           label="房间号"
           placeholder="请输入房间号"
         />
         <van-field
-          v-model="currentGene.status"
+          v-model="cage.shelvesNo"
           readonly
           label="架号"
           placeholder="请输入架号"
@@ -295,6 +291,7 @@ export default {
   },
   watch: {
     curVariety(n, o) {
+      this.fillGenes() // 切换品系，清空基因型
       const newVariety = n
       this.varietiesName = newVariety.varietiesName
       this.varietiesId = newVariety.id

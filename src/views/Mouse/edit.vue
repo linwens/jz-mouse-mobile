@@ -182,25 +182,25 @@
             </template>
           </van-select>
           <van-field
-            v-model="currentGene.geneName"
+            v-model="cage.cageNo"
             label="笼位号"
             placeholder="请输入笼位号名称"
           />
           <div class="cage-box">
             <van-field
-              v-model="currentGene.geneName"
+              v-model="cage.cageNo"
               readonly
               label="笼位号"
               placeholder="请输入笼位号名称"
             />
             <van-field
-              v-model="currentGene.miceCondition"
+              v-model="cage.roomNo"
               readonly
               label="房间号"
               placeholder="请输入房间号"
             />
             <van-field
-              v-model="currentGene.status"
+              v-model="cage.shelvesNo"
               readonly
               label="架号"
               placeholder="请输入架号"

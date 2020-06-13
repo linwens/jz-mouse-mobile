@@ -76,11 +76,7 @@
             value: 1
           }
         ]"
-      >
-        <template slot="placeholder">
-          <p></p>
-        </template>
-      </van-select>
+      />
       <!-- 检测信息标签 -->
       <div>
         <van-cell title="检测信息" :border="false">
@@ -113,27 +109,23 @@
         <collapse v-for="(item, index) in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
-              <span>实验组ADEsG</span>
-              <span>处理药物成分</span>
+              <span>{{ item.experimentGroupName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>检测：<span>检测信息-01</span>;<span>检测信息-01</span>;<span>检测信息-01</span>;<span>检测信息-01</span></p>
+              <p>检测：<span>{{ item.testName }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠数量：<span>20</span></p>
+              <p>小鼠数量：<span>{{ item.sum }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>小鼠：
-                <span class="txt-btn--green" @click="showMouses(item)">查看小鼠</span>
-                <span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span>
-              </p>
+              <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
             </div>
           </template>
           <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit(item)">编辑</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
+            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
+            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
           </template>
         </collapse>
       </template>
@@ -200,20 +192,35 @@
           <collapse v-for="item in mouseList" :key="item.id">
             <template slot="title">
               <div class="df s-aic s-jcsb">
-                <span>实验记录</span>
+                <span>查看小鼠</span>
               </div>
             </template>
             <template slot="content">
-              <div class="df s-aic">
-                <p>饲养条件：<span>饲养条件巴拉啦</span></p>
-                <p>负责人：<span>小勾</span></p>
+              <div class="de s-aic">
+                <p>编号：<span>{{ item.miceNo }}</span></p>
+              </div>
+              <div class="de s-aic">
+                <p>基因型：<span>{{ item.geneName }}</span></p>
               </div>
               <div class="df s-aic">
-                <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
+                <p>笼位号：<span>{{ item.cageNo }}</span></p>
+                <p>标记：<span>{{ item.sign }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+                <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>体重：<span>{{ item.weight }}</span></p>
+                <p>品系：<span>{{ item.varietiesName }}</span></p>
+              </div>
+              <div class="df s-aic">
+                <p>健康状况：<span>{{ item.status }}</span></p>
+                <p>毛色：<span>{{ item.color }}</span></p>
               </div>
             </template>
             <template slot="footer">
-              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">移除</van-button>
+              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
             </template>
           </collapse>
         </template>
