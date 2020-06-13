@@ -57,7 +57,7 @@
               <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
-                <van-progress :percentage="Number(percentage)" :stroke-width="16" color="#58A2FB" text-color="#fff" />
+                <van-progress ref="progress" :percentage="Number(percentage)" :stroke-width="16" color="#58A2FB" text-color="#fff" />
               </div>
             </div>
             <div class="df s-jcc s-aic">
@@ -219,6 +219,7 @@ export default {
   },
   data() {
     return {
+      pgWidth: 0, // 进度条长度
       isAdmin: false,
       curMouseId: null, // 当前选中小鼠的id
       mouseInfo: {},
@@ -344,10 +345,11 @@ export default {
   created() {
     this.isAdmin = this.$store.getters.info.admin
     this.getCageList()
+    this.pgWidth = window.innerWidth - 56
   },
   methods: {
     showTips(val) {
-      const time = dateTimeFormatter(val, 'yyyy-MM-dd hh:mm')
+      const time = dateTimeFormatter(val * 1000, 'yyyy-MM-dd hh:mm')
       Toast(time)
     },
     setHandleTimeScale(time) {
@@ -355,14 +357,14 @@ export default {
       const end = this.mouseExptInfo.endTime * 1000
       const duration = end - start
       const scale = (time * 1000 - start) / duration
-      return (scale * 380).toFixed(2)
+      return (scale * this.pgWidth).toFixed(2)
     },
     setTestTimeScale(time) {
       const start = this.mouseExptInfo.startTime * 1000
       const end = this.mouseExptInfo.endTime * 1000
       const duration = end - start
       const scale = (time * 1000 - start) / duration
-      return (scale * 380).toFixed(2)
+      return (scale * this.pgWidth).toFixed(2)
     },
     editCageSubmit() {
       this.$refs['editCageForm'].validate((valid) => {
