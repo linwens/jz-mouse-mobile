@@ -36,7 +36,7 @@
             </div>
           </template>
           <template slot="footer">
-            <van-button plain hairline round size="small" color="#EB5444" type="info">删除</van-button>
+            <van-button plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
           </template>
         </collapse>
       </template>
@@ -74,7 +74,6 @@ export default {
   },
   created() {
     this.isAdmin = this.$store.getters.info.admin
-    this.getList()
   },
   methods: {
     handleRefreshChange() {
@@ -93,7 +92,7 @@ export default {
           miceId: row.miceId
         })
       }).then(() => {
-        this.getList()
+        this.getList(1)
         Toast.success('删除成功')
       }).catch(function() {
       })

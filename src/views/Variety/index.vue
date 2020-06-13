@@ -18,8 +18,8 @@
         <collapse v-for="item in tableData" :key="item.miceGeneId">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
-              <span class="fs10" style="word-break:break-all;line-height: 1;">{{ item.varietiesName }}</span>
-              <span class="fs10" style="word-break:break-all;line-height: 1;">{{ item.geneName }}</span>
+              <span class="fs10">{{ item.varietiesName }}</span>
+              <span class="fs10">{{ item.geneName }}</span>
             </div>
           </template>
           <template slot="content">

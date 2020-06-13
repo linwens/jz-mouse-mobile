@@ -70,6 +70,10 @@ export default {
         color: #333;
       }
       &--multiple {
+        span {
+          word-break:break-all;
+          line-height: 1;
+        }
         span:nth-child(1) {
           min-width: 50%;
         }
