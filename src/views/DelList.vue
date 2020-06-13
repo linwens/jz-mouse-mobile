@@ -28,7 +28,7 @@
             </div>
             <div class="df s-aic">
               <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
-              <p>体重：<span>{{ item.weight }}</span></p>
+              <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
             </div>
             <div class="df s-aic">
               <p>毛色：<span>{{ item.color }}</span></p>
@@ -83,7 +83,7 @@ export default {
     rowItemDel: function(row) {
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除小鼠：${row.miceId}的数据?`,
+        message: `是否确认删除小鼠：${row.miceNo}的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

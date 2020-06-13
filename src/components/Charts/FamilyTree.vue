@@ -1,21 +1,25 @@
 <template>
   <div>
-    <van-select
-      btn-type="button"
-      :cur-val.sync="treeType"
-      btn-text="请选择类型"
-      :columns="[
-        {
-          label: '父母记录',
-          value: 0
-        },
-        {
-          label: '子鼠记录',
-          value: 1
-        }
-      ]"
-    />
-    <van-button round size="mini" color="#00CB7C" type="primary" @click="goDetail">查看详情</van-button>
+    <div class="df s-jcc s-aic" style="padding: 8px 14px;">
+      <van-select
+        class="mr10"
+        btn-width-class="w100"
+        btn-type="button"
+        :cur-val-num.sync="treeType"
+        btn-text="请选择类型"
+        :columns="[
+          {
+            label: '父母记录',
+            value: 0
+          },
+          {
+            label: '子鼠记录',
+            value: 1
+          }
+        ]"
+      />
+      <van-button round size="small" color="#00CB7C" type="primary" @click="goDetail">查看详情</van-button>
+    </div>
     <div :id="miceId" :class="className" :style="{height:height,width:width, 'min-height': '500px'}" />
   </div>
 </template>
@@ -33,19 +37,22 @@ function recur(data, parent) { // data是对象
     if (parent.fatherId === data.id) {
       return {
         name: `父鼠${data.miceNo}`,
-        value: data.id
+        value: data.miceNo,
+        id: data.id
       }
     }
     if (parent.motherId === data.id) {
       return {
         name: `母鼠${data.miceNo}`,
-        value: data.id
+        value: data.miceNo,
+        id: data.id
       }
     }
   } else {
     data = {
       name: `小鼠 ${data.miceNo}`,
-      value: data.id,
+      value: data.miceNo,
+      id: data.id,
       fatherId: data.fatherId,
       motherId: data.motherId,
       children: data.children
@@ -65,6 +72,10 @@ export default {
   },
   mixins: [resize],
   props: {
+    num: { // 序号
+      type: Number,
+      default: 0
+    },
     className: {
       type: String,
       default: 'fTree'
@@ -85,6 +96,7 @@ export default {
   data() {
     return {
       chart: null,
+      curMiceId: null,
       curMouse: '',
       curMouseStatus: null, // 小鼠是否删除
       treeType: 0 // 查看那种家谱树
@@ -132,7 +144,7 @@ export default {
         if (this.curMouseStatus) {
           Toast.fail('小鼠已删除')
         } else {
-          this.$router.push({ name: 'mouseEdit', params: { id: this.curMouse }})
+          this.$router.push({ name: 'MouseEdit', params: { id: this.curMouse }})
         }
       } else {
         Toast.fail('请先点击小鼠')
@@ -144,16 +156,19 @@ export default {
         descendant: this.miceId
       }).then((res) => {
         const { data } = res
+        console.log('data===>', data)
         const rslt = {
-          name: `小鼠${this.miceNo}`,
-          value: this.miceId,
+          name: `小鼠${data[0].miceNo}`,
+          value: data[0].miceNo,
+          id: data[0].id,
           children: []
         }
         if (data && data[0] && data[0].children && data[0].children.length > 0) {
           for (let i = 0; i < data[0].children.length; i++) {
             rslt.children.push({
               name: `子鼠${data[0].children[i].miceNo}`,
-              value: data[0].children[i].id
+              value: data[0].children[i].miceNo,
+              id: data[0].children[i].id
             })
           }
         }
@@ -206,8 +221,8 @@ export default {
                 position: 'top',
                 verticalAlign: 'middle',
                 align: 'left',
-                distance: 8
-                // rotate: -90,
+                distance: 8,
+                rotate: 8
               }
             },
             lineStyle: {
@@ -224,7 +239,7 @@ export default {
               }
             },
 
-            expandAndCollapse: true,
+            expandAndCollapse: false,
 
             animationDuration: 550, // 初始动画的时长
             animationDurationUpdate: 750 // 数据更新动画的时长
@@ -237,8 +252,9 @@ export default {
         seriesName: 'familyTree'
       }, function(e) {
         console.log('e=====>', e)
-        self.curMouse = e.value
-        getMouseState(e.value).then((res) => {
+        self.curMouse = e.data.value
+        self.curMiceId = e.data.id
+        getMouseState(e.data.id).then((res) => {
           this.curMouseStatus = res.data
         })
       })

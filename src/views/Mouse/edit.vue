@@ -299,7 +299,7 @@ export default {
       },
       cacheFilesList: [],
       // 品系选择
-      curVariety: '',
+      curVariety: {},
       varietiesName: '',
       varietiesId: '',
       // 基因型选择
@@ -368,7 +368,7 @@ export default {
   },
   watch: {
     curVariety(n, o) {
-      const newVariety = JSON.parse(n)
+      const newVariety = n
       this.varietiesName = newVariety.varietiesName
       this.varietiesId = newVariety.id
       this.form.varietiesId = newVariety.id

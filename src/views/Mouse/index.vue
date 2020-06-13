@@ -89,7 +89,7 @@
               <p>出生日期：<span>{{ mouseInfo.birthDate * 1000 | timeFormat('yyyy-MM-dd') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>体重：<span>{{ mouseInfo.weight }}</span></p>
+              <p>体重：<span>{{ mouseInfo.weight ? `${mouseInfo.weight}g` : '' }}</span></p>
               <p>笼位号：<span>{{ mouseInfo.cageNo }}</span></p>
             </div>
             <div class="df s-aic">

@@ -5,8 +5,10 @@
     <!-- 家谱弹窗 -->
     <van-popup
       v-model="dialogVisible"
+      closeable
+      position="bottom"
       get-container="body"
-      :style="{width: '80%', height: '90%', 'margin-top': dupCount ? `-${20 * dupCount}px` : 0, 'left': 20 * dupCount + 'px'}"
+      :style="{height: '90%'}"
     >
       <family-tree v-if="dialogVisible" :num="dupCount" :mice-id="miceId" />
     </van-popup>
