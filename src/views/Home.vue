@@ -45,7 +45,7 @@
     </div>
     <p class="mt12 ml14 fs14 cl-grey-9">总计：<span class="cl-black">{{ page.total }} 条数据</span></p>
     <!-- 列表 -->
-    <main-list>
+    <main-list :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>
         <collapse v-for="item in tableData" :key="item.id" :footer="false">
           <template slot="title">
@@ -299,6 +299,7 @@ export default {
       barType: 'currentVarieties',
       barTypeBtn: '人员',
       tableLoading: false,
+      noMore: false,
       page: {
         total: 0, // 总页数
         page: 1, // 当前页数
@@ -320,7 +321,7 @@ export default {
       // 基因型列表
       if (!n) {
         this.genesOpts = []
-        this.getList()
+        this.getList(1)
         return
       }
       getLisByVariety({
@@ -328,29 +329,28 @@ export default {
       }).then((res) => {
         this.genesOpts = res.data
       })
-      this.getList()
+      this.getList(1)
     },
     'myMouseForm.genotypes'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'myMouseForm.gender'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'myMouseForm.pureHeterozygote'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'myMouseForm.status'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'myMouseForm.operator'(n, o) {
-      console.log('负责人====')
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.varietiesId'(n, o) {
       // 基因型列表
       if (!n) {
         this.genesOpts = []
-        this.getList()
+        this.getList(1)
         return
       }
       getLisByVariety({
@@ -358,22 +358,22 @@ export default {
       }).then((res) => {
         this.genesOpts = res.data
       })
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.genotypes'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.gender'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.pureHeterozygote'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.status'(n, o) {
-      this.getList()
+      this.getList(1)
     },
     'exptMouseForm.operator'(n, o) {
-      this.getList()
+      this.getList(1)
     }
   },
   created() {
@@ -462,14 +462,21 @@ export default {
       this.getList()
     },
     // 获取列表
-    getList() {
+    getList(page) {
+      if (page === 1) { // 如果展示第一页，先清列表
+        this.tableData = []
+      }
       const params = this.activeName === 'mine' ? this.myMouseForm : this.exptMouseForm
       this.tableLoading = true
       fetchList(Object.assign({}, params, {
-        current: this.page.page,
+        current: page || this.page.page,
         size: this.page.limit
       })).then(res => {
-        this.tableData = res.data.records
+        this.tableData = this.tableData.concat(res.data.records)
+        this.page.page = res.data.current + 1
+        if (this.page.page > res.data.pages) {
+          this.noMore = true
+        }
         this.page.total = res.data.total
       }).finally(() => {
         this.tableLoading = false
