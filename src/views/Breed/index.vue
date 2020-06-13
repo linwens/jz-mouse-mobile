@@ -93,7 +93,7 @@ export default {
       }).then(() => {
         return delBreedGroup(row.id)
       }).then(() => {
-        this.getList()
+        this.getList(1)
         Toast.success('删除成功')
       }).catch(() => {
       })
