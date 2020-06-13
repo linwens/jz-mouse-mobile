@@ -17,49 +17,46 @@
       <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="goAdd()">添加</van-button>
     </div>
     <!-- 列表 -->
-    <main-list>
-      <template>
-        <collapse v-for="(item, index) in tableData" :key="item.id">
-          <template slot="title">
-            <div class="df s-aic">
-              <span>实验组ADEsG</span>
-            </div>
-          </template>
-          <template slot="content">
-            <div class="df s-aic">
-              <p>编号：<span>{{ item.miceNo }}</span></p>
-              <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
-              <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>毛色：<span>{{ item.color }}</span></p>
-              <p>健康状况：<span>{{ item.status }}</span></p>
-            </div>
-            <div v-if="item.gender === 1" class="df s-aic">
-              <p>受孕时间：
-                <span v-if="item.pregnantTime" class="txt-btn--green" @click="setPregTime({item, index})">
-                  {{ item.pregnantTime | timeFormat('yyyy-MM-dd') }}
-                </span>
-                <span v-else class="txt-btn--green" @click="setPregTime({item, index})">设置受孕时间</span>
-              </p>
-            </div>
-          </template>
-          <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goMouse(item)">查看</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
-          </template>
-        </collapse>
-      </template>
-    </main-list>
+    <div>
+      <collapse v-for="(item, index) in tableData" :key="item.id">
+        <template slot="title">
+          <div class="df s-aic">
+            <span>实验组ADEsG</span>
+          </div>
+        </template>
+        <template slot="content">
+          <div class="df s-aic">
+            <p>编号：<span>{{ item.miceNo }}</span></p>
+            <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+            <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>毛色：<span>{{ item.color }}</span></p>
+            <p>健康状况：<span>{{ item.status }}</span></p>
+          </div>
+          <div v-if="item.gender === 1" class="df s-aic">
+            <p>受孕时间：
+              <span v-if="item.pregnantTime" class="txt-btn--green" @click="setPregTime({item, index})">
+                {{ item.pregnantTime | timeFormat('yyyy-MM-dd') }}
+              </span>
+              <span v-else class="txt-btn--green" @click="setPregTime({item, index})">设置受孕时间</span>
+            </p>
+          </div>
+        </template>
+        <template slot="footer">
+          <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goMouse(item)">查看</van-button>
+          <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
+        </template>
+      </collapse>
+    </div>
     <bottom-btn @confirm="submit" />
   </div>
 </template>
 
 <script>
-import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
@@ -74,7 +71,6 @@ export default {
     'van-form': Form,
     'van-field': Field,
     TimeSelect,
-    MainList,
     Collapse,
     BottomBtn
   },

@@ -187,44 +187,42 @@
       closeable
       get-container="body"
     >
-      <main-list>
-        <template>
-          <collapse v-for="item in mouseList" :key="item.id">
-            <template slot="title">
-              <div class="df s-aic s-jcsb">
-                <span>查看小鼠</span>
-              </div>
-            </template>
-            <template slot="content">
-              <div class="de s-aic">
-                <p>编号：<span>{{ item.miceNo }}</span></p>
-              </div>
-              <div class="de s-aic">
-                <p>基因型：<span>{{ item.geneName }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>笼位号：<span>{{ item.cageNo }}</span></p>
-                <p>标记：<span>{{ item.sign }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
-                <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>体重：<span>{{ item.weight }}</span></p>
-                <p>品系：<span>{{ item.varietiesName }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>健康状况：<span>{{ item.status }}</span></p>
-                <p>毛色：<span>{{ item.color }}</span></p>
-              </div>
-            </template>
-            <template slot="footer">
-              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
-            </template>
-          </collapse>
-        </template>
-      </main-list>
+      <div class="mt30">
+        <collapse v-for="item in mouseList" :key="item.id">
+          <template slot="title">
+            <div class="df s-aic s-jcsb">
+              <span>查看小鼠</span>
+            </div>
+          </template>
+          <template slot="content">
+            <div class="de s-aic">
+              <p>编号：<span>{{ item.miceNo }}</span></p>
+            </div>
+            <div class="de s-aic">
+              <p>基因型：<span>{{ item.geneName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>笼位号：<span>{{ item.cageNo }}</span></p>
+              <p>标记：<span>{{ item.sign }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+              <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>体重：<span>{{ item.weight }}</span></p>
+              <p>品系：<span>{{ item.varietiesName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>健康状况：<span>{{ item.status }}</span></p>
+              <p>毛色：<span>{{ item.color }}</span></p>
+            </div>
+          </template>
+          <template slot="footer">
+            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
+          </template>
+        </collapse>
+      </div>
     </van-popup>
   </div>
 </template>

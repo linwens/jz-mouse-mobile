@@ -93,32 +93,30 @@
       <van-button class="w90" hairline round size="small" color="#32C985" type="info">新增分组</van-button>
     </div>
     <!-- 列表 -->
-    <main-list>
-      <template>
-        <collapse v-for="(item, index) in tableData" :key="item.id">
-          <template slot="title">
-            <div class="df s-aic s-jcsb">
-              <span>{{ item.experimentGroupName }}</span>
-            </div>
-          </template>
-          <template slot="content">
-            <div class="df s-aic">
-              <p>检测：<span>{{ item.testName }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>小鼠数量：<span>{{ item.sum }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
-            </div>
-          </template>
-          <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
-          </template>
-        </collapse>
-      </template>
-    </main-list>
+    <div>
+      <collapse v-for="(item, index) in tableData" :key="item.id">
+        <template slot="title">
+          <div class="df s-aic s-jcsb">
+            <span>{{ item.experimentGroupName }}</span>
+          </div>
+        </template>
+        <template slot="content">
+          <div class="df s-aic">
+            <p>检测：<span>{{ item.testName }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>小鼠数量：<span>{{ item.sum }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
+          </div>
+        </template>
+        <template slot="footer">
+          <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
+          <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
+        </template>
+      </collapse>
+    </div>
     <bottom-btn @confirm="saveExptInfo" />
     <!-- 小鼠列表弹窗 -->
     <van-popup
@@ -128,50 +126,48 @@
       closeable
       get-container="body"
     >
-      <main-list>
-        <template>
-          <collapse v-for="item in mouseList" :key="item.id">
-            <template slot="title">
-              <div class="df s-aic s-jcsb">
-                <span>查看小鼠</span>
-              </div>
-            </template>
-            <template slot="content">
-              <div class="de s-aic">
-                <p>编号：<span>{{ item.miceNo }}</span></p>
-              </div>
-              <div class="de s-aic">
-                <p>基因型：<span>{{ item.geneName }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>笼位号：<span>{{ item.cageNo }}</span></p>
-                <p>标记：<span>{{ item.sign }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
-                <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
-                <p>品系：<span>{{ item.varietiesName }}</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>健康状况：<span>{{ item.status }}</span></p>
-                <p>毛色：<span>{{ item.color }}</span></p>
-              </div>
-            </template>
-            <template slot="footer">
-              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
-            </template>
-          </collapse>
-        </template>
-      </main-list>
+      <div class="mt30">
+        <collapse v-for="item in mouseList" :key="item.id">
+          <template slot="title">
+            <div class="df s-aic s-jcsb">
+              <span>查看小鼠</span>
+            </div>
+          </template>
+          <template slot="content">
+            <div class="de s-aic">
+              <p>编号：<span>{{ item.miceNo }}</span></p>
+            </div>
+            <div class="de s-aic">
+              <p>基因型：<span>{{ item.geneName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>笼位号：<span>{{ item.cageNo }}</span></p>
+              <p>标记：<span>{{ item.sign }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+              <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
+              <p>品系：<span>{{ item.varietiesName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>健康状况：<span>{{ item.status }}</span></p>
+              <p>毛色：<span>{{ item.color }}</span></p>
+            </div>
+          </template>
+          <template slot="footer">
+            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
+          </template>
+        </collapse>
+
+      </div>
     </van-popup>
   </div>
 </template>
 
 <script>
-import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
@@ -179,7 +175,7 @@ import TimeSelect from '@/components/Form/TimeSelect.vue'
 import { getExptInfoById, updateExptInfo } from '@/api/experiment'
 import { getMouseInfoByIds } from '@/api/mouse'
 import { calcWeek } from '@/components/Mixins/calcWeek'
-import { Button, Form, Field, Tag, Cell, Toast, Dialog } from 'vant'
+import { Button, Form, Field, Tag, Cell, Toast, Dialog, Popup } from 'vant'
 
 export default {
   name: 'ExperimentEdit',
@@ -189,9 +185,9 @@ export default {
     'van-field': Field,
     'van-tag': Tag,
     'van-cell': Cell,
+    'van-popup': Popup,
     VanSelect,
     TimeSelect,
-    MainList,
     Collapse,
     BottomBtn
   },
@@ -383,8 +379,8 @@ export default {
     },
     // 查看小鼠列表
     showMouses(scope) {
-      this.curGroupIndex = scope.$index
-      const idArr = scope.row.experimentGroupSelectionMiceIds
+      this.curGroupIndex = scope.index
+      const idArr = scope.item.experimentGroupSelectionMiceIds
       if (idArr.length === 0) {
         Toast.fail('没有小鼠')
       } else {
