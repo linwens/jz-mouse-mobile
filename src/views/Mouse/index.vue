@@ -562,7 +562,7 @@ export default {
               shelvesNo
             }
           })
-          this.goPage('addChild')
+          this.goPage('MouseAddChild')
         }
 
         if (this.buildStep === 1 && this.choicedList.length === 0) {

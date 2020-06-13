@@ -19,40 +19,45 @@
           <div class="genes-box">
             <van-field
               v-model="currentGene.geneName"
+              readonly
               label="基因型"
               placeholder="请输入基因型名称"
               :rules="[{ required: true, message: '请输入基因型名称' }]"
             />
             <van-field
               v-model="currentGene.miceCondition"
+              readonly
               label="饲养条件"
               placeholder="请输入饲养条件"
-              :rules="[{ required: true, message: '请输入饲养条件' }]"
             />
             <van-field
               v-model="currentGene.status"
+              readonly
               label="健康状态"
               placeholder="请输入健康状态"
-              :rules="[{ required: true, message: '请输入健康状态' }]"
             />
             <van-field
               v-model="currentGene.color"
+              readonly
               label="毛色"
               placeholder="请输入毛色"
-              :rules="[{ required: true, message: '请输入毛色' }]"
             />
             <van-field
               v-model="currentGene.area"
+              readonly
               label="应用领域"
               placeholder="请输入应用领域"
               rows="2"
               autosize
               type="textarea"
-              :rules="[{ required: true, message: '请输入应用领域' }]"
             />
             <div class="df s-jcfe s-aic pb10">
-              <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">选择</van-button>
-              <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">新增</van-button>
+              <genes-choose :id="varietiesId" btn-text="选择" class="mr16" :genes.sync="genes" />
+              <add-genes-btn
+                :varieties-id="varietiesId"
+                :varieties-name="varietiesName"
+                :genes-data.sync="genes"
+              />
             </div>
           </div>
           <van-field v-model="form.miceNo" label="编号" />
@@ -77,8 +82,9 @@
               }
             ]"
           />
+          <van-field v-model="form.sign" placeholder="输入1-99" />
           <div v-show="form.position !== 'custom'" class="mouse__edit--img mt8">
-            <img v-if="form.position !== 'custom'" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${form.filePrefix}/${form.sign}.jpg`" alt="">
+            <img v-if="form.position !== 'custom'" class="sign-img" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${form.filePrefix}/${form.sign}.jpg`" alt="">
             <span class="pl16 pr16 fs14">示例：</span>
             <img class="sign-img" src="@/assets/test.jpg" alt="">
           </div>
@@ -97,12 +103,12 @@
             </template>
           </time-select>
           <div class="df s-aic">
-            <van-field v-model="weekAge" label="周龄">
+            <van-field v-model="weekAge" label="周龄" readonly>
               <template #extra>
                 <span>周</span>
               </template>
             </van-field>
-            <van-field v-model="dayAge">
+            <van-field v-model="dayAge" readonly>
               <template #extra>
                 <span>天</span>
               </template>
@@ -183,16 +189,19 @@
           <div class="cage-box">
             <van-field
               v-model="currentGene.geneName"
+              readonly
               label="笼位号"
               placeholder="请输入笼位号名称"
             />
             <van-field
               v-model="currentGene.miceCondition"
+              readonly
               label="房间号"
               placeholder="请输入房间号"
             />
             <van-field
               v-model="currentGene.status"
+              readonly
               label="架号"
               placeholder="请输入架号"
             />
@@ -239,9 +248,9 @@ import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
-// import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
+import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
 // import UploadBtn from '@/components/Dialogs/Upload'
-// import GenesChoose from '@/components/Dialogs/GenesChoose'
+import GenesChoose from '@/components/Dialogs/GenesChoose'
 // import ViewFiles from '@/components/ViewFiles'
 import { getMouseInfo, getMouseExpInfo, getCageInfo, editMouse } from '@/api/mouse'
 import { Button, Form, Field, Toast, Tab, Tabs } from 'vant'
@@ -259,10 +268,10 @@ export default {
     ChooseVariety,
     VanSelect,
     TimeSelect,
-    BottomBtn
-    // AddGenesBtn,
+    BottomBtn,
+    AddGenesBtn,
     // UploadBtn,
-    // GenesChoose,
+    GenesChoose
     // ViewFiles
   },
   data() {
@@ -594,5 +603,6 @@ export default {
   .sign-img {
     width: 126px;
     height: 69px;
+    border: 1px solid #eee;
   }
 </style>

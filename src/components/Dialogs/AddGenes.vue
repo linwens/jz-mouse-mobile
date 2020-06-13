@@ -76,8 +76,8 @@ export default {
     },
     // 品系id
     varietiesId: {
-      type: Number,
-      default: 0
+      type: null,
+      default: null
     },
     // 品系名称
     varietiesName: {

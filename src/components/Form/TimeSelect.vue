@@ -2,7 +2,7 @@
   <div class="time-select">
     <van-cell class="time-select__placeholder" :title="btnText" is-link @click="showOptions">
       <template #default>
-        <slot name="placeholder" />
+        {{ +new Date(value) | timeFormat('yyyy-MM-dd hh:mm:ss') }}
       </template>
     </van-cell>
     <!-- 弹出 -->
@@ -47,6 +47,7 @@ export default {
   },
   data() {
     return {
+      value: '',
       show: false,
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
@@ -58,7 +59,11 @@ export default {
       this.show = true
     },
     onConfirm(value, index) {
-      Toast(`当前值：${value}, 当前索引：${index}`)
+      console.log(`当前值：${value}, 当前索引：${index}`)
+      const timestamp = +new Date(value)
+      console.log(timestamp)
+      this.value = value
+      this.$emit('update:time', timestamp)
       this.show = false
     },
     onChange(picker, value, index) {

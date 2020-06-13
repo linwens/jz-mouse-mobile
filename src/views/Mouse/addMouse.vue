@@ -15,52 +15,53 @@
       <div class="genes-box">
         <van-field
           v-model="currentGene.geneName"
+          readonly
           label="基因型"
           placeholder="请输入基因型名称"
           :rules="[{ required: true, message: '请输入基因型名称' }]"
         />
         <van-field
           v-model="currentGene.miceCondition"
+          readonly
           label="饲养条件"
           placeholder="请输入饲养条件"
-          :rules="[{ required: true, message: '请输入饲养条件' }]"
         />
         <van-field
           v-model="currentGene.status"
+          readonly
           label="健康状态"
           placeholder="请输入健康状态"
-          :rules="[{ required: true, message: '请输入健康状态' }]"
         />
         <van-field
           v-model="currentGene.color"
+          readonly
           label="毛色"
           placeholder="请输入毛色"
-          :rules="[{ required: true, message: '请输入毛色' }]"
         />
         <van-field
           v-model="currentGene.area"
+          readonly
           label="应用领域"
           placeholder="请输入应用领域"
           rows="2"
           autosize
           type="textarea"
-          :rules="[{ required: true, message: '请输入应用领域' }]"
         />
         <div class="df s-jcfe s-aic pb10">
-          <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">选择</van-button>
-          <van-button class="w60 mr10" hairline round size="small" color="#32C985" type="info">新增</van-button>
+          <genes-choose :id="varietiesId" btn-text="选择" class="mr16" :genes.sync="genes" />
+          <add-genes-btn
+            :varieties-id="varietiesId"
+            :varieties-name="varietiesName"
+            :genes-data.sync="genes"
+          />
         </div>
       </div>
-      <van-field v-model="form.miceNo" label="编号" />
-      <div class="file--span fs14">
-        <span>状态 闲置</span>
-      </div>
-      <van-field v-model="form.weight" label="数量">
+      <van-field v-model="form.femaleMiceNum" label="数量">
         <template #extra>
           <span>只(雌)</span>
         </template>
       </van-field>
-      <van-field v-model="form.weight">
+      <van-field v-model="form.maleMiceNum">
         <template #extra>
           <span>只(雄)</span>
         </template>
@@ -158,9 +159,9 @@
         <p>附件：<span class="txt-btn--green">查看附件</span><span class="txt-btn--green ml18">上传附件</span></p>
       </div>
     </van-form>
-    <bottom-btn @confirm="goChoose">
+    <bottom-btn>
       <template slot="confirm">
-        <van-button class="w150" round size="small" color="#32C985" type="info">下一步(去选笼子)</van-button>
+        <van-button class="w150" round size="small" color="#32C985" type="info" @click="goChoose()">下一步(去选笼子)</van-button>
       </template>
     </bottom-btn>
   </div>
@@ -172,7 +173,8 @@ import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
 // import ViewFiles from '@/components/ViewFiles'
 import ChooseVariety from '@/components/Dialogs/ChooseVariety'
-// import AddGenesBtn from '@/components/Dialogs/AddGenes'
+import AddGenesBtn from '@/components/Dialogs/AddGenes'
+import GenesChoose from '@/components/Dialogs/GenesChoose'
 // import UploadBtn from '@/components/Dialogs/Upload'
 import { Button, Form, Field, Toast } from 'vant'
 
@@ -185,10 +187,11 @@ export default {
     BottomBtn,
     ChooseVariety,
     VanSelect,
-    TimeSelect
+    TimeSelect,
+    AddGenesBtn,
+    GenesChoose
     // ViewFiles,
     // UploadBtn,
-    // AddGenesBtn
   },
   data() {
     return {
@@ -196,8 +199,8 @@ export default {
       form: {
         vid: '',
         genotypes: null,
-        maleMiceNum: 0,
-        femaleMiceNum: 0,
+        maleMiceNum: null,
+        femaleMiceNum: null,
         weight: null,
         birthDate: null,
         pureHeterozygote: null,
@@ -217,7 +220,7 @@ export default {
       },
       cacheFilesList: [],
       // 品系选择
-      curVariety: '',
+      curVariety: {},
       varietiesName: '',
       varietiesId: '',
       // 基因型选择
@@ -251,7 +254,7 @@ export default {
   },
   watch: {
     curVariety(n, o) {
-      const newVariety = JSON.parse(n)
+      const newVariety = n
       this.varietiesName = newVariety.varietiesName
       this.varietiesId = newVariety.id
     },
@@ -327,7 +330,7 @@ export default {
           files: this.cacheFilesList,
           common: this.form
         })
-        this.$router.push({ name: 'mouseCage', params: this.form })
+        this.$router.push({ name: 'MouseCage', params: this.form })
       }
     },
     // 校验表单
