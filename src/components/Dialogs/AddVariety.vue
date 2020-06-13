@@ -1,17 +1,17 @@
 <template>
   <div class="dib">
-    <van-button class="w-100" hairline round size="small" color="#32C985" type="info" @click="show = true">新增品系</van-button>
+    <van-button class="w-100" hairline round size="small" color="#32C985" type="info" @click="varietyDialog = true">新增品系</van-button>
     <van-dialog
-      v-model="show"
+      v-model="varietyDialog"
       title="新增品系"
       show-cancel-button
       confirm-button-text="确定"
       confirm-button-color="#FF6358"
-      @confirm="confirm"
+      @confirm="fillVarity"
     >
       <van-form class="mt20 mb20">
         <van-field
-          v-model="name"
+          v-model="addVarietyForm.varietiesName"
           label="品系名称"
           placeholder="请输入品系名称"
           :rules="[{ required: true, message: '请输入品系名称' }]"
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { addItemObj } from '@/api/variety'
 import { Button, Dialog, Form, Field } from 'vant'
 
 export default {
@@ -34,16 +35,35 @@ export default {
   },
   data() {
     return {
-      name: '',
-      show: false
+      addVarietyForm: {
+        varietiesName: ''
+      },
+      varietyDialog: false
     }
   },
   methods: {
-    confirm() {
-      this.show = false
+    fillVarity() {
+      this.varietyDialog = false
+      // 提交成功后触发done
+      const { varietiesName } = this.addVarietyForm
+      const { id: operator, id: userId } = this.$store.getters.info
+      addItemObj({
+        varietiesName,
+        operator,
+        userId
+      }).then((res) => {
+        if (res.data) {
+          // 存储输入过的值
+          this.$store.dispatch('user/setInputHistory', {
+            varietiesName
+          })
+          this.$emit('done')
+          this.addVarietyForm.varietiesName = ''
+          this.$refs['addVarietyForm'].resetFields() // 就为了没有错误提示
+        }
+      })
     }
   }
-
 }
 </script>
 

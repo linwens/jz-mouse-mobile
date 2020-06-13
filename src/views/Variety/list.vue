@@ -1,18 +1,18 @@
 <template>
   <div class="variety-list">
     <!-- 列表 -->
-    <main-list>
+    <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>
         <collapse v-for="item in tableData" :key="item.id">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
-              <span>XR-120/2</span>
-              <span>张三</span>
+              <span>{{ item.varietiesName }}</span>
+              <span>{{ item.operatorName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>创建时间：<span>2020-01-22 12:22:10</span></p>
+              <p>创建时间：<span>{{ item.createTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span></p>
             </div>
           </template>
           <template slot="footer">
@@ -24,7 +24,7 @@
     </main-list>
     <bottom-btn @confirm="submit">
       <template slot="confirm">
-        <add-variety class="w150" />
+        <add-variety class="w150" @done="getList(1)" />
       </template>
     </bottom-btn>
     <!-- 编辑品系弹窗 -->
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       tableLoading: false,
+      noMore: false,
       page: {
         total: 0, // 总页数
         page: 1, // 当前页数
@@ -110,20 +111,29 @@ export default {
       }).then(function() {
         return delItemObj(row.id)
       }).then(() => {
-        this.getList()
+        this.getList(1)
         Toast.success('删除成功')
       }).catch(function() {
       })
     },
     // 获取列表
-    getList() {
+    getList(page) {
+      if (page === 1) { // 如果展示第一页，先清列表
+        this.noMore = false
+        this.tableData = []
+      }
       this.tableLoading = true
       varietiesList(Object.assign({
-        current: this.page.page,
+        current: page || this.page.page,
         size: this.page.limit
-      })).then(response => {
-        this.tableData = response.data.records
-        this.page.total = response.data.total
+      })).then(res => {
+        this.tableData = this.tableData.concat(res.data.records)
+        if (this.page.page > res.data.pages) {
+          this.noMore = true
+        } else {
+          this.page.page = res.data.current + 1
+        }
+        this.page.total = res.data.total
       }).finally(() => {
         this.tableLoading = false
       })
@@ -160,5 +170,6 @@ export default {
 <style lang="scss">
   .variety-list {
     padding-top: 16px;
+    margin-bottom: 50px;
   }
 </style>

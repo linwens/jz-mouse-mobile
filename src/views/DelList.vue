@@ -9,30 +9,30 @@
       </template>
     </top-bar>
     <!-- 列表 -->
-    <main-list>
+    <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>
-        <collapse v-for="item in tableData" :key="item.id">
+        <collapse v-for="item in tableData" :key="item.miceNo">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
-              <span>ER-334</span>
-              <span>34-IO98</span>
+              <span class="fs10">{{ item.varietiesName }}</span>
+              <span class="fs10">{{ item.geneName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>编号：<span>023</span></p>
-              <p>出生日期：<span>2020-02-01</span></p>
+              <p>编号：<span>{{ item.miceNo }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>性别：<span>雄</span></p>
-              <p>体重：<span>10g</span></p>
+              <p>出生日期：<span>{{ item.birthDate * 1000 | timeFormat('yyyy-MM-dd') }}</span></p>
+              <p>类型：<span>{{ item.miceStatusDesc }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>毛色：<span>灰色</span></p>
-              <p>健康状况：<span>健康无异常</span></p>
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+              <p>体重：<span>{{ item.weight }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>类型：<span>手动删除</span></p>
+              <p>毛色：<span>{{ item.color }}</span></p>
+              <p>健康状况：<span>{{ item.healthyStatus }}</span></p>
             </div>
           </template>
           <template slot="footer">
@@ -62,10 +62,12 @@ export default {
   data() {
     return {
       isAdmin: false,
+      tableLoading: false,
+      noMore: false,
       page: {
         total: 0, // 总页数
         page: 1, // 当前页数
-        limit: 10 // 每页显示多少条
+        limit: 5 // 每页显示多少条
       },
       tableData: []
     }
@@ -97,14 +99,23 @@ export default {
       })
     },
     // 获取列表
-    getList() {
+    getList(page) {
+      if (page === 1) { // 如果展示第一页，先清列表
+        this.noMore = false
+        this.tableData = []
+      }
       this.tableLoading = true
       fetchList(Object.assign({
-        current: this.page.page,
+        current: page || this.page.page,
         size: this.page.limit
-      })).then(response => {
-        this.tableData = response.data.records
-        this.page.total = response.data.total
+      })).then(res => {
+        this.tableData = this.tableData.concat(res.data.records)
+        if (this.page.page > res.data.pages) {
+          this.noMore = true
+        } else {
+          this.page.page = res.data.current + 1
+        }
+        this.page.total = res.data.total
       }).finally(() => {
         this.tableLoading = false
       })

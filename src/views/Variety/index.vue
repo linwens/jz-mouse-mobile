@@ -13,31 +13,31 @@
       </template>
     </top-bar>
     <!-- 列表 -->
-    <main-list :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
+    <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>
         <collapse v-for="item in tableData" :key="item.miceGeneId">
           <template slot="title">
             <div class="df s-aic xs-collapse__content--multiple">
-              <span>ER-334</span>
-              <span>34-IO98</span>
+              <span>{{ item.geneName }}</span>
+              <span>{{ item.varietiesName }}</span>
             </div>
           </template>
           <template slot="content">
             <div class="df s-aic">
-              <p>饲养条件：<span>饲养条件巴拉啦</span></p>
-              <p>负责人：<span>小勾</span></p>
+              <p>饲养条件：<span>{{ item.miceCondition }}</span></p>
+              <p>负责人：<span>{{ item.operatorName }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>健康状况：<span>健康</span></p>
-              <p>毛色：<span>灰色</span></p>
+              <p>健康状况：<span>{{ item.status }}</span></p>
+              <p>毛色：<span>{{ item.color }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
+              <p>应用领域：<span>{{ item.area }}</span></p>
             </div>
           </template>
           <template slot="footer">
-            <span class="txt-btn--green fs14">编辑</span>
-            <span class="txt-btn--red fs14 ml15 mr8">删除</span>
+            <span class="txt-btn--green fs14" @click="goEdit(item)">编辑</span>
+            <span class="txt-btn--red fs14 ml15 mr8" @click="rowItemDel(item)">删除</span>
           </template>
         </collapse>
       </template>
@@ -109,7 +109,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log('del====row', row)
         const { miceGeneId } = row
         return delGenes(miceGeneId)
       }).then(() => {
@@ -120,20 +119,23 @@ export default {
     },
     // 获取列表
     getList(page) {
+      if (page === 1) { // 如果展示第一页，先清列表
+        this.noMore = false
+        this.tableData = []
+      }
       this.tableLoading = true
-      if (this.noMore) return false
       fetchList(Object.assign({
         current: page || this.page.page,
         size: this.page.limit
-      })).then(response => {
-        this.tableData = this.tableData.concat(response.data.records)
-        this.page.page = response.data.current + 1
-        if (this.page.page > response.data.pages) {
+      })).then(res => {
+        this.tableData = this.tableData.concat(res.data.records)
+        if (this.page.page > res.data.pages) {
           this.noMore = true
+        } else {
+          this.page.page = res.data.current + 1
         }
-        this.page.total = response.data.total
+        this.page.total = res.data.total
       }).finally(() => {
-        console.log('结束')
         this.tableLoading = false
       })
     }
