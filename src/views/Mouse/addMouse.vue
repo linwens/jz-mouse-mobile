@@ -104,11 +104,7 @@
             value: 2
           }
         ]"
-      >
-        <template slot="placeholder">
-          <p></p>
-        </template>
-      </van-select>
+      />
       <div class="file--span fs14">
         <span>展示颜色：00000</span>
       </div>
@@ -174,10 +170,10 @@
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
-import ViewFiles from '@/components/ViewFiles'
+// import ViewFiles from '@/components/ViewFiles'
 import ChooseVariety from '@/components/Dialogs/ChooseVariety'
-import AddGenesBtn from '@/components/Dialogs/AddGenes'
-import UploadBtn from '@/components/Dialogs/Upload'
+// import AddGenesBtn from '@/components/Dialogs/AddGenes'
+// import UploadBtn from '@/components/Dialogs/Upload'
 import { Button, Form, Field, Toast } from 'vant'
 
 export default {
@@ -189,10 +185,10 @@ export default {
     BottomBtn,
     ChooseVariety,
     VanSelect,
-    TimeSelect,
-    ViewFiles,
-    UploadBtn,
-    AddGenesBtn
+    TimeSelect
+    // ViewFiles,
+    // UploadBtn,
+    // AddGenesBtn
   },
   data() {
     return {

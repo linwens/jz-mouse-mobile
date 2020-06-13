@@ -90,7 +90,6 @@ export default {
     },
     // 删除
     rowItemDel: function(row) {
-      const _this = this
       this.$confirm(`是否确认删除实验组: ${row.name}吗?`, '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

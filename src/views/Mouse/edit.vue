@@ -76,11 +76,7 @@
                 value: 'custom'
               }
             ]"
-          >
-            <template slot="placeholder">
-              <p></p>
-            </template>
-          </van-select>
+          />
           <div v-show="form.position !== 'custom'" class="mouse__edit--img mt8">
             <img v-if="form.position !== 'custom'" :src="`http://bllb-animal-test.oss-cn-hangzhou.aliyuncs.com/mice-sign/${form.filePrefix}/${form.sign}.jpg`" alt="">
             <span class="pl16 pr16 fs14">示例：</span>
@@ -129,11 +125,7 @@
                 value: 2
               }
             ]"
-          >
-            <template slot="placeholder">
-              <p></p>
-            </template>
-          </van-select>
+          />
           <div class="file--span fs14">
             <span>展示颜色：00000</span>
           </div>
@@ -247,10 +239,10 @@ import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
-import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
-import UploadBtn from '@/components/Dialogs/Upload'
-import GenesChoose from '@/components/Dialogs/GenesChoose'
-import ViewFiles from '@/components/ViewFiles'
+// import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
+// import UploadBtn from '@/components/Dialogs/Upload'
+// import GenesChoose from '@/components/Dialogs/GenesChoose'
+// import ViewFiles from '@/components/ViewFiles'
 import { getMouseInfo, getMouseExpInfo, getCageInfo, editMouse } from '@/api/mouse'
 import { Button, Form, Field, Toast, Tab, Tabs } from 'vant'
 
@@ -267,11 +259,11 @@ export default {
     ChooseVariety,
     VanSelect,
     TimeSelect,
-    BottomBtn,
-    AddGenesBtn,
-    UploadBtn,
-    GenesChoose,
-    ViewFiles
+    BottomBtn
+    // AddGenesBtn,
+    // UploadBtn,
+    // GenesChoose,
+    // ViewFiles
   },
   data() {
     return {
@@ -432,7 +424,7 @@ export default {
     getMouserInfo() {
       getMouseInfo(this.curMouseId).then((res) => {
         console.log(res)
-        const { geneName, varietiesName, miceCondition, area, status, color, varietiesId, ...other } = res.data
+        const { geneName, varietiesName, miceCondition, area, status, color, varietiesId } = res.data
         this.varietiesName = varietiesName
         this.varietiesId = Number(varietiesId)
         this.$set(this, 'form', res.data)

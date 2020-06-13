@@ -42,7 +42,7 @@
 import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
-import { delDelMouse, fetchList } from '@/api/delList'
+import { delBreedGroup, fetchList } from '@/api/breed'
 import { Button, Toast } from 'vant'
 
 export default {
@@ -83,7 +83,6 @@ export default {
     },
     // 删除
     rowItemDel: function(row) {
-      const _this = this
       this.$confirm('是否确认删除繁育组："' + row.name + '"的数据?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

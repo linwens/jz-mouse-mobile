@@ -92,8 +92,6 @@ export default {
       curBtnLabel: ''
     }
   },
-  created() {
-  },
   watch: {
     columns(n, o) {
       const names = n.map((el) => {
@@ -101,6 +99,9 @@ export default {
       })
       this.$set(this, 'formatCol', names)
     }
+  },
+  created() {
+    console.log(this.curVal, this.curValNum)
   },
   methods: {
     onConfirm(value) {
@@ -114,11 +115,11 @@ export default {
         return el[this.keyText] === value
       })
       const rslt = choicedOne[0][this.valText]
-      console.log(this.valText, choicedOne)
-      if (this.curVal) {
+
+      if (typeof rslt === 'string') {
         this.$emit('update:curVal', typeof rslt === 'object' ? JSON.stringify(rslt) : String(rslt))
       }
-      if (this.curValNum) {
+      if (typeof rslt === 'number') {
         this.$emit('update:curValNum', typeof rslt === 'object' ? JSON.stringify(rslt) : Number(rslt))
       }
       if (this.btnType === 'button') {

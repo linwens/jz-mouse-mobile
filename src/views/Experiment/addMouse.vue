@@ -137,7 +137,7 @@
 <script>
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import MouseCage from '@/components/MouseCage/index.vue'
-import AddCageBtn from '@/components/Dialogs/AddCage'
+// import AddCageBtn from '@/components/Dialogs/AddCage'
 import ViewFiles from '@/components/ViewFiles'
 import UploadBtn from '@/components/Dialogs/Upload'
 import ExptRecord from '@/components/Dialogs/ExptRecord'
@@ -164,7 +164,7 @@ export default {
     ExptRecord,
     SetTime,
     ShowFamily,
-    AddCageBtn,
+    // AddCageBtn,
     UploadBtn,
     ViewFiles,
     MouseCage

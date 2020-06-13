@@ -15,7 +15,7 @@
       <van-select
         btn-type="button"
         btn-width-class="w80"
-        :cur-val.sync="myMouseForm.operator"
+        :cur-val-num.sync="myMouseForm.operator"
         btn-text="负责人"
         :columns="persons"
         key-text="userName"
@@ -24,7 +24,7 @@
       <van-select
         btn-type="button"
         btn-width-class="w80"
-        :cur-val.sync="myMouseForm.varietiesId"
+        :cur-val-num.sync="myMouseForm.varietiesId"
         btn-text="品系"
         :columns="varietiesOpts"
         key-text="varietiesName"
@@ -33,7 +33,7 @@
       <van-select
         btn-type="button"
         btn-width-class="w80"
-        :cur-val.sync="myMouseForm.genotypes"
+        :cur-val-num.sync="myMouseForm.genotypes"
         btn-text="基因型"
         :columns="genesOpts"
         key-text="geneName"
@@ -87,8 +87,8 @@
     </main-list>
     <!-- 更多筛选项 -->
     <van-popup
-      title="筛选"
       v-model="filterDialog"
+      title="筛选"
       position="bottom"
       :style="{ height: '40%' }"
       closeable
@@ -99,7 +99,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.operator"
+            :cur-val-num.sync="myMouseForm.operator"
             btn-text="负责人"
             :columns="persons"
             key-text="userName"
@@ -108,7 +108,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.varietiesId"
+            :cur-val-num.sync="myMouseForm.varietiesId"
             btn-text="品系"
             :columns="varietiesOpts"
             key-text="varietiesName"
@@ -119,7 +119,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.genotypes"
+            :cur-val-num.sync="myMouseForm.genotypes"
             btn-text="基因型"
             :columns="genesOpts"
             key-text="geneName"
@@ -128,7 +128,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.pureHeterozygote"
+            :cur-val-num.sync="myMouseForm.pureHeterozygote"
             btn-text="纯/杂合子"
             :columns="[
               {
@@ -150,7 +150,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.gender"
+            :cur-val-num.sync="myMouseForm.gender"
             btn-text="性别"
             :columns="[
               {
@@ -166,7 +166,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="myMouseForm.status"
+            :cur-val-num.sync="myMouseForm.status"
             btn-text="状态"
             :columns="[
               {
@@ -242,23 +242,24 @@ import TopBar from '@/components/TopBar/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import FormSelect from '@/components/Form/select.vue'
 import SumBar from '@/components/Charts/SumBar'
-import ViewFiles from '@/components/ViewFiles'
+// import ViewFiles from '@/components/ViewFiles'
 import { fetchList, getUsers } from '@/api/home'
 import { varietiesList } from '@/api/variety'
 import { getLisByVariety } from '@/api/genes'
 import { mapGetters } from 'vuex'
-import { Button, Toast, Popup } from 'vant'
+import { Icon, Button, Toast, Popup } from 'vant'
 
 export default {
   name: 'Home',
   components: {
+    'van-icon': Icon,
     'van-button': Button,
     'van-popup': Popup,
     'xs-select': FormSelect,
     VanSelect,
     TopBar,
     SumBar,
-    ViewFiles,
+    // ViewFiles,
     Collapse,
     MainList
   },
@@ -342,6 +343,7 @@ export default {
       this.getList()
     },
     'myMouseForm.operator'(n, o) {
+      console.log('负责人====')
       this.getList()
     },
     'exptMouseForm.varietiesId'(n, o) {
