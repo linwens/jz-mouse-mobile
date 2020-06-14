@@ -6,12 +6,12 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop',
+  device: 'mobile',
   cacheMouseInfo: getStorageItem('m-info') || '',
   addingMouses: getStorageItem('adding-mouse') || '',
   addingChildMouse: getStorageItem('adding-child') || '', // 新增子鼠
   addingExpt: getStorageItem('adding-expt') || '',
-  addingBreed: getStorageItem('adding-breed') || ''
+  addingBreed: getStorageItem('adding-breed') || { miceIds: null }
 }
 
 const mutations = {

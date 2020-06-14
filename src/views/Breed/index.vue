@@ -4,7 +4,7 @@
     <top-bar :active-key="4">
       <template>
         <div class="w-100 df s-jcfe s-aic">
-          <van-button class="w90" hairline round size="small" color="#32C985" type="info" to="/breededit">新增繁育组</van-button>
+          <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="goAdd">新增繁育组</van-button>
         </div>
       </template>
     </top-bar>
@@ -73,6 +73,7 @@ export default {
       this.goPage({ type: 'add', id: 0 })
     },
     goEdit(row) {
+      console.log('goEdit', row)
       const id = row.id
       this.goPage({ type: 'edit', id: id })
     },

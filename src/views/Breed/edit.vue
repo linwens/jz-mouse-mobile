@@ -18,10 +18,11 @@
     </div>
     <!-- 列表 -->
     <div>
-      <collapse v-for="(item, index) in tableData" :key="item.id">
+      <collapse v-for="(item, index) in breedForm.miceIds" :key="item.id">
         <template slot="title">
-          <div class="df s-aic">
-            <span>实验组ADEsG</span>
+          <div class="df s-aic xs-collapse__content--multiple">
+            <span class="fs10">{{ item.varietiesName }}</span>
+            <span class="fs10">{{ item.geneName }}</span>
           </div>
         </template>
         <template slot="content">
@@ -52,7 +53,7 @@
         </template>
       </collapse>
     </div>
-    <bottom-btn @confirm="submit" />
+    <bottom-btn @confirm="submitForm" />
   </div>
 </template>
 
@@ -114,6 +115,7 @@ export default {
     // 如果是编辑，获取详情
     const cacheInfo = this.$store.getters.addingBreed
     const cacheMouses = this.$store.getters.addingMouses
+    console.log(this.$store.getters)
     console.log(cacheInfo)
     cacheInfo.miceIds = cacheMouses // CNMB
     console.log(this.type)
@@ -146,12 +148,12 @@ export default {
         }).then(() => {
           this.$set(this.breedForm, 'miceIds', [])
           this.$store.dispatch('app/cacheBreed', this.breedForm)
-          this.goPage('breedAddMouse', { type: 'noBreed' })
+          this.goPage('BreedAddMouse', { type: 'noBreed' })
         }).catch(function() {
         })
       } else {
         this.$store.dispatch('app/cacheBreed', this.breedForm)
-        this.goPage('breedAddMouse', { type: 'noBreed' })
+        this.goPage('BreedAddMouse', { type: 'noBreed' })
       }
     },
     goBack() {
@@ -212,38 +214,35 @@ export default {
         this.canEdit = true
         return false
       }
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log(this.breedForm)
-          if (this.breedForm.miceIds.length === 0) {
-            Toast.fail('请添加小鼠')
-            return false
-          }
-          const miceArr = this.breedForm.miceIds.map((el) => {
-            const { miceInfoId: miceId, pregnantTime } = el
-            return {
-              miceId,
-              pregnantTime: pregnantTime / 1000 || 0
-            }
-          })
-          const { id: userId } = this.$store.getters.info
-          const { miceIds, ...other } = this.breedForm
-          const params = Object.assign({}, other, {
-            breedTime: this.breedForm.breedTime / 1000,
-            createTime: Math.floor(+new Date() / 1000),
-            createUser: userId,
-            miceInfoInAddMiceBreedDTOList: miceArr
-          })
-          if (this.type === 'add') {
-            this.doAdd(params)
-          } else {
-            this.doEdit(params)
-          }
-        } else {
-          console.log('error submit!!')
-          return false
+      if (this.breedForm.name === '') {
+        Toast.fail('请输入繁育组名称')
+        return false
+      }
+      console.log(this.breedForm)
+      if (this.breedForm.miceIds.length === 0) {
+        Toast.fail('请添加小鼠')
+        return false
+      }
+      const miceArr = this.breedForm.miceIds.map((el) => {
+        const { miceInfoId: miceId, pregnantTime } = el
+        return {
+          miceId,
+          pregnantTime: pregnantTime / 1000 || 0
         }
       })
+      const { id: userId } = this.$store.getters.info
+      const { miceIds, ...other } = this.breedForm
+      const params = Object.assign({}, other, {
+        breedTime: this.breedForm.breedTime / 1000,
+        createTime: Math.floor(+new Date() / 1000),
+        createUser: userId,
+        miceInfoInAddMiceBreedDTOList: miceArr
+      })
+      if (this.type === 'add') {
+        this.doAdd(params)
+      } else {
+        this.doEdit(params)
+      }
     },
     // 新增
     doAdd(params) {

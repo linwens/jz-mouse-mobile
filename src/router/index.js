@@ -82,7 +82,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "breedList" */ '../views/Breed/index.vue')
   },
   {
-    path: '/breedEdit',
+    path: '/breedEdit/:id',
     name: 'BreedEdit',
     component: () => import(/* webpackChunkName: "breedEdit" */ '../views/Breed/edit.vue')
   },

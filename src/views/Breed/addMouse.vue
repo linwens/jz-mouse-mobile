@@ -126,9 +126,9 @@
         :cur-mouse-expt.sync="mouseExptInfo"
       />
     </div>
-    <bottom-btn @confirm="goAdd">
+    <bottom-btn>
       <template slot="confirm">
-        <van-button class="w150" round size="small" color="#32C985" type="info">确认添加</van-button>
+        <van-button class="w150" round size="small" color="#32C985" type="info" @click="goAdd()">确认添加</van-button>
       </template>
     </bottom-btn>
   </div>
@@ -346,7 +346,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$router.push({
-          name: 'mouseCage',
+          name: 'MouseCage',
           params: {
             mouses: curMouses,
             type: 'breed'
@@ -361,6 +361,7 @@ export default {
       // 填充繁育组信息
       const cacheBreed = this.$store.getters.addingBreed // 繁育组信息
       // 更新繁育组数据
+      console.log('cacheBreed.miceIds===', cacheBreed, cacheBreed.miceIds)
       cacheBreed.miceIds = cacheBreed.miceIds.concat(mouseArr)
       this.$store.dispatch('app/cacheBreed', cacheBreed)
       this.goBack()
