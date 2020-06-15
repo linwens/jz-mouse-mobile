@@ -73,7 +73,7 @@
             <span class="txt-btn--green" @click="tagDialog = true">添加</span>
           </template>
         </van-cell>
-        <div class="expt-add__tags">
+        <div class="expt-edit__tags">
           <van-tag
             v-for="(item, index) in tags"
             :key="index"
@@ -89,9 +89,59 @@
         </div>
       </div>
     </van-form>
-    <div class="add-btn df s-jcfe s-aic pt13 pb11">
-      <van-button class="w90" hairline round size="small" color="#32C985" type="info">新增分组</van-button>
+    <div class="edit-btn df s-jcfe s-aic pt13 pb11">
+      <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="addNewGroup">新增分组</van-button>
     </div>
+    <!-- 添加标签弹窗 -->
+    <van-dialog
+      v-model="tagDialog"
+      title="增加检测信息"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="addTag"
+    >
+      <van-form class="mt20 mb20">
+        <van-field
+          v-model="tagsForm.name"
+          label="检测信息"
+          placeholder="请输入检测信息"
+          :rules="[{ required: true, message: '检测信息不能为空' }]"
+        />
+      </van-form>
+    </van-dialog>
+    <!-- 新建分组弹窗 -->
+    <van-dialog
+      v-model="addGroupDialog"
+      title="分组信息"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="addGroup"
+    >
+      <van-form class="mt20 mb20">
+        <van-field
+          v-model="addGroupForm.experimentGroupName"
+          label="检测信息"
+          placeholder="请输入检测信息"
+          :rules="[{ required: true, message: '分组名称不能为空' }]"
+        />
+        <van-field
+          v-model="addGroupForm.eventName"
+          label="处理"
+          placeholder="请输入处理信息"
+        />
+        <van-select
+          :cur-val.sync="addGroupForm.testName"
+          btn-text="检测信息"
+          :columns="tags"
+          key-text="label"
+          val-text="label"
+        />
+      </van-form>
+    </van-dialog>
     <!-- 列表 -->
     <div>
       <collapse v-for="(item, index) in tableData" :key="item.id">
@@ -105,7 +155,7 @@
             <p>检测：<span>{{ item.testName }}</span></p>
           </div>
           <div class="df s-aic">
-            <p>小鼠数量：<span>{{ item.sum }}</span></p>
+            <p>小鼠数量：<span>{{ item.experimentGroupSelectionMiceIds.length }}</span></p>
           </div>
           <div class="df s-aic">
             <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
@@ -127,7 +177,7 @@
       get-container="body"
     >
       <div class="mt30">
-        <collapse v-for="item in mouseList" :key="item.id">
+        <collapse v-for="(item, index) in mouseList" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>查看小鼠</span>
@@ -158,7 +208,7 @@
             </div>
           </template>
           <template slot="footer">
-            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
+            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse({item, index})">删除</van-button>
           </template>
         </collapse>
 
@@ -186,6 +236,7 @@ export default {
     'van-tag': Tag,
     'van-cell': Cell,
     'van-popup': Popup,
+    [Dialog.Component.name]: Dialog.Component,
     VanSelect,
     TimeSelect,
     Collapse,
@@ -239,6 +290,7 @@ export default {
   created() {
     console.log(this.$route)
     const cacheExpts = this.$store.getters.addingExpt
+    console.log(cacheExpts)
     if (Object.keys(cacheExpts).length > 0 && cacheExpts.form.experimentId == this.$route.params.id) {
       const addingExpt = this.$store.getters.addingExpt
       this.$set(this, 'experimentForm', addingExpt.form)
@@ -257,8 +309,8 @@ export default {
       })
     },
     goAddMouse(scope) {
-      this.setStorageInfo(scope.$index)
-      this.goPage('experimentAddMouse', { type: 'noExpt', index: scope.$index })
+      this.setStorageInfo(scope.index)
+      this.goPage('ExptAddMouse', { type: 'noExpt', index: scope.index })
     },
     goPage(r, obj) {
       this.$router.push({ name: r, params: obj })
@@ -273,12 +325,12 @@ export default {
       const _this = this
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除实验分组："${scope.row.experimentGroupName}"?`,
+        message: `是否确认删除实验分组："${scope.item.experimentGroupName}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.tableData.splice(scope.$index, 1)
+        _this.tableData.splice(scope.index, 1)
         Toast.success('删除成功,还需提交保存')
       }).catch(function() {
       })
@@ -289,15 +341,15 @@ export default {
       const _this = this
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除小鼠"${scope.row.miceNo}"的数据?`,
+        message: `是否确认删除小鼠"${scope.item.miceNo}"的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.mouseList.splice(scope.$index, 1)
+        _this.mouseList.splice(scope.index, 1)
         // 删除对应分组的小鼠id
         const curGroupMices = _this.tableData[_this.curGroupIndex].experimentGroupSelectionMiceIds
-        const curMiceId = scope.row.miceId
+        const curMiceId = scope.item.miceId
         const index = curGroupMices.indexOf(curMiceId)
         curGroupMices.splice(index, 1)
 
@@ -348,6 +400,7 @@ export default {
     },
     // 新建分组
     addGroup() {
+      console.log(this.addGroupForm)
       this.addGroupDialog = false
       // 有编号就是编辑
       if (typeof this.addGroupForm.index === 'number') {
@@ -359,7 +412,8 @@ export default {
     // 新增列表项
     addListItem(data) {
       const item = JSON.parse(JSON.stringify(data))
-      item.testName = data.testName ? data.testName.join(';') : ''
+      // item.testName = data.testName ? data.testName.join(';') : ''
+      item.testName = data.testName ? data.testName : ''
       // 小鼠数量新建时候为0
       item.experimentGroupSelectionMiceIds = []
 
@@ -464,7 +518,7 @@ export default {
     console.log('enter====>', to, from)
     next(vm => {
       // 是添加小鼠返回的,组装列表项数据
-      if (from.name === 'experimentAddMouse') {
+      if (from.name === 'ExptAddMouse') {
         const addingExpt = vm.$store.getters.addingExpt
         vm.$set(vm, 'experimentForm', addingExpt ? addingExpt.form : {})
         vm.$set(vm, 'tags', addingExpt ? addingExpt.tags : [])
@@ -478,16 +532,16 @@ export default {
 
 <style lang="scss">
   .expt-edit {
-    margin-bottom: 50px;
+    margin-bottom: 80px;
 
     &__tags {
-      padding: 0 13px;
+      padding: 0 14px;
       .van-tag {
         margin-right: 5px;
       }
     }
 
-    .add-btn {
+    .edit-btn {
       width: 90%;
       margin: 0 auto;
     }

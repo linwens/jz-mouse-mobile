@@ -101,35 +101,33 @@
       </div>
     </van-form>
     <div class="add-btn df s-jcfe s-aic pt13 pb11">
-      <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="addNewGroup()">新增分组</van-button>
+      <van-button class="w90 mr14" hairline round size="small" color="#32C985" type="info" @click="addNewGroup()">新增分组</van-button>
     </div>
     <!-- 列表 -->
-    <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @refresh="getList(1)">
-      <template>
-        <collapse v-for="(item, index) in tableData" :key="item.id">
-          <template slot="title">
-            <div class="df s-aic s-jcsb">
-              <span>{{ item.experimentGroupName }}</span>
-            </div>
-          </template>
-          <template slot="content">
-            <div class="df s-aic">
-              <p>检测：<span>{{ item.testName }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>小鼠数量：<span>{{ item.sum }}</span></p>
-            </div>
-            <div class="df s-aic">
-              <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
-            </div>
-          </template>
-          <template slot="footer">
-            <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
-            <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
-          </template>
-        </collapse>
-      </template>
-    </main-list>
+    <div>
+      <collapse v-for="(item, index) in tableData" :key="item.id">
+        <template slot="title">
+          <div class="df s-aic s-jcsb">
+            <span>{{ item.experimentGroupName }}</span>
+          </div>
+        </template>
+        <template slot="content">
+          <div class="df s-aic">
+            <p>检测：<span>{{ item.testName }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>小鼠数量：<span>{{ item.experimentGroupSelectionMiceIds.length }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
+          </div>
+        </template>
+        <template slot="footer">
+          <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
+          <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
+        </template>
+      </collapse>
+    </div>
     <bottom-btn @confirm="doAddExpt" />
     <!-- 添加标签弹窗 -->
     <van-dialog
@@ -228,7 +226,6 @@
 </template>
 
 <script>
-import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
@@ -248,7 +245,6 @@ export default {
     'van-cell': Cell,
     'van-popup': Popup,
     [Dialog.Component.name]: Dialog.Component,
-    MainList,
     Collapse,
     BottomBtn,
     VanSelect,
@@ -326,7 +322,7 @@ export default {
     goAddMouse(scope) {
       console.log(scope)
       this.setStorageInfo(scope.index)
-      this.goPage('experimentAddMouse', { type: 'noExpt', index: scope.index })
+      this.goPage('ExptAddMouse', { type: 'noExpt', index: scope.index })
     },
     goPage(r, obj) {
       this.$router.push({ name: r, params: obj })
@@ -520,7 +516,7 @@ export default {
     console.log('enter====>', to, from)
     next(vm => {
       // 是添加小鼠返回的,组装列表项数据
-      if (from.name === 'experimentAddMouse') {
+      if (from.name === 'ExptAddMouse') {
         const addingExpt = vm.$store.getters.addingExpt
         vm.$set(vm, 'experimentForm', addingExpt ? addingExpt.form : {})
         vm.$set(vm, 'tags', addingExpt ? addingExpt.tags : [])
@@ -531,6 +527,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  .expt-add {
+    margin-bottom: 80px;
+
+    &__tags {
+      padding: 0 14px;
+      .van-tag {
+        margin-right: 5px;
+      }
+    }
+
+    .add-btn {
+      width: 90%;
+      margin: 0 auto;
+    }
+  }
 
 </style>

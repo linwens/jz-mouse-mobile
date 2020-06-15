@@ -124,11 +124,12 @@
         :cur-mouse-id.sync="curMouseId"
         :cur-mouse.sync="mouseInfo"
         :cur-mouse-expt.sync="mouseExptInfo"
+        :cant-choice-mouses="mouseIds"
       />
     </div>
-    <bottom-btn @confirm="goAdd">
+    <bottom-btn>
       <template slot="confirm">
-        <van-button class="w150" round size="small" color="#32C985" type="info">确认添加</van-button>
+        <van-button class="w150" round size="small" color="#32C985" type="info" @click="goAdd()">确认添加</van-button>
       </template>
     </bottom-btn>
   </div>

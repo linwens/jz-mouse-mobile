@@ -6,7 +6,7 @@
       </template>
     </van-cell>
     <!-- 弹出 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
+    <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
       <van-datetime-picker
         v-model="currentDate"
         type="datetime"
@@ -49,10 +49,21 @@ export default {
     return {
       value: '',
       show: false,
-      minDate: new Date(2020, 0, 1),
+      minDate: new Date(2019, 0, 1),
       maxDate: new Date(2025, 10, 1),
       currentDate: new Date()
     }
+  },
+  watch: {
+    time(n, o) {
+      console.log('time.length===', (n + '').length)
+      if (n) {
+        this.value = n
+      }
+    }
+  },
+  created() {
+    this.value = this.time
   },
   methods: {
     showOptions() {

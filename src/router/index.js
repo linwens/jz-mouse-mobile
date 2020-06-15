@@ -26,7 +26,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "mouseList" */ '../views/Mouse/index.vue')
   },
   {
-    path: '/mouseEdit',
+    path: '/mouseEdit/:id',
     name: 'MouseEdit',
     component: () => import(/* webpackChunkName: "mouseEdit" */ '../views/Mouse/edit.vue')
   },
@@ -53,7 +53,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "exptList" */ '../views/Experiment/index.vue')
   },
   {
-    path: '/exptEdit',
+    path: '/exptEdit/:id',
     name: 'ExperimentEdit',
     component: () => import(/* webpackChunkName: "exptEdit" */ '../views/Experiment/edit.vue')
   },

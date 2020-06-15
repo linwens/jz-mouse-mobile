@@ -102,6 +102,8 @@ export default {
   },
   created() {
     console.log(this.curVal, this.curValNum)
+    const nowVal = this.curVal || this.curValNum
+    this.value = this.columns.filter((el) => el.value === nowVal)[0] ? this.columns.filter((el) => el.value === nowVal)[0][this.keyText] : ''
   },
   methods: {
     onConfirm(value) {
