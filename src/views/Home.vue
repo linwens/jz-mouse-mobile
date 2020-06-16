@@ -76,7 +76,7 @@
             </div>
             <div class="df s-aic">
               <p>笼位号：<span>{{ item.cageNo }}</span></p>
-              <p>家谱记录：<span class="txt-btn--green">查看</span></p>
+              <p>家谱记录：<show-family v-if="item.id" :mice-id="item.id" btn-type="text" /></p>
             </div>
             <div class="df s-aic">
               <p>检测结果：<span class="txt-btn--green">查看</span></p>
@@ -197,7 +197,7 @@
           <van-select
             btn-type="button"
             btn-width-class="w150"
-            :cur-val.sync="JSON.stringify(weekRange)"
+            :cur-val-arr.sync="weekRange"
             btn-text="周龄"
             :columns="[
               {
@@ -218,12 +218,12 @@
               },
               {
                 label: '自定义',
-                value: 'custom'
+                value: JSON.stringify(['custom'])
               }
             ]"
-            @done="selectWeekRange"
+            @confirm="selectWeekRange"
           />
-          <span v-if="weekRange === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
+          <span v-if="weekRange[0] === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
         </div>
       </div>
       <div class="bottom-btn df s-jcsa s-aic">
@@ -231,6 +231,31 @@
         <van-button class="w150" round color="#32C985" size="small" type="info" @click="filterDialog = false">搜索</van-button>
       </div>
     </van-popup>
+    <!-- 自定义周龄 -->
+    <van-dialog
+      v-model="weekRangeDialog"
+      title="选择周龄"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="okRange"
+    >
+      <van-form
+        ref="weekRangeForm"
+        class="mt20 mb20"
+      >
+        <van-field
+          v-model="weekRangeForm.startWeek"
+          label="周龄起始"
+          placeholder="0"
+        />
+        <van-field
+          v-model="weekRangeForm.endWeek"
+          label="周龄结束"
+          placeholder="0"
+        />
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 
@@ -242,12 +267,13 @@ import TopBar from '@/components/TopBar/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import FormSelect from '@/components/Form/select.vue'
 import SumBar from '@/components/Charts/SumBar'
+import ShowFamily from '@/components/Dialogs/ShowFamily'
 // import ViewFiles from '@/components/ViewFiles'
 import { fetchList, getUsers } from '@/api/home'
 import { varietiesList } from '@/api/variety'
 import { getLisByVariety } from '@/api/genes'
 import { mapGetters } from 'vuex'
-import { Icon, Button, Toast, Popup } from 'vant'
+import { Icon, Button, Toast, Popup, Dialog, Form, Field } from 'vant'
 
 export default {
   name: 'Home',
@@ -255,10 +281,14 @@ export default {
     'van-icon': Icon,
     'van-button': Button,
     'van-popup': Popup,
+    'van-form': Form,
+    'van-field': Field,
     'xs-select': FormSelect,
+    [Dialog.Component.name]: Dialog.Component,
     VanSelect,
     TopBar,
     SumBar,
+    ShowFamily,
     // ViewFiles,
     Collapse,
     MainList
@@ -413,7 +443,7 @@ export default {
         expt: 'exptMouseForm'
       }
       console.log('========', val)
-      if (val === 'custom') {
+      if (val[0] === 'custom') {
         this.weekRangeDialog = true
       } else {
         if (!val) {
@@ -422,7 +452,7 @@ export default {
           this.getList()
           return
         }
-        const parseVal = JSON.parse(val)
+        const parseVal = val
         // 注意周龄是到今天算的，所以后面的值算开始时间
         this[MAP[this.activeName]].startTime = parseVal[1] ? parseVal[1] : 0
         this[MAP[this.activeName]].endTime = parseVal[0] ? parseVal[0] : 0

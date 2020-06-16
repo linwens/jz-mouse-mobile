@@ -57,7 +57,7 @@
               <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
-                <van-progress ref="progress" :percentage="Number(percentage)" :stroke-width="16" color="#58A2FB" text-color="#fff" />
+                <van-progress ref="progress" :percentage="percentage" :stroke-width="16" color="#58A2FB" text-color="#58A2FB" />
               </div>
             </div>
             <div class="df s-jcc s-aic">
@@ -670,6 +670,10 @@ export default {
       &--y{
         bottom: -12px;
       }
+    }
+
+    .van-progress__pivot {
+      background: none!important;
     }
 
     &__info-sign {

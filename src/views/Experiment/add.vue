@@ -186,7 +186,7 @@
       get-container="body"
     >
       <div class="mt30">
-        <collapse v-for="item in mouseList" :key="item.id">
+        <collapse v-for="(item, index) in mouseList" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>查看小鼠</span>
@@ -217,7 +217,7 @@
             </div>
           </template>
           <template slot="footer">
-            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse(item)">删除</van-button>
+            <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="delMouse({item, index})">删除</van-button>
           </template>
         </collapse>
       </div>
@@ -339,12 +339,12 @@ export default {
       const _this = this
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除实验分组："${scope.row.experimentGroupName}"?`,
+        message: `是否确认删除实验分组："${scope.item.experimentGroupName}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.tableData.splice(scope.$index, 1)
+        _this.tableData.splice(scope.index, 1)
         Toast.success('删除成功,还需提交保存')
       }).catch(function() {
       })
@@ -355,15 +355,15 @@ export default {
       const _this = this
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除小鼠"${scope.row.miceId}"的数据?`,
+        message: `是否确认删除小鼠"${scope.item.miceId}"的数据?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _this.mouseList.splice(scope.$index, 1)
+        _this.mouseList.splice(scope.index, 1)
         // 删除对应分组的小鼠id
         const curGroupMices = _this.tableData[_this.curGroupIndex].experimentGroupSelectionMiceIds
-        const curMiceId = scope.row.miceId
+        const curMiceId = scope.item.miceId
         const index = curGroupMices.indexOf(curMiceId)
         curGroupMices.splice(index, 1)
 
@@ -395,14 +395,14 @@ export default {
     },
     // 编辑分组信息
     goEdit(scope) {
-      const data = JSON.parse(JSON.stringify(scope.row))
-      const exptLabels = scope.row.testName
+      const data = JSON.parse(JSON.stringify(scope.item))
+      const exptLabels = scope.item.testName
       console.log(exptLabels)
       data.testName = exptLabels ? exptLabels.split(';') : []
       console.log('goEdit====', data)
       this.addGroupDialog = true
       this.addGroupForm = data
-      this.addGroupForm.index = scope.$index
+      this.addGroupForm.index = scope.index
     },
     // 添加标签
     addTag() {
@@ -469,7 +469,7 @@ export default {
     },
     // 查看小鼠列表
     showMouses(scope) {
-      this.curGroupIndex = scope.$index
+      this.curGroupIndex = scope.index
       console.log(scope.row)
       this.getMouseList(scope.row.experimentGroupSelectionMiceIds)
       this.mousesDialog = true

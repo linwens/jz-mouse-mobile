@@ -74,7 +74,7 @@ export default {
         const item = data[i]
         femaleSum.push(item.femaleNum)
         maleSum.push(item.maleNum)
-        xData.push(item.name)
+        xData.push(`${item.name}\n${item.varietiesName ? item.varietiesName : ''}`)
       }
       // var xData = (() => {
       //   var list = []

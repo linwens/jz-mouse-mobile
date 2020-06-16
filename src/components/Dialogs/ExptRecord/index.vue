@@ -8,35 +8,33 @@
       :style="{ height: '50%' }"
       get-container="body"
     >
-      <main-list>
-        <template>
-          <collapse v-for="item in recordList" :key="item.id">
-            <template slot="title">
-              <div class="df s-aic s-jcsb">
-                <span>实验记录</span>
-              </div>
-            </template>
-            <template slot="content">
-              <div class="df s-aic">
-                <p>饲养条件：<span>饲养条件巴拉啦</span></p>
-                <p>负责人：<span>小勾</span></p>
-              </div>
-              <div class="df s-aic">
-                <p>应用领域：<span>范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否范德萨范德萨发飞洒发发顺丰撒是否是否</span></p>
-              </div>
-            </template>
-            <template slot="footer">
-              <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
-            </template>
-          </collapse>
+      <collapse v-for="item in recordList" :key="item.id">
+        <template slot="title">
+          <div class="df s-aic s-jcsb">
+            <span>实验记录</span>
+          </div>
         </template>
-      </main-list>
+        <template slot="content">
+          <div class="df s-aic">
+            <p>操作类型：<span>{{ item.operationType === 0 ? '检测' : '处理' }}</span></p>
+            <p>操作人：<span>{{ item.operationName }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>操作时间：<span>{{ item.createTime * 1000 | timeFormat('yyyy年MM月dd日 hh:mm:ss') }}</span></p>
+          </div>
+          <div class="df s-aic">
+            <p>处理检测时间：<span>{{ item.time * 1000 | timeFormat('yyyy年MM月dd日 hh:mm:ss') }}</span></p>
+          </div>
+        </template>
+        <template slot="footer">
+          <van-button class="mr10" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
+        </template>
+      </collapse>
     </van-popup>
   </div>
 </template>
 
 <script>
-import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import { Button, Popup, Toast, Dialog } from 'vant'
 import { getExptRecord, delExptRecord } from '@/api/experiment'
@@ -46,7 +44,6 @@ export default {
   components: {
     'van-button': Button,
     'van-popup': Popup,
-    MainList,
     Collapse
   },
   props: {
@@ -118,7 +115,6 @@ export default {
     },
     // 删除
     rowItemDel: function(row) {
-      const _this = this
       if (!(row.own || this.isAdmin)) { // 不是自己的信息无权删除
         Toast.fail('无权限删除他人记录')
         return

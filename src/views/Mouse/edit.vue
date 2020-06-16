@@ -133,7 +133,7 @@
             ]"
           />
           <div class="file--span fs14">
-            <span>展示颜色：00000</span>
+            <span>展示颜色：<color-picker :color="form.color" /></span>
           </div>
           <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
             <template slot="placeholder">
@@ -182,25 +182,25 @@
             </template>
           </van-select>
           <van-field
-            v-model="cage.cageNo"
+            v-model="cageInfo.cageNo"
             label="笼位号"
             placeholder="请输入笼位号名称"
           />
           <div class="cage-box">
             <van-field
-              v-model="cage.cageNo"
+              v-model="cageInfo.cageNo"
               readonly
               label="笼位号"
               placeholder="请输入笼位号名称"
             />
             <van-field
-              v-model="cage.roomNo"
+              v-model="cageInfo.roomNo"
               readonly
               label="房间号"
               placeholder="请输入房间号"
             />
             <van-field
-              v-model="cage.shelvesNo"
+              v-model="cageInfo.shelvesNo"
               readonly
               label="架号"
               placeholder="请输入架号"
@@ -249,6 +249,7 @@ import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
 import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
+import ColorPicker from '@/components/Dialogs/ColorPicker.vue'
 // import UploadBtn from '@/components/Dialogs/Upload'
 import GenesChoose from '@/components/Dialogs/GenesChoose'
 // import ViewFiles from '@/components/ViewFiles'
@@ -269,6 +270,7 @@ export default {
     VanSelect,
     TimeSelect,
     BottomBtn,
+    ColorPicker,
     AddGenesBtn,
     // UploadBtn,
     GenesChoose

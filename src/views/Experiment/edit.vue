@@ -366,7 +366,7 @@ export default {
       console.log('goEdit====', data)
       this.addGroupDialog = true
       this.addGroupForm = data
-      this.addGroupForm.index = scope.$index
+      this.addGroupForm.index = scope.index
     },
     // 添加标签
     addTag() {

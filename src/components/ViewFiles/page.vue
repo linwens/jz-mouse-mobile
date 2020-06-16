@@ -2,7 +2,7 @@
   <div class="view-files">
     <main-list>
       <template>
-        <collapse v-for="item in filesData" :key="item.id">
+        <collapse v-for="(item, index) in filesData" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
               <span>小鼠文件</span>
@@ -16,7 +16,7 @@
           </template>
           <template slot="footer">
             <van-button class="mr10" plain hairline round size="small" color="#333" type="info">预览</van-button>
-            <van-button plain hairline round size="small" color="#EB5444" type="info">移除</van-button>
+            <van-button plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">移除</van-button>
           </template>
         </collapse>
       </template>
@@ -127,16 +127,16 @@ export default {
       }
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除数据为${scope.row.fileName}的文件吗?`,
+        message: `是否确认删除数据为${scope.item.fileName}的文件吗?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        if (scope.row.fileId) {
-          return delFile(scope.row.fileId)
+        if (scope.item.fileId) {
+          return delFile(scope.item.fileId)
         }
-        if (!scope.row.fileId) {
-          _this.filesData.splice(scope.$index, 1)
+        if (!scope.item.fileId) {
+          _this.filesData.splice(scope.index, 1)
         }
       }).then(() => {
         this.getList()
