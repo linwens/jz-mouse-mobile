@@ -147,7 +147,7 @@ export default {
       }
       Dialog.confirm({
         title: '警告',
-        message: `当前仍有${this.mouseData.femaleMiceNum + this.mouseData.maleMiceNum}只小鼠尚未放入鼠笼，是否继续返回？`,
+        message: `当前仍有${parseInt(this.mouseData.femaleMiceNum) + parseInt(this.mouseData.maleMiceNum)}只小鼠尚未放入鼠笼，是否继续返回？`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -290,7 +290,7 @@ export default {
     // 导航离开该组件的对应路由时调用
     console.log(to)
     if (!this.canGo && this.mouseData.femaleMiceNum + this.mouseData.maleMiceNum !== 0) {
-      const answer = window.confirm(`您当前还有${this.mouseData.femaleMiceNum + this.mouseData.maleMiceNum}只小鼠未新增完成，离开页面后系统将无法保留相关数据，是否继续离开？`)
+      const answer = window.confirm(`您当前还有${parseInt(this.mouseData.femaleMiceNum) + parseInt(this.mouseData.maleMiceNum)}只小鼠未新增完成，离开页面后系统将无法保留相关数据，是否继续离开？`)
       if (answer) {
         next()
       } else {

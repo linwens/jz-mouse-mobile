@@ -1,6 +1,6 @@
 <template>
   <div class="breed-edit">
-    <van-form>
+    <van-form :show-error-message="false">
       <van-field
         v-model="breedForm.name"
         label="繁育组名称"

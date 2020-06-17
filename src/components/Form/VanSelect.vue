@@ -88,6 +88,10 @@ export default {
     valText: { // 值字段名
       type: String,
       default: 'value'
+    },
+    dataType: { // 数据类型
+      type: String,
+      default: null
     }
   },
   data() {
@@ -104,9 +108,31 @@ export default {
     }
   },
   created() {
-    console.log(this.curVal, this.curValNum, this.columns)
-    const nowVal = this.curVal || this.curValNum || JSON.stringify(this.curValArr)
-    this.value = this.columns.filter((el) => el.value === nowVal)[0] ? this.columns.filter((el) => el.value === nowVal)[0][this.keyText] : ''
+    console.log(this.curVal, this.curValNum, this.columns, this.curVal || (this.curValNum >= 0 ? this.curValNum : null))
+    let nowVal = null
+    if (this.curVal) {
+      nowVal = this.curVal
+    }
+    if (this.curValNum >= 0) {
+      nowVal = this.curValNum
+    }
+    if (this.curValArr && this.curValArr.length > 0) {
+      nowVal = JSON.stringify(this.curValArr)
+    }
+    console.log('nowVal===', nowVal)
+    if (this.columns.length === 0) {
+      if (this.dataType === 'arr') {
+        this.value = JSON.parse(nowVal)[0]
+      } else {
+        this.value = nowVal
+      }
+    } else {
+      if (this.dataType === 'arr') {
+        this.value = this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0] ? this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0][this.keyText] : ''
+      } else {
+        this.value = this.columns.filter((el) => el.value === nowVal)[0] ? this.columns.filter((el) => el.value === nowVal)[0][this.keyText] : ''
+      }
+    }
     this.createOpt(this.columns)
   },
   methods: {
@@ -131,9 +157,8 @@ export default {
 
       if (typeof rslt === 'string') {
         let value = null
-        if (this.curValArr && !this.curVal) {
-          value = JSON.parse(rslt)
-          this.$emit('update:curValArr', value)
+        if (this.dataType === 'arr') {
+          this.$emit('update:curValArr', [rslt])
         } else {
           value = typeof rslt === 'object' ? JSON.stringify(rslt) : String(rslt)
           this.$emit('update:curVal', value)

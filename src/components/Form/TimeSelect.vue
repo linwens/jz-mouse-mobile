@@ -1,6 +1,6 @@
 <template>
   <div class="time-select">
-    <van-cell class="time-select__placeholder" :title="btnText" is-link @click="showOptions">
+    <van-cell class="time-select__placeholder" :title="btnText" is-link @click="disabled ? null : showOptions()">
       <template #default>
         {{ +new Date(value) | timeFormat('yyyy-MM-dd hh:mm:ss') }}
       </template>
@@ -36,6 +36,10 @@ export default {
     'van-datetime-picker': DatetimePicker
   },
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     btnText: {
       type: String,
       default: '时间选择'

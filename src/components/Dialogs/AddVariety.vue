@@ -11,6 +11,7 @@
     >
       <van-form
         ref="addVarietyForm"
+        :show-error-message="false"
         class="mt20 mb20"
       >
         <van-field

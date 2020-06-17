@@ -1,23 +1,25 @@
 <template>
   <div class="expt-edit">
-    <van-form>
+    <van-form :show-error-message="false">
       <van-field
         v-model="experimentForm.experimentName"
         label="实验组名称"
         placeholder="请输入实验组名称"
+        :disabled="!canEdit"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
       />
-      <time-select btn-text="开始时间" :time.sync="experimentForm.startTime">
+      <time-select :disabled="!canEdit" btn-text="开始时间" :time.sync="experimentForm.startTime">
         <template slot="placeholder">
           <p>请选择开始时间</p>
         </template>
       </time-select>
-      <time-select btn-text="结束时间" :time.sync="experimentForm.endTime">
+      <time-select :disabled="!canEdit" btn-text="结束时间" :time.sync="experimentForm.endTime">
         <template slot="placeholder">
           <p>请选择结束时间</p>
         </template>
       </time-select>
       <van-select
+        :disabled="!canEdit"
         btn-text="处理时间提醒"
         :cur-val-num.sync="experimentForm.handleTimeFlag"
         :columns="[
@@ -36,6 +38,7 @@
         </template>
       </van-select>
       <van-select
+        :disabled="!canEdit"
         btn-text="检测时间提醒"
         :cur-val-num.sync="experimentForm.testTimeFlag"
         :columns="[
@@ -53,6 +56,7 @@
         </template>
       </van-select>
       <van-select
+        :disabled="!canEdit"
         btn-text="实验结束后小鼠状态"
         :cur-val-num.sync="experimentForm.endMiceState"
         :columns="[
@@ -68,7 +72,7 @@
       />
       <!-- 检测信息标签 -->
       <div>
-        <van-cell title="检测信息" :border="false">
+        <van-cell v-if="canEdit" title="检测信息" :border="false">
           <template #right-icon>
             <span class="txt-btn--green" @click="tagDialog = true">添加</span>
           </template>
@@ -79,7 +83,7 @@
             :key="index"
             plain
             color="#58A2FB"
-            closeable
+            :closeable="canEdit"
             size="medium"
             type="primary"
             @close="handleClose(item)"
@@ -90,7 +94,7 @@
       </div>
     </van-form>
     <div class="edit-btn df s-jcfe s-aic pt13 pb11">
-      <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="addNewGroup">新增分组</van-button>
+      <van-button v-if="canEdit" class="w90" hairline round size="small" color="#32C985" type="info" @click="addNewGroup">新增分组</van-button>
     </div>
     <!-- 添加标签弹窗 -->
     <van-dialog
@@ -102,7 +106,7 @@
       confirm-button-color="#FF6358"
       @confirm="addTag"
     >
-      <van-form class="mt20 mb20">
+      <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="tagsForm.name"
           label="检测信息"
@@ -121,7 +125,7 @@
       confirm-button-color="#FF6358"
       @confirm="addGroup"
     >
-      <van-form class="mt20 mb20">
+      <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="addGroupForm.experimentGroupName"
           label="检测信息"
@@ -134,7 +138,8 @@
           placeholder="请输入处理信息"
         />
         <van-select
-          :cur-val.sync="addGroupForm.testName"
+          data-type="arr"
+          :cur-val-arr.sync="addGroupForm.testName"
           btn-text="检测信息"
           :columns="tags"
           key-text="label"
@@ -161,13 +166,17 @@
             <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
           </div>
         </template>
-        <template slot="footer">
+        <template v-if="canEdit" slot="footer">
           <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit({item, index})">编辑</van-button>
           <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">删除</van-button>
         </template>
       </collapse>
     </div>
-    <bottom-btn @confirm="saveExptInfo" />
+    <bottom-btn>
+      <template slot="confirm">
+        <van-button class="w150" round size="small" color="#32C985" type="info" @click="saveExptInfo()">{{ canEdit ? '确认' : '编辑' }}</van-button>
+      </template>
+    </bottom-btn>
     <!-- 小鼠列表弹窗 -->
     <van-popup
       v-model="mousesDialog"
@@ -359,13 +368,14 @@ export default {
     },
     // 编辑分组信息
     goEdit(scope) {
-      const data = JSON.parse(JSON.stringify(scope.row))
-      const exptLabels = scope.row.testName
-      console.log(exptLabels)
+      const data = JSON.parse(JSON.stringify(scope.item))
+      const exptLabels = scope.item.testName
       data.testName = exptLabels ? exptLabels.split(';') : []
-      console.log('goEdit====', data)
+
       this.addGroupDialog = true
-      this.addGroupForm = data
+      for (const key of Object.keys(data)) {
+        this.addGroupForm[key] = data[key]
+      }
       this.addGroupForm.index = scope.index
     },
     // 添加标签

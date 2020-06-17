@@ -9,7 +9,7 @@
       <span> 密码: 随意</span>
     </div>
 
-    <van-form @submit="handleLogin">
+    <van-form :show-error-message="false" @submit="handleLogin">
       <van-field
         v-model="loginForm.username"
         name="用户名"

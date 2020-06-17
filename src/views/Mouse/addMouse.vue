@@ -1,6 +1,6 @@
 <template>
   <div class="mouse-add">
-    <van-form>
+    <van-form :show-error-message="false">
       <van-field
         v-model="varietiesName"
         label="品系"
@@ -107,7 +107,7 @@
         ]"
       />
       <div class="file--span fs14">
-        <span>展示颜色：00000</span>
+        <span>展示颜色：<color-picker :color.sync="form.color" /></span>
       </div>
       <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
         <template slot="placeholder">
@@ -171,6 +171,7 @@
 import BottomBtn from '@/components/BottomBtn/index.vue'
 import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
+import ColorPicker from '@/components/Dialogs/ColorPicker.vue'
 // import ViewFiles from '@/components/ViewFiles'
 import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import AddGenesBtn from '@/components/Dialogs/AddGenes'
@@ -185,6 +186,7 @@ export default {
     'van-form': Form,
     'van-field': Field,
     BottomBtn,
+    ColorPicker,
     ChooseVariety,
     VanSelect,
     TimeSelect,
@@ -199,8 +201,8 @@ export default {
       form: {
         vid: '',
         genotypes: null,
-        maleMiceNum: null,
-        femaleMiceNum: null,
+        maleMiceNum: 0,
+        femaleMiceNum: 0,
         weight: null,
         birthDate: null,
         pureHeterozygote: null,

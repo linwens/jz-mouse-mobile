@@ -1,6 +1,6 @@
 <template>
   <div class="variety-edit">
-    <van-form>
+    <van-form :show-error-message="false">
       <van-field
         v-model="addGensForm.varietiesName"
         label="品系"

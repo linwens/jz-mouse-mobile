@@ -37,7 +37,7 @@
       confirm-button-color="#FF6358"
       @confirm="doEdit"
     >
-      <van-form class="mt20 mb20">
+      <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="editVarietyForm.varietiesName"
           label="品系名称"

@@ -2,7 +2,7 @@
   <div class="mouse-edit">
     <van-tabs v-model="activeName" color="#00CB7C" line-width="50%">
       <van-tab title="小鼠信息">
-        <van-form>
+        <van-form :show-error-message="false">
           <van-field v-model="form.fatherId" label="父鼠编号" />
           <van-field v-model="form.motherId" label="母鼠编号" />
           <van-field
@@ -133,7 +133,7 @@
             ]"
           />
           <div class="file--span fs14">
-            <span>展示颜色：<color-picker :color="form.color" /></span>
+            <span>展示颜色：<color-picker :color.sync="form.color" /></span>
           </div>
           <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
             <template slot="placeholder">
@@ -213,27 +213,23 @@
       </van-tab>
       <van-tab title="实验记录">
         <!-- 列表 -->
-        <main-list>
-          <template>
-            <collapse v-for="item in tableData" :key="item.id" :footer="false">
-              <template slot="title">
-                <div class="df s-aic s-jcsb">
-                  <span>{{ item.experimentName }}</span>
-                  <i class="cl-grey-9">{{ item.startTime * 1000 | timeFormat('yyyy.MM.dd') }}-{{ item.endTime * 1000 | timeFormat('yyyy.MM.dd') }}</i>
-                </div>
-              </template>
-              <template slot="content">
-                <div class="df s-aic">
-                  <p>分组名称：<span>{{ item.sampleGroupName }}</span></p>
-                  <p>处理：<span>{{ item.eventName }}</span></p>
-                </div>
-                <div class="df s-aic">
-                  <p>检测：<span>{{ item.testName }}</span></p>
-                </div>
-              </template>
-            </collapse>
+        <collapse v-for="item in tableData" :key="item.id" :footer="false">
+          <template slot="title">
+            <div class="df s-aic s-jcsb">
+              <span>{{ item.experimentName }}</span>
+              <i class="cl-grey-9">{{ item.startTime * 1000 | timeFormat('yyyy.MM.dd') }}-{{ item.endTime * 1000 | timeFormat('yyyy.MM.dd') }}</i>
+            </div>
           </template>
-        </main-list>
+          <template slot="content">
+            <div class="df s-aic">
+              <p>分组名称：<span>{{ item.sampleGroupName }}</span></p>
+              <p>处理：<span>{{ item.eventName }}</span></p>
+            </div>
+            <div class="df s-aic">
+              <p>检测：<span>{{ item.testName }}</span></p>
+            </div>
+          </template>
+        </collapse>
       </van-tab>
     </van-tabs>
     <!-- 底部按钮 -->
@@ -242,7 +238,6 @@
 </template>
 
 <script>
-import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import ChooseVariety from '@/components/Dialogs/ChooseVariety'
 import BottomBtn from '@/components/BottomBtn/index.vue'
@@ -264,7 +259,6 @@ export default {
     'van-field': Field,
     'van-tab': Tab,
     'van-tabs': Tabs,
-    MainList,
     Collapse,
     ChooseVariety,
     VanSelect,
@@ -426,7 +420,6 @@ export default {
       this.getMouserInfo()
     }
     getMouseExpInfo(this.curMouseId).then((res) => {
-      console.log(res)
       this.$set(this, 'tableData', res.data)
     })
   },

@@ -1,8 +1,8 @@
 <template>
   <div class="add-child">
-    <van-form>
-      <van-field v-model="form.fatherId" label="父鼠编号" readonly />
-      <van-field v-model="form.motherId" label="母鼠编号" readonly />
+    <van-form :show-error-message="false">
+      <van-field v-model="father.miceInfoId" label="父鼠编号" readonly />
+      <van-field v-model="mother.miceInfoId" label="母鼠编号" readonly />
       <van-field
         v-model="varietiesName"
         label="品系"
@@ -58,7 +58,6 @@
           />
         </div>
       </div>
-      <van-field v-model="form.miceNo" label="编号" />
       <div class="file--span fs14">
         <span>状态 闲置</span>
       </div>
@@ -342,7 +341,7 @@ export default {
       })[0]
     }
     this.$set(this, 'cage', cage)
-    const { vid, varietiesName, genotypes, geneName  } = this.father
+    const { vid, varietiesName, genotypes, geneName } = this.father
     this.varietiesName = varietiesName
     this.varietiesId = vid
     this.form.genotypes = genotypes

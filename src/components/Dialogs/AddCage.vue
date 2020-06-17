@@ -11,7 +11,7 @@
       confirm-button-color="#FF6358"
       @confirm="addCageSubmit"
     >
-      <van-form class="mt20 mb20">
+      <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="addCageForm.cageNo"
           label="笼位号"

@@ -1,6 +1,6 @@
 <template>
   <div class="expt-add">
-    <van-form>
+    <van-form :show-error-message="false">
       <van-field
         v-model="experimentForm.experimentName"
         label="实验组名称"
@@ -138,7 +138,7 @@
       confirm-button-color="#FF6358"
       @confirm="addTag"
     >
-      <van-form class="mt20 mb20">
+      <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="tagsForm.name"
           label="检测信息"
@@ -156,7 +156,7 @@
       confirm-button-color="#FF6358"
       @confirm="addGroup"
     >
-      <van-form ref="addGroupForm" class="mt20 mb20">
+      <van-form :show-error-message="false" ref="addGroupForm" class="mt20 mb20">
         <van-field
           v-model="addGroupForm.experimentGroupName"
           label="分组名称"
@@ -169,7 +169,8 @@
           placeholder="请输入处理信息"
         />
         <van-select
-          :cur-val.sync="addGroupForm.testName"
+          data-type="arr"
+          :cur-val-arr.sync="addGroupForm.testName"
           btn-text="检测信息"
           :columns="tags"
           key-text="label"
@@ -443,6 +444,7 @@ export default {
         this.editListItem(this.addGroupForm)
       } else {
         Toast.success('新增实验分组成功')
+        console.log('添加成功==', this.addGroupForm)
         this.addListItem(this.addGroupForm)
       }
     },

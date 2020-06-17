@@ -20,6 +20,9 @@
       />
       <van-button round size="small" color="#00CB7C" type="primary" @click="goDetail">查看详情</van-button>
     </div>
+    <div class="df s-jcc s-aic">
+      <span v-if="curMouse" class="fs10">当前小鼠：{{ curMouse }}</span>
+    </div>
     <div :id="miceId" :class="className" :style="{height:height,width:width, 'min-height': '500px'}" />
   </div>
 </template>
@@ -140,11 +143,12 @@ export default {
     },
     // 查看小鼠详情
     goDetail() {
+      console.log('this.curMouse===', this.curMouse)
       if (this.curMouse) {
         if (this.curMouseStatus) {
           Toast.fail('小鼠已删除')
         } else {
-          this.$router.push({ name: 'MouseEdit', params: { id: this.curMouse }})
+          this.$router.push({ name: 'MouseEdit', params: { id: this.curMiceId }})
         }
       } else {
         Toast.fail('请先点击小鼠')
