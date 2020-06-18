@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <van-button :class="btnWidthClass" round :size="size" color="#333" plain type="primary" @click="showList">{{ btnText }}</van-button>
+  <div class="dib">
+    <van-button v-if="btnType === 'default'" :class="btnWidthClass" round :size="size" color="#333" plain type="primary" @click="showList">{{ btnText }}</van-button>
+    <span v-else class="txt-btn--green fs14" @click="showList">{{ btnText }}</span>
     <!-- 文件列表弹窗 -->
     <van-popup
       v-model="recordDialog"
@@ -47,6 +48,10 @@ export default {
     Collapse
   },
   props: {
+    btnType: {
+      type: String,
+      default: 'default'
+    },
     id: {
       type: Number,
       default: null

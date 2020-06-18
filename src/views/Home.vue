@@ -4,7 +4,7 @@
     <top-bar :active-key="0">
       <template>
         <div class="w-100 df s-jcsb s-aic">
-          <xs-select class="ml17" />
+          <xs-select class="ml17" @choiced="changeMan" />
         </div>
       </template>
     </top-bar>

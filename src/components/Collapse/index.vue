@@ -8,7 +8,7 @@
         <div class="xs-collapse__content">
           <slot name="content" />
         </div>
-        <div v-if="footer" class="xs-collapse__fotter h50 df s-aic s-jcfe">
+        <div v-if="footer" class="xs-collapse__fotter h35 df s-aic s-jcfe">
           <slot name="footer" />
         </div>
       </van-collapse-item>

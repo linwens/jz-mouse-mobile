@@ -57,7 +57,7 @@
               <div v-if="Object.keys(mouseExptInfo).length > 0" class="pos-r">
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 1})" :key="item.time+item.operationType" icon-class="loc-green" class="mouse__progrTag mouse__progrTag--g" :style="{'left': setHandleTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
                 <svg-icon v-for="item in mouseExptInfo.experimentTimes.filter(el=>{ return el.operationType === 0})" :key="item.time+item.operationType" icon-class="loc-yellow" class="mouse__progrTag mouse__progrTag--y" :style="{'left': setTestTimeScale(item.time) + 'px'}" @click="showTips(item.time)" />
-                <van-progress ref="progress" :percentage="percentage" :stroke-width="16" color="#58A2FB" text-color="#58A2FB" />
+                <van-progress ref="progress" :percentage="percentage" :stroke-width="16" color="#58A2FB" :text-color="percentage > 80 ? '#fff' : '#58A2FB'" />
               </div>
             </div>
             <div class="df s-jcc s-aic">
@@ -174,6 +174,35 @@
         </van-tab>
       </van-tabs>
     </div>
+    <!-- 编辑鼠笼 -->
+    <van-dialog
+      v-model="cageDialog"
+      title="编辑"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="editCageSubmit"
+    >
+      <van-form :show-error-message="false">
+        <van-field
+          v-model="editCageForm.cageNo"
+          label="笼位号"
+          placeholder="请输入笼位号"
+          :rules="[{ required: true, message: '笼位号不能为空' }]"
+        />
+        <van-field
+          v-model="editCageForm.roomNo"
+          label="房间号"
+          placeholder="请输入房间号"
+        />
+        <van-field
+          v-model="editCageForm.shelvesNo"
+          label="架号"
+          placeholder="请输入架号"
+        />
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 
@@ -194,7 +223,9 @@ import {
   Button,
   Dialog,
   Toast,
-  Progress
+  Progress,
+  Form,
+  Field
 } from 'vant'
 import { transferCage, editCage, delMiceByMiceId, fetchCageList, getMouseExpInfo } from '@/api/mouse'
 import { dateTimeFormatter } from '@/utils'
@@ -208,6 +239,9 @@ export default {
     'van-tab': Tab,
     'van-tabs': Tabs,
     'van-progress': Progress,
+    'van-form': Form,
+    'van-field': Field,
+    [Dialog.Component.name]: Dialog.Component,
     ExptRecord,
     SetTime,
     ShowFamily,
@@ -367,22 +401,16 @@ export default {
       return (scale * this.pgWidth).toFixed(2)
     },
     editCageSubmit() {
-      this.$refs['editCageForm'].validate((valid) => {
-        if (valid) {
-          this.cageDialog = false
-          // 提交成功后触发done
-          const { id: userId } = this.$store.getters.info
-          editCage(Object.assign(this.editCageForm, {
-            id: this.choosedCage,
-            operator: userId
-          })).then((res) => {
-            Toast.success('编辑鼠笼成功')
-          })
-        } else {
-          return false
-        }
+      this.cageDialog = false
+      // 提交成功后触发done
+      const { id: userId } = this.$store.getters.info
+      editCage(Object.assign(this.editCageForm, {
+        id: this.choosedCage,
+        operator: userId
+      })).then((res) => {
+        Toast.success('编辑鼠笼成功')
+        this.getCageList()
       })
-      // 填充品系
     },
     // 编辑查看小鼠
     goEdit() {
@@ -642,7 +670,7 @@ export default {
     }
 
     &__info1 {
-      height: 252px;
+      min-height: 252px;
       padding: 10px 15px;
       background-color: #fff;
       font-size: 14px;

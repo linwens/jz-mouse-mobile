@@ -131,7 +131,11 @@ export default {
         this.value = this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0] ? this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0][this.keyText] : ''
       } else {
         this.value = this.columns.filter((el) => el.value === nowVal)[0] ? this.columns.filter((el) => el.value === nowVal)[0][this.keyText] : ''
+        console.log('value--===', this.value)
       }
+    }
+    if (this.btnType === 'button') {
+      this.curBtnLabel = this.value
     }
     this.createOpt(this.columns)
   },

@@ -5,7 +5,7 @@
       <svg-icon icon-class="select-icon" class="fs10" />
     </van-button>
     <!-- 弹出 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
+    <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
       <van-picker
         title="标题"
         show-toolbar
@@ -45,7 +45,7 @@ export default {
     return {
       show: false,
       btnText: '',
-      columns: ['我的小鼠', '实验室小鼠', '实验室人员']
+      columns: ['我的小鼠', '实验室基因型', '实验室人员']
     }
   },
   created() {
@@ -56,11 +56,11 @@ export default {
       this.show = true
     },
     onConfirm(value, index) {
-      Toast(`当前值：${value}, 当前索引：${index}`)
+      // Toast(`当前值：${value}, 当前索引：${index}`)
       this.btnText = value
       const MAP = new Map()
       MAP.set('我的小鼠', 'currentVarieties')
-      MAP.set('实验室小鼠', 'allVarieties')
+      MAP.set('实验室基因型', 'allVarieties')
       MAP.set('实验室人员', 'operator')
 
       this.$emit('choiced', MAP.get(value))

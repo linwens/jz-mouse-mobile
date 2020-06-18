@@ -27,7 +27,7 @@
               <p>最新检测时间：<span>{{ item.newTestTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><span class="txt-btn--green ml14">操作记录</span></p>
+              <p>最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><expt-record v-if="item.id" :id="item.id" btn-type="text" class="ml10" /></p>
             </div>
             <div class="df s-aic">
               <p>建模检测结果：<span class="txt-btn--green">查看</span><span class="txt-btn--green ml18">上传</span></p>
@@ -50,6 +50,7 @@ import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import SetTime from '@/components/Dialogs/SetTime'
+import ExptRecord from '@/components/Dialogs/ExptRecord'
 import { delExptObj, fetchList, endExpt } from '@/api/experiment'
 import { Button, Toast, Dialog } from 'vant'
 
@@ -57,6 +58,7 @@ export default {
   name: 'ExperimentIndex',
   components: {
     'van-button': Button,
+    ExptRecord,
     SetTime,
     MainList,
     Collapse,
@@ -102,7 +104,7 @@ export default {
       }).then(function() {
         return delExptObj(row.id)
       }).then(() => {
-        this.getList()
+        this.getList(1)
         Toast.success('删除成功')
       }).catch(function() {
       })

@@ -2,14 +2,14 @@
   <div class="time-select">
     <van-cell class="time-select__placeholder" :title="btnText" is-link @click="disabled ? null : showOptions()">
       <template #default>
-        {{ +new Date(value) | timeFormat('yyyy-MM-dd hh:mm:ss') }}
+        {{ +new Date(value) | timeFormat(format) }}
       </template>
     </van-cell>
     <!-- 弹出 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
+    <van-popup v-model="show" get-container="body" position="bottom" :style="{ height: '40%' }">
       <van-datetime-picker
         v-model="currentDate"
-        type="datetime"
+        :type="type"
         title="选择开始时间"
         :min-date="minDate"
         :max-date="maxDate"
@@ -36,6 +36,10 @@ export default {
     'van-datetime-picker': DatetimePicker
   },
   props: {
+    type: {
+      type: String,
+      default: 'datetime'
+    },
     disabled: {
       type: Boolean,
       default: false
@@ -56,6 +60,18 @@ export default {
       minDate: new Date(2019, 0, 1),
       maxDate: new Date(2025, 10, 1),
       currentDate: new Date()
+    }
+  },
+  computed: {
+    format() {
+      const MAP = {
+        'date': 'yyyy-MM-dd',
+        'time': 'hh:mm',
+        'month-day': 'MM-dd',
+        'year-month': 'yyyy-MM',
+        'datetime': 'yyyy-MM-dd hh:mm:ss'
+      }
+      return MAP[this.type]
     }
   },
   watch: {

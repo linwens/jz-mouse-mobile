@@ -2,18 +2,22 @@
   <div class="breed-edit">
     <van-form :show-error-message="false">
       <van-field
+        v-if="disabled"
         v-model="breedForm.name"
         label="繁育组名称"
         placeholder="请输入繁育组名称"
         :rules="[{ required: true, message: '请输入繁育组名称' }]"
       />
-      <time-select btn-text="开始时间" :time.sync="breedForm.breedTime">
+      <div v-else class="file--span fs14">
+        <span>繁育组名称 {{ breedForm.name }}</span>
+      </div>
+      <time-select :disabled="!disabled" btn-text="繁育时间" :time.sync="breedForm.breedTime">
         <template slot="placeholder">
-          <p>请选择开始时间</p>
+          <p>选择日期时间</p>
         </template>
       </time-select>
     </van-form>
-    <div class="add-btn df s-jcfe s-aic pt13 pb11">
+    <div v-if="disabled" class="add-btn df s-jcfe s-aic pt13 pb11">
       <van-button class="w90" hairline round size="small" color="#32C985" type="info" @click="goAdd()">添加</van-button>
     </div>
     <!-- 列表 -->
@@ -28,14 +32,16 @@
         <template slot="content">
           <div class="df s-aic">
             <p>编号：<span>{{ item.miceNo }}</span></p>
+          </div>
+          <div class="df s-aic">
             <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
-          </div>
-          <div class="df s-aic">
             <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
-            <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
           </div>
           <div class="df s-aic">
-            <p>毛色：<span>{{ item.color }}</span></p>
+            <p>体重：<span>{{ item.weight ? `${item.weight}g` : '' }}</span></p>
+            <p>毛色：<span>{{ item.geneColor }}</span></p>
+          </div>
+          <div class="df s-aic">
             <p>健康状况：<span>{{ item.status }}</span></p>
           </div>
           <div v-if="item.gender === 1" class="df s-aic">
@@ -47,13 +53,31 @@
             </p>
           </div>
         </template>
-        <template slot="footer">
+        <template v-if="disabled" slot="footer">
           <van-button class="w75 mr10" plain hairline round size="small" color="#333" type="info" @click="goMouse(item)">查看</van-button>
           <van-button class="w75" plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
         </template>
       </collapse>
     </div>
-    <bottom-btn @confirm="submitForm" />
+    <bottom-btn :right-btn-text="canEdit ? '确定' : '编辑'" @confirm="submitForm" />
+    <!-- 设置时间弹窗 -->
+    <van-dialog
+      v-model="dialogVisible"
+      title="设置受孕时间"
+      get-container="body"
+      show-cancel-button
+      confirm-button-text="确定"
+      confirm-button-color="#FF6358"
+      @confirm="submitPregTime"
+    >
+      <van-form class="mt20 mb20">
+        <time-select btn-text="日期时间" :time.sync="breedTime.date">
+          <template slot="placeholder">
+            <p>选择日期时间</p>
+          </template>
+        </time-select>
+      </van-form>
+    </van-dialog>
   </div>
 </template>
 
@@ -71,6 +95,7 @@ export default {
     'van-button': Button,
     'van-form': Form,
     'van-field': Field,
+    [Dialog.Component.name]: Dialog.Component,
     TimeSelect,
     Collapse,
     BottomBtn
@@ -162,7 +187,7 @@ export default {
     },
     goMouse(row) {
       console.log('查看小鼠====', row)
-      this.goPage('mouseEdit', { id: row.miceInfoId })
+      this.goPage('MouseEdit', { id: row.miceInfoId })
     },
     goPage(r, obj) {
       this.$router.push({ name: r, params: obj })
@@ -176,7 +201,7 @@ export default {
       console.log('miceIds==', this.breedForm.miceIds)
       Dialog.confirm({
         title: '警告',
-        message: `是否确认删除小鼠："${row.miceInfoId}"?`,
+        message: `是否确认删除小鼠："${row.miceNo}"?`,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -267,7 +292,7 @@ export default {
       console.log(scope)
       this.mouseIndex = scope.index
       this.dialogVisible = true
-      this.breedTime.date = scope.row.pregnantTime === 0 ? null : scope.row.pregnantTime
+      this.breedTime.date = scope.item.pregnantTime === 0 ? null : scope.item.pregnantTime
     },
     submitPregTime() {
       console.log(this.timeFormat)

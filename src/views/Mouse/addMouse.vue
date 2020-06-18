@@ -71,7 +71,7 @@
           <span>g</span>
         </template>
       </van-field>
-      <time-select btn-text="出生日期" :time.sync="form.birthDate">
+      <time-select btn-text="出生日期" type="date" :time.sync="form.birthDate">
         <template slot="placeholder">
           <p>请选择出生日期</p>
         </template>
@@ -208,9 +208,9 @@ export default {
         pureHeterozygote: null,
         color: '#58A2FB',
         separateCageRemindTime: null,
-        separateCageRemindFlag: 0,
+        separateCageRemindFlag: null,
         phenotypicIdentificationRemindTime: null,
-        phenotypicIdentificationRemindFlag: 0,
+        phenotypicIdentificationRemindFlag: null,
         fatherId: 0,
         files: [],
         motherId: 0,
