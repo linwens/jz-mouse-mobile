@@ -326,6 +326,7 @@ export default {
 
 <style lang="scss">
   .breed-edit {
+    margin-bottom: 80px;
     .add-btn {
       width: 90%;
       margin: 0 auto;
