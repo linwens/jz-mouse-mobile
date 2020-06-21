@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <span v-if="btnType === 'text'" class="txt-btn--green fs14">{{ btnText }}</span>
+  <div class="dib">
+    <span v-if="btnType === 'text'" class="txt-btn--green fs14" @click="goViewFiles">{{ btnText }}</span>
     <van-button v-else class="w-100" hairline round size="small" color="#32C985" type="info" @click="goViewFiles">{{ btnText }}</van-button>
   </div>
 </template>
@@ -41,11 +41,15 @@ export default {
   },
   methods: {
     goViewFiles() {
-      this.goPage({ name: 'ViewFiles', params: {
-        bizId: this.id,
+      console.log('goViewFiles===', this.id, this.bizType)
+      this.$router.push({ path: '/viewFiles', query: {
+        id: this.id,
         bizType: this.bizType
-      }
-      })
+      }})
+      // this.goPage('ViewFiles', {
+      //   id: this.id,
+      //   bizType: this.bizType
+      // })
     }
   }
 }

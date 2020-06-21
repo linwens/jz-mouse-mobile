@@ -30,7 +30,7 @@
               <p>最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><expt-record v-if="item.id" :id="item.id" btn-type="text" class="ml10" /></p>
             </div>
             <div class="df s-aic">
-              <p>建模检测结果：<span class="txt-btn--green">查看</span><span class="txt-btn--green ml18">上传</span></p>
+              <p>建模检测结果：<view-files :id="item.id" biz-type="mice" btn-type="text" btn-text="查看" /><span class="txt-btn--green ml18">上传</span></p>
             </div>
           </template>
           <template slot="footer">
@@ -50,6 +50,7 @@ import TopBar from '@/components/TopBar/index.vue'
 import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import SetTime from '@/components/Dialogs/SetTime'
+import ViewFiles from '@/components/ViewFiles'
 import ExptRecord from '@/components/Dialogs/ExptRecord'
 import { delExptObj, fetchList, endExpt } from '@/api/experiment'
 import { Button, Toast, Dialog } from 'vant'
@@ -58,6 +59,7 @@ export default {
   name: 'ExperimentIndex',
   components: {
     'van-button': Button,
+    ViewFiles,
     ExptRecord,
     SetTime,
     MainList,
@@ -141,7 +143,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.getList()
+        this.getList(1)
         endExpt({
           experimentId: id
         }).then((res) => {

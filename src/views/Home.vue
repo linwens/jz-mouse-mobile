@@ -57,14 +57,16 @@
           <template slot="content">
             <div class="df s-aic">
               <p>编号：<span>{{ item.miceNo }}</span></p>
-              <p>负责人：<span>{{ item.operator }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>纯/杂合子：<span>{{ item.pureHeterozygote }}</span></p>
-              <p>性别：<span>{{ item.gender }}</span></p>
+              <p>负责人：<span>{{ persons.filter(el => {return el.userId === item.operator })[0].userName }}</span></p>
+              <p>纯/杂合子：<span>{{ pureOpts.filter(el => {return el.value === item.pureHeterozygote })[0].label }}</span></p>
             </div>
             <div class="df s-aic">
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌'}}</span></p>
               <p>周龄：<span>{{ item.birthDate }}</span></p>
+            </div>
+            <div class="df s-aic">
               <p>状态：
                 <span v-if="item.status === 1" class="isIdle">闲置</span>
                 <span v-else-if="item.status === 2" class="isBreed">繁育</span>
@@ -73,13 +75,11 @@
                 <span v-else-if="item.status === 5">实验处死</span>
                 <span v-else>无</span>
               </p>
-            </div>
-            <div class="df s-aic">
               <p>笼位号：<span>{{ item.cageNo }}</span></p>
-              <p>家谱记录：<show-family v-if="item.id" :mice-id="item.id" btn-type="text" /></p>
             </div>
             <div class="df s-aic">
-              <p>检测结果：<span class="txt-btn--green">查看</span></p>
+              <p>家谱记录：<show-family v-if="item.id" :mice-id="item.id" btn-type="text" /></p>
+              <p>检测结果：<view-files :id="item.id" biz-type="mice" btn-type="text" btn-text="查看" /></p>
             </div>
           </template>
         </collapse>
@@ -130,20 +130,7 @@
             btn-width-class="w150"
             :cur-val-num.sync="myMouseForm.pureHeterozygote"
             btn-text="纯/杂合子"
-            :columns="[
-              {
-                label: '纯合子',
-                value: 0
-              },
-              {
-                label: '杂合子',
-                value: 1
-              },
-              {
-                label: '未测试',
-                value: 2
-              }
-            ]"
+            :columns="pureOpts"
           />
         </div>
         <div class="w-100 df s-jcsb filter__col">
@@ -268,7 +255,7 @@ import VanSelect from '@/components/Form/VanSelect.vue'
 import FormSelect from '@/components/Form/select.vue'
 import SumBar from '@/components/Charts/SumBar'
 import ShowFamily from '@/components/Dialogs/ShowFamily'
-// import ViewFiles from '@/components/ViewFiles'
+import ViewFiles from '@/components/ViewFiles'
 import { fetchList, getUsers } from '@/api/home'
 import { varietiesList } from '@/api/variety'
 import { getLisByVariety } from '@/api/genes'
@@ -289,7 +276,7 @@ export default {
     TopBar,
     SumBar,
     ShowFamily,
-    // ViewFiles,
+    ViewFiles,
     Collapse,
     MainList
   },
@@ -338,7 +325,21 @@ export default {
       tableData: [],
       persons: [], // 负责人选择项
       varietiesOpts: [], // 品系选择项
-      genesOpts: [] // 基因型选择项
+      genesOpts: [], // 基因型选择项
+      pureOpts: [ // 纯杂合子选项
+        {
+          label: '纯合子',
+          value: 0
+        },
+        {
+          label: '杂合子',
+          value: 1
+        },
+        {
+          label: '未测试',
+          value: 2
+        }
+      ]
     }
   },
   computed: {
@@ -424,6 +425,7 @@ export default {
         expt: 'exptMouseForm'
       }
       const obj = this[MAP[this.activeName]]
+
       for (const key of Object.keys(obj)) {
         if (this.activeName === 'mine' && key !== 'operator') {
           obj[key] = null
@@ -526,8 +528,10 @@ export default {
       return `${weeks}周${days}天`
     },
     // 实验小鼠柱状图，切换负责人
-    changeMan() {
-      this.barTypeBtn = this.barTypeBtn === '人员' ? '小鼠' : '人员'
+    changeMan(val) {
+      console.log('changeman==', val)
+      this.activeName = val === 'currentVarieties' ? 'mine' : 'expt'
+      this.barTypeBtn = this.barTypeBtn === '人员' ? '基因型' : '人员'
       this.barType = this.barType === 'operator' ? 'allVarieties' : 'operator'
     }
   }

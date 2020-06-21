@@ -105,6 +105,27 @@ export default {
   watch: {
     columns(n, o) {
       this.createOpt(n)
+    },
+    curVal(n, o) {
+      console.log('watch--curVal', n)
+      if (!n) {
+        this.value = null
+        this.curBtnLabel = null
+      }
+    },
+    curValArr(n, o) {
+      console.log('watch--curValArr', n)
+      if (!n) {
+        this.value = null
+        this.curBtnLabel = null
+      }
+    },
+    curValNum(n, o) {
+      console.log('watch--curValNum', n)
+      if (!n) {
+        this.value = null
+        this.curBtnLabel = null
+      }
     }
   },
   created() {
