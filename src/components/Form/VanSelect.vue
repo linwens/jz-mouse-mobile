@@ -111,6 +111,9 @@ export default {
       if (!n) {
         this.value = null
         this.curBtnLabel = null
+      } else {
+        this.value = n
+        this.curBtnLabel = n
       }
     },
     curValArr(n, o) {
@@ -121,15 +124,20 @@ export default {
       }
     },
     curValNum(n, o) {
-      console.log('watch--curValNum', n)
+      console.log('watch--curValNum', n, '||', this.columns, '|||', this.keyText)
       if (!n) {
         this.value = null
         this.curBtnLabel = null
+      } else {
+        const val = this.columns.filter((el) => el[this.valText] === n)[0] ? this.columns.filter((el) => el[this.valText] === n)[0][this.keyText] : ''
+        console.log(val)
+        this.value = val
+        this.curBtnLabel = val
       }
     }
   },
   created() {
-    console.log(this.curVal, this.curValNum, this.columns, this.curVal || (this.curValNum >= 0 ? this.curValNum : null))
+    console.log('======-----=|||===', this.curVal, '|', this.curValNum, '||', this.columns, '|||', this.curVal || (this.curValNum >= 0 ? this.curValNum : null))
     let nowVal = null
     if (this.curVal) {
       nowVal = this.curVal

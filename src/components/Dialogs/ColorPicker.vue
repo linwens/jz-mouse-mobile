@@ -28,7 +28,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: '#58A2FB'
+      default: '#f4f4f4'
     }
   },
   data() {
@@ -38,11 +38,12 @@ export default {
       colorObj: this.color
     }
   },
-  // watch: {
-  //   colorSquare(n, o) {
-  //     this.$emit('update:color', n)
-  //   }
-  // },
+  watch: {
+    color(n, o) {
+      console.log('watch-color==', n)
+      this.colorSquare = this.color
+    }
+  },
   methods: {
     selectColor() {
       console.log('colorObj====', this.colorObj)

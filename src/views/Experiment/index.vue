@@ -34,7 +34,7 @@
             </div>
           </template>
           <template slot="footer">
-            <set-time :id="item.id" btn-text="设置时间" type="text" class="dib mr10" />
+            <set-time :id="item.id" btn-text="设置时间" type="text" class="dib mr10" :end-time="item.endTime" />
             <van-button class="mr10" plain hairline round size="small" color="#333" type="info" @click="doEnd(item.id)">手动结束</van-button>
             <van-button class="mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit(item)">详情</van-button>
             <van-button plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>

@@ -57,6 +57,7 @@ export default {
     },
     onConfirm(value, index) {
       // Toast(`当前值：${value}, 当前索引：${index}`)
+      console.log('confirm==', value)
       this.btnText = value
       const MAP = new Map()
       MAP.set('我的小鼠', 'currentVarieties')

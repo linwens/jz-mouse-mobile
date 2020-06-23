@@ -484,6 +484,10 @@ export default {
     },
     // 新增实验组
     doAddExpt() {
+      if (!this.experimentForm.experimentName) {
+        Toast.fail('请输入实验组名称')
+        return false
+      }
       const { startTime, endTime, handleTime, testTime, ...other } = this.experimentForm
       const { id: userId } = this.$store.getters.info
       // 实验分组数据格式整理
@@ -497,6 +501,7 @@ export default {
       const lables = this.tags.map((el) => {
         return el.label
       })
+      console.log('时间检测====', handleTime, testTime, endTime)
       if (handleTime > endTime || testTime > endTime) {
         Toast.fail('检测时间或处理时间不得大于结束时间')
         return false

@@ -133,7 +133,7 @@
             ]"
           />
           <div class="file--span fs14">
-            <span>展示颜色：<color-picker :color.sync="form.color" /></span>
+            <span>展示颜色：<color-picker :color.sync="form.miceColor" /></span>
           </div>
           <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
             <template slot="placeholder">
@@ -432,6 +432,7 @@ export default {
         this.varietiesName = varietiesName
         this.varietiesId = Number(varietiesId)
         this.$set(this, 'form', res.data)
+        console.log('回填信息==', this.form)
         // 时间戳换算
         this.$set(this.form, 'birthDate', res.data.birthDate * 1000)
         this.$set(this.form, 'separateCageRemindTime', res.data.separateCageRemindTime * 1000)

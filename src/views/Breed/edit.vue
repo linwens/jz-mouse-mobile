@@ -263,6 +263,7 @@ export default {
         createUser: userId,
         miceInfoInAddMiceBreedDTOList: miceArr
       })
+      console.log('===|||--===', params.breedTime)
       if (this.type === 'add') {
         this.doAdd(params)
       } else {
@@ -280,6 +281,7 @@ export default {
     },
     // 编辑
     doEdit(params) {
+      console.log('doEdit==', params)
       editBreed(params).then((res) => {
         Toast.success('编辑信息成功')
         this.$store.dispatch('app/clearMouses')

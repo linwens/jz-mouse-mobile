@@ -98,7 +98,7 @@
             </div>
             <div class="df s-aic">
               <p class="df s-aic">显示颜色：<i class="mouse__info--i dib" :style="{'width': '16px', 'height': '16px', 'backgroundColor': mouseInfo.miceColor}" /></p>
-              <p>附件：<span class="txt-btn--green">查看</span></p>
+              <p>附件：<view-files :id="mouseInfo.miceId" biz-type="mice" btn-type="text" btn-text="查看" /></p>
             </div>
             <div class="df s-aic pos-r">
               <p>标记：<span>21</span></p>

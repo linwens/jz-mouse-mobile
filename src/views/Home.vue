@@ -532,7 +532,7 @@ export default {
       console.log('changeman==', val)
       this.activeName = val === 'currentVarieties' ? 'mine' : 'expt'
       this.barTypeBtn = this.barTypeBtn === '人员' ? '基因型' : '人员'
-      this.barType = this.barType === 'operator' ? 'allVarieties' : 'operator'
+      this.barType = val // this.barType === 'operator' ? 'allVarieties' : 'operator'
     }
   }
 }
