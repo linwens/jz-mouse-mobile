@@ -3,6 +3,7 @@
     <van-form :show-error-message="false">
       <van-field
         v-model="varietiesName"
+        required
         label="品系"
         disabled
         placeholder="请选择品系"
@@ -15,6 +16,7 @@
       <div class="genes-box">
         <van-field
           v-model="currentGene.geneName"
+          required
           readonly
           label="基因型"
           placeholder="请输入基因型名称"

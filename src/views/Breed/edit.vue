@@ -4,6 +4,7 @@
       <van-field
         v-if="disabled"
         v-model="breedForm.name"
+        required
         label="繁育组名称"
         placeholder="请输入繁育组名称"
         :rules="[{ required: true, message: '请输入繁育组名称' }]"

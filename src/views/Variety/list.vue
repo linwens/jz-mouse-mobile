@@ -40,6 +40,7 @@
       <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="editVarietyForm.varietiesName"
+          required
           label="品系名称"
           placeholder="请输入品系名称"
           :rules="[{ required: true, message: '品系名称不能为空' }]"

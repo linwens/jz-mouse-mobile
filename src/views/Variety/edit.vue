@@ -3,6 +3,7 @@
     <van-form :show-error-message="false">
       <van-field
         v-model="addGensForm.varietiesName"
+        required
         label="品系"
         disabled
         placeholder="请选择品系"
@@ -14,30 +15,35 @@
       </van-field>
       <van-field
         v-model="addGensForm.geneName"
+        required
         label="基因型"
         placeholder="请输入基因型名称"
         :rules="[{ required: true, message: '请输入基因型名称' }]"
       />
       <van-field
         v-model="addGensForm.miceCondition"
+        required
         label="饲养条件"
         placeholder="请输入饲养条件"
         :rules="[{ required: true, message: '请输入饲养条件' }]"
       />
       <van-field
         v-model="addGensForm.status"
+        required
         label="健康状态"
         placeholder="请输入健康状态"
         :rules="[{ required: true, message: '请输入健康状态' }]"
       />
       <van-field
         v-model="addGensForm.color"
+        required
         label="毛色"
         placeholder="请输入毛色"
         :rules="[{ required: true, message: '请输入毛色' }]"
       />
       <van-field
         v-model="addGensForm.area"
+        required
         label="应用领域"
         placeholder="请输入应用领域"
         rows="2"

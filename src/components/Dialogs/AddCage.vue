@@ -14,18 +14,21 @@
       <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="addCageForm.cageNo"
+          required
           label="笼位号"
           placeholder="请输入笼位号"
           :rules="[{ required: true, message: '请输入笼位号' }]"
         />
         <van-field
           v-model="addCageForm.roomNo"
+          required
           label="房间号"
           placeholder="请输入房间号"
           :rules="[{ required: true, message: '请输入房间号' }]"
         />
         <van-field
           v-model="addCageForm.shelvesNo"
+          required
           label="架号"
           placeholder="请输入架号"
           :rules="[{ required: true, message: '请输入架号' }]"

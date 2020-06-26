@@ -12,6 +12,7 @@
     <van-form :show-error-message="false" @submit="handleLogin">
       <van-field
         v-model="loginForm.username"
+        required
         name="用户名"
         label="用户名"
         placeholder="用户名"
@@ -19,6 +20,7 @@
       />
       <van-field
         v-model="loginForm.password"
+        required
         type="password"
         name="密码"
         label="密码"

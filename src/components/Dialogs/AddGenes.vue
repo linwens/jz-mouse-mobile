@@ -14,6 +14,7 @@
       <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="addGensForm.geneName"
+          required
           label="基因型名称"
           placeholder="请输入基因型名称"
           :rules="[{ required: true, message: '基因型名称不能为空' }]"

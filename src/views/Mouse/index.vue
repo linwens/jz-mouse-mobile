@@ -187,6 +187,7 @@
       <van-form :show-error-message="false">
         <van-field
           v-model="editCageForm.cageNo"
+          required
           label="笼位号"
           placeholder="请输入笼位号"
           :rules="[{ required: true, message: '笼位号不能为空' }]"

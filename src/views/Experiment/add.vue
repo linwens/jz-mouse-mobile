@@ -3,6 +3,7 @@
     <van-form :show-error-message="false">
       <van-field
         v-model="experimentForm.experimentName"
+        required
         label="实验组名称"
         placeholder="请输入实验组名称"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
@@ -141,6 +142,7 @@
       <van-form :show-error-message="false" class="mt20 mb20">
         <van-field
           v-model="tagsForm.name"
+          required
           label="检测信息"
           placeholder="请输入检测信息"
           :rules="[{ required: true, message: '检测信息不能为空' }]"
