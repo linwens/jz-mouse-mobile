@@ -207,7 +207,10 @@
             />
           </div>
           <div class="file--span fs14">
-            <p>附件：<span class="txt-btn--green">查看附件</span><span class="txt-btn--green ml18">上传附件</span></p>
+            <p>附件：
+              <view-files v-if="canEdit" :id="curMouseId" biz-type="mice" btn-type="text" btn-text="查看附件" />
+              <upload-btn v-if="canEdit" :id="curMouseId" btn-text="上传附件" biz-type="mice" class="dib ml18" />
+            </p>
           </div>
         </van-form>
       </van-tab>
@@ -245,16 +248,16 @@ import VanSelect from '@/components/Form/VanSelect.vue'
 import TimeSelect from '@/components/Form/TimeSelect.vue'
 import AddGenesBtn from '@/components/Dialogs/AddGenes.vue'
 import ColorPicker from '@/components/Dialogs/ColorPicker.vue'
-// import UploadBtn from '@/components/Dialogs/Upload'
+import ViewFiles from '@/components/ViewFiles'
+import UploadBtn from '@/components/Dialogs/Upload'
 import GenesChoose from '@/components/Dialogs/GenesChoose'
-// import ViewFiles from '@/components/ViewFiles'
 import { getMouseInfo, getMouseExpInfo, getCageInfo, editMouse } from '@/api/mouse'
-import { Button, Form, Field, Toast, Tab, Tabs } from 'vant'
+import { Form, Field, Toast, Tab, Tabs } from 'vant'
 
 export default {
   name: 'MouseEdit',
   components: {
-    'van-button': Button,
+    ViewFiles,
     'van-form': Form,
     'van-field': Field,
     'van-tab': Tab,
@@ -266,9 +269,8 @@ export default {
     BottomBtn,
     ColorPicker,
     AddGenesBtn,
-    // UploadBtn,
+    UploadBtn,
     GenesChoose
-    // ViewFiles
   },
   data() {
     return {

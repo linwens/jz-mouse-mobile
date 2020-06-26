@@ -15,7 +15,8 @@
             </div>
           </template>
           <template slot="footer">
-            <van-button class="mr10" plain hairline round size="small" color="#333" type="info">预览</van-button>
+            <!-- <van-button class="mr10" plain hairline round size="small" color="#333" type="info" :disabled="item">预览</van-button> -->
+            <file-viewer v-if="item.fileType === 'jpg' || item.fileType === 'png' || item.fileType === 'jpeg'" :file-url="item.path" btn-text="预览" />
             <van-button plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel({item, index})">移除</van-button>
           </template>
         </collapse>
@@ -91,9 +92,9 @@ export default {
     this.isAdmin = this.$store.getters.info.admin
     this.id = this.$route.query.id
     this.bizType = this.$route.query.bizType
-    if (this.id) {
-      this.getList()
-    }
+    // if (this.id) {
+    //   this.getList()
+    // }
   },
   methods: {
     // 展示列表
@@ -118,6 +119,7 @@ export default {
       })).then(res => {
         this.filesData = this.filesData.concat(res.data.records)
         if (this.filesPage.page >= res.data.pages) {
+          console.log('没了', page)
           this.noMore = true
         } else {
           this.filesPage.page = res.data.current + 1
@@ -127,9 +129,6 @@ export default {
         this.filesLoading = false
       })
     },
-    // handleRefreshChange() {
-    //   this.getList()
-    // },
     // 删除
     rowItemDel: function(scope) {
       const _this = this

@@ -1,6 +1,7 @@
 <template>
   <div class="dib">
-    <van-button round size="small" color="#00CB7C" :plain="plain" type="primary" @click="dialogVisible = true">{{ btnText }}</van-button>
+    <van-button class="mr10" round size="small" hairline color="#333" :plain="plain" :disabled="disabled" type="primary" @click="dialogVisible = true">{{ btnText }}</van-button>
+    <van-image-preview v-if="type === 'img'" v-model="dialogVisible" :images="[fileUrl]" />
     <div v-if="type === 'pdf'">
       <van-dialog
         v-model="dialogVisible"
@@ -15,9 +16,9 @@
         >
       </van-dialog>
     </div>
-    <div v-if="type === 'img'">
+    <!-- <div v-if="type === 'img'">
       <van-image-preview v-model="dialogVisible" :images="fileUrl" />
-    </div>
+    </div> -->
     <div v-if="type === 'office'">
       <van-dialog
         v-model="dialogVisible"
@@ -38,14 +39,23 @@
 </template>
 
 <script>
-import { Dialog, ImagePreview } from 'vant'
+import { Button, Dialog, ImagePreview } from 'vant'
 export default {
   name: 'FileViewer',
   components: {
+    'van-button': Button,
     [ImagePreview.Component.name]: ImagePreview.Component,
     [Dialog.Component.name]: Dialog.Component
   },
   props: {
+    plain: {
+      type: Boolean,
+      default: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     btnText: {
       type: String,
       default: '查看'

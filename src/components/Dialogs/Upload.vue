@@ -7,11 +7,16 @@
       v-model="dialogVisible"
       get-container="body"
       position="bottom"
+      class="p10"
     >
       <van-uploader
         v-model="fileList"
         multiple
-        max-count="5"
+        :deletable="false"
+        :max-size="3 * 1024 * 1024"
+        :before-read="beforeRead"
+        :after-read="afterRead"
+        :before-delete="beforeDel"
       />
     </van-popup>
     <!-- <el-dialog
@@ -46,8 +51,10 @@
 </template>
 
 <script>
-import { Button, Popup, Toast, Uploader, Dialog } from 'vant'
+import { Popup, Toast, Uploader, Dialog } from 'vant'
+import { delFile, uploadFiles } from '@/api/cmn'
 import { getToken } from '@/utils/auth'
+import request from '@/utils/request'
 
 export default {
   name: 'UploadFile',
@@ -76,59 +83,60 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      // 根据是否传了id 走不同的上传接口
-      actionUrl: this.id ? `${process.env.VUE_APP_BASE_API}/sysfile/uploads/${this.bizType}/${this.id}` : `${process.env.VUE_APP_BASE_API}/sysfile/uploadFiles`,
       fileList: [],
-      cacheUrl: []
+      // cacheUrl: []
     }
   },
   created() {
     // this.getParams()
   },
   methods: {
-    submitUpload() { // 上传文件
-      this.$refs.upload.submit()
-    },
-    getToken,
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview(file) {
-      console.log(file)
-    },
-    handleExceed(files, fileList) {
-      Toast.fail(`当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    handleSuccess(response, file, fileList) {
-      Toast.clear()
-      Toast.success('文件上传成功')
-      console.log('上传成功返回...', this.id, response)
-      console.log(response, file, fileList)
-      if (!this.id && response.data.length > 0) {
-        console.log(this.cacheUrl, fileList)
-        // 因为设计稿只有一个上传按钮，所以没法做手动上传，就无法一次性传多张图，只能多次传单张图，为了确保done调用获得的data是全部
-        if (response.data.length <= fileList.length) {
-          this.cacheUrl.push(response.data[0])
-        }
-        if (this.cacheUrl.length === fileList.length) {
-          console.log('触发done')
-          this.$emit('done', this.cacheUrl, fileList)
-          this.dialogVisible = false
-          this.fileList = []
-        }
-      }
-      if (this.id) {
-        this.dialogVisible = false
-        this.fileList = []
-      }
-    },
-    beforeRemove(file, fileList) {
-      return Dialog.confirm({
-        message: `确定移除 ${file.name}？`,
-      }).then(() => {
-        return true
-      }).catch(() => {
+    beforeRead(file) {
+      console.log('beforeRead===', file)
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+        Toast('请上传 jpg/png 格式图片')
         return false
+      }
+      return true
+    },
+    afterRead(file) {
+      console.log('afterRead===', file)
+      file.status = 'uploading'
+      file.message = '上传中...'
+
+      // 上传服务器
+      const formData = new FormData()
+      formData.append('files', file.file)
+
+      request({
+        url: `/sysfile/uploads/${this.bizType}/${this.id}`,
+        method: 'POST',
+        data: formData
+      }).then((res) => {
+        console.log('uploadFiles====', res)
+        file.status = 'success'
+        file.message = '上传成功'
+        Toast('图片上传成功!')
+      }).catch(function() {
+        file.status = 'failed'
+        file.message = '上传失败'
+      }).finally((res) => {
+        console.log('uploadFiles==finally==', res)
+      })
+    },
+    beforeDel(file) {
+      console.log('del===', file)
+      Dialog.confirm({
+        title: '警告',
+        message: `是否确认删除当前图片 ${file.file.name}?`,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delFile(file.fileId)
+      }).then(() => {
+        Toast.success('删除成功')
+      }).catch(function() {
       })
     }
   }
