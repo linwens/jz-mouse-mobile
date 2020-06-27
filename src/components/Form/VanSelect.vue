@@ -151,13 +151,17 @@ export default {
     console.log('nowVal===', nowVal)
     if (this.columns.length === 0) {
       if (this.dataType === 'arr') {
-        this.value = JSON.parse(nowVal)[0]
+        this.value = nowVal ? JSON.parse(nowVal)[0] : null
       } else {
         this.value = nowVal
       }
     } else {
       if (this.dataType === 'arr') {
-        this.value = this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0] ? this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0][this.keyText] : ''
+        if (nowVal) {
+          this.value = this.columns.filter((el) => el[this.keyText] === JSON.parse(nowVal)[0])[0][this.keyText]
+        } else {
+          this.value = ''
+        }
       } else {
         this.value = this.columns.filter((el) => el.value === nowVal)[0] ? this.columns.filter((el) => el.value === nowVal)[0][this.keyText] : ''
         console.log('value--===', this.value)

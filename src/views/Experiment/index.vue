@@ -30,11 +30,14 @@
               <p>最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><expt-record v-if="item.id" :id="item.id" btn-type="text" class="ml10" /></p>
             </div>
             <div class="df s-aic">
-              <p>建模检测结果：<view-files :id="item.id" biz-type="mice" btn-type="text" btn-text="查看" /><span class="txt-btn--green ml18">上传</span></p>
+              <p>建模检测结果：
+                <view-files :id="item.id" biz-type="mice" btn-type="text" btn-text="查看" />
+                <upload-btn :id="item.id" btn-text="上传" biz-type="experiment" class="dib ml18" />
+              </p>
             </div>
           </template>
           <template slot="footer">
-            <set-time :id="item.id" btn-text="设置时间" type="text" class="dib mr10" :end-time="item.endTime" />
+            <set-time :id="item.id" btn-text="设置时间" type="text" class="dib mr10" :start-time="item.startTime" :end-time="item.endTime" />
             <van-button class="mr10" plain hairline round size="small" color="#333" type="info" @click="doEnd(item.id)">手动结束</van-button>
             <van-button class="mr10" plain hairline round size="small" color="#333" type="info" @click="goEdit(item)">详情</van-button>
             <van-button plain hairline round size="small" color="#EB5444" type="info" @click="rowItemDel(item)">删除</van-button>
@@ -51,6 +54,7 @@ import MainList from '@/components/List/index.vue'
 import Collapse from '@/components/Collapse/index.vue'
 import SetTime from '@/components/Dialogs/SetTime'
 import ViewFiles from '@/components/ViewFiles'
+import UploadBtn from '@/components/Dialogs/Upload'
 import ExptRecord from '@/components/Dialogs/ExptRecord'
 import { delExptObj, fetchList, endExpt } from '@/api/experiment'
 import { Button, Toast, Dialog } from 'vant'
@@ -60,6 +64,7 @@ export default {
   components: {
     'van-button': Button,
     ViewFiles,
+    UploadBtn,
     ExptRecord,
     SetTime,
     MainList,

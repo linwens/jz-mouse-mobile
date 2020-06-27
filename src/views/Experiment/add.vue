@@ -309,7 +309,7 @@ export default {
     if (cacheExpts && cacheExpts.form.experimentId == this.$route.params.id) {
       const addingExpt = this.$store.getters.addingExpt
       this.$set(this, 'experimentForm', addingExpt.form)
-      // this.$set(this, 'tags', addingExpt.tags)
+      this.$set(this, 'tags', addingExpt.tags)
       this.$set(this, 'tableData', addingExpt.table)
     }
   },
@@ -506,6 +506,10 @@ export default {
       console.log('时间检测====', handleTime, testTime, endTime)
       if (handleTime > endTime || testTime > endTime) {
         Toast.fail('检测时间或处理时间不得大于结束时间')
+        return false
+      }
+      if (handleTime < startTime || testTime < startTime) {
+        Toast.fail('检测时间或处理时间不得小于开始时间')
         return false
       }
       addNewExpt(Object.assign({}, {

@@ -60,11 +60,11 @@
             </div>
             <div class="df s-aic">
               <p>负责人：<span>{{ persons.filter(el => {return el.userId === item.operator })[0].userName }}</span></p>
-              <p>纯/杂合子：<span>{{ pureOpts.filter(el => {return el.value === item.pureHeterozygote })[0].label }}</span></p>
+              <p>纯/杂合子：<span>{{ returnPure(item.pureHeterozygote) }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌'}}</span></p>
-              <p>周龄：<span>{{ item.birthDate }}</span></p>
+              <p>性别：<span>{{ item.gender === 0 ? '雄' : '雌' }}</span></p>
+              <p>周龄：<span>{{ calcWeek(item.birthDate) }}</span></p>
             </div>
             <div class="df s-aic">
               <p>状态：
@@ -439,12 +439,12 @@ export default {
       this.getList()
     },
     // 选择周龄范围
-    selectWeekRange(val) {
+    selectWeekRange(value) {
       const MAP = {
         mine: 'myMouseForm',
         expt: 'exptMouseForm'
       }
-      console.log('========', val)
+      const val = JSON.parse(value)
       if (val[0] === 'custom') {
         this.weekRangeDialog = true
       } else {
@@ -455,6 +455,7 @@ export default {
           return
         }
         const parseVal = val
+        console.log('parseVal==', typeof parseVal, parseVal)
         // 注意周龄是到今天算的，所以后面的值算开始时间
         this[MAP[this.activeName]].startTime = parseVal[1] ? parseVal[1] : 0
         this[MAP[this.activeName]].endTime = parseVal[0] ? parseVal[0] : 0
@@ -515,6 +516,14 @@ export default {
       }).finally(() => {
         this.tableLoading = false
       })
+    },
+    // 回显纯杂合子
+    returnPure(value) {
+      if (!value) return ''
+      const curPure = this.pureOpts.filter(el => {
+        return el.value === value
+      })
+      return curPure[0].label
     },
     // 计算周龄
     calcWeek(birthDate) {

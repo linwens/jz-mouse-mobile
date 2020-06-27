@@ -56,6 +56,10 @@ export default {
     TimeSelect
   },
   props: {
+    startTime: {
+      type: Number,
+      default: 0
+    },
     endTime: {
       type: Number,
       default: 0
@@ -95,6 +99,10 @@ export default {
     setTime() {
       if (this.setTimeForm.time > this.endTime) {
         Toast.fail('检测时间或处理时间不得大于结束时间')
+        return false
+      }
+      if (this.setTimeForm.time < this.startTime) {
+        Toast.fail('检测时间或处理时间不得小于开始时间')
         return false
       }
       this.setTimeDialog = false

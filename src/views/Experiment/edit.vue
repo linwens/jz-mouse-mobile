@@ -131,8 +131,8 @@
         <van-field
           v-model="addGroupForm.experimentGroupName"
           required
-          label="检测信息"
-          placeholder="请输入检测信息"
+          label="分组名称"
+          placeholder="请输入分组名称"
           :rules="[{ required: true, message: '分组名称不能为空' }]"
         />
         <van-field
@@ -143,7 +143,7 @@
         <van-select
           data-type="arr"
           :cur-val-arr.sync="addGroupForm.testName"
-          btn-text="检测信息"
+          btn-text="分组名称"
           :columns="tags"
           key-text="label"
           val-text="label"
@@ -371,9 +371,10 @@ export default {
     },
     // 编辑分组信息
     goEdit(scope) {
+      console.log('goEdit==', scope)
       const data = JSON.parse(JSON.stringify(scope.item))
       const exptLabels = scope.item.testName
-      data.testName = exptLabels ? exptLabels.split(';') : []
+      data.testName = exptLabels.split(';') || []
 
       this.addGroupDialog = true
       for (const key of Object.keys(data)) {

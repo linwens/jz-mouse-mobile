@@ -72,7 +72,7 @@
                 </i>
               </p>
               <div class="df s-jcc s-aic">
-                <set-time v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" :end-time="mouseExptInfo.endTime" @done="setProgress" />
+                <set-time v-if="mouseExptInfo.experimentId && (isAdmin || activeName === 'myCage')" :id="mouseExptInfo.experimentId" :start-time="mouseExptInfo.startTime" :end-time="mouseExptInfo.endTime" @done="setProgress" />
                 <expt-record v-if="mouseExptInfo.experimentId" :id="mouseExptInfo.experimentId" class="ml10" />
               </div>
             </div>
