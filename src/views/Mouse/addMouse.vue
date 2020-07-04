@@ -58,7 +58,11 @@
           />
         </div>
       </div>
-      <van-field v-model="form.femaleMiceNum" label="数量">
+      <van-field
+        v-model="form.femaleMiceNum"
+        required
+        label="数量"
+      >
         <template #extra>
           <span>只(雌)</span>
         </template>
@@ -73,7 +77,7 @@
           <span>g</span>
         </template>
       </van-field>
-      <time-select btn-text="出生日期" type="date" :time.sync="form.birthDate">
+      <time-select btn-text="出生日期" title="选择出生日期" type="date" :time.sync="form.birthDate">
         <template slot="placeholder">
           <p>请选择出生日期</p>
         </template>
@@ -111,7 +115,7 @@
       <div class="file--span fs14">
         <span>展示颜色：<color-picker :color.sync="form.color" /></span>
       </div>
-      <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
+      <time-select btn-text="分笼时间" title="选择分笼时间" :time.sync="form.separateCageRemindTime">
         <template slot="placeholder">
           <p>请选择分笼时间</p>
         </template>
@@ -134,7 +138,7 @@
           <p>是否开启处理时间提醒</p>
         </template>
       </van-select>
-      <time-select btn-text="表型鉴定时间" :time.sync="form.phenotypicIdentificationRemindTime">
+      <time-select btn-text="表型鉴定时间" title="选择表型鉴定时间" :time.sync="form.phenotypicIdentificationRemindTime">
         <template slot="placeholder">
           <p>请选择表型鉴定时间</p>
         </template>
@@ -384,7 +388,10 @@ export default {
 
 <style lang="scss">
   .mouse-add {
-    margin-bottom: 80px;
+    .van-form {
+      margin-bottom: 80px;
+    }
+    // margin-bottom: 80px;
   }
   .genes-box {
     width: 90%;

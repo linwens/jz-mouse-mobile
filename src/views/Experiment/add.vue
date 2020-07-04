@@ -8,17 +8,17 @@
         placeholder="请输入实验组名称"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
       />
-      <time-select btn-text="开始时间" :time.sync="experimentForm.startTime">
+      <time-select btn-text="开始时间" title="选择开始时间" :time.sync="experimentForm.startTime">
         <template slot="placeholder">
           <p>请选择开始时间</p>
         </template>
       </time-select>
-      <time-select btn-text="结束时间" :time.sync="experimentForm.endTime">
+      <time-select btn-text="结束时间" title="选择结束时间" :time.sync="experimentForm.endTime">
         <template slot="placeholder">
           <p>请选择结束时间</p>
         </template>
       </time-select>
-      <time-select btn-text="处理时间" :time.sync="experimentForm.handleTime">
+      <time-select btn-text="处理时间" title="选择处理时间" :time.sync="experimentForm.handleTime">
         <template slot="placeholder">
           <p>请选择处理时间</p>
         </template>
@@ -41,7 +41,7 @@
           <p>是否开启处理时间提醒</p>
         </template>
       </van-select>
-      <time-select btn-text="检测时间" :time.sync="experimentForm.testTime">
+      <time-select btn-text="检测时间" title="选择检测时间" :time.sync="experimentForm.testTime">
         <template slot="placeholder">
           <p>请选择检测时间</p>
         </template>
@@ -188,7 +188,7 @@
       closeable
       get-container="body"
     >
-      <div class="mt30">
+      <div class="mt50">
         <collapse v-for="(item, index) in mouseList" :key="item.id">
           <template slot="title">
             <div class="df s-aic s-jcsb">
@@ -474,8 +474,8 @@ export default {
     // 查看小鼠列表
     showMouses(scope) {
       this.curGroupIndex = scope.index
-      console.log(scope.row)
-      this.getMouseList(scope.row.experimentGroupSelectionMiceIds)
+      console.log(scope.item)
+      this.getMouseList(scope.item.experimentGroupSelectionMiceIds)
       this.mousesDialog = true
     },
     // 获取小鼠列表

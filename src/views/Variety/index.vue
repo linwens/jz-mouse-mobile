@@ -4,7 +4,7 @@
     <top-bar :active-key="1">
       <template>
         <div class="w-100 df s-jcsb s-aic">
-          <div>
+          <div class="df s-aic">
             <add-variety class="w90 ml10" @done="getList(1)" />
             <van-button class="w90 ml10" hairline round size="small" color="#32C985" type="info" to="/varietyEdit">新增基因型</van-button>
           </div>

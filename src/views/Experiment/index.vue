@@ -148,11 +148,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.getList(1)
         endExpt({
           experimentId: id
         }).then((res) => {
-          _self.$message.success('手动结束实验成功')
+          Toast('手动结束实验成功')
+          this.getList(1)
         })
       }).catch(function() {
       })

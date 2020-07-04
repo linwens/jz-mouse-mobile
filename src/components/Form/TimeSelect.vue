@@ -6,11 +6,12 @@
       </template>
     </van-cell>
     <!-- 弹出 -->
-    <van-popup v-model="show" get-container="body" position="bottom" :style="{ height: '40%' }">
+    <van-popup v-model="show" get-container="body" position="bottom" :style="{ width: '100%', height: '40%' }">
       <van-datetime-picker
         v-model="currentDate"
+        class="w-100"
         :type="type"
-        title="选择开始时间"
+        :title="title"
         :min-date="minDate"
         :max-date="maxDate"
         @confirm="onConfirm"
@@ -51,6 +52,10 @@ export default {
     time: {
       type: Number,
       default: 0
+    },
+    title: {
+      type: String,
+      default: '选择日期时间'
     }
   },
   data() {

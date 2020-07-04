@@ -1,5 +1,5 @@
 <template>
-  <div class="dib">
+  <div class="dib" style="font-size: 0;">
     <van-button class="w-100" hairline round size="small" color="#32C985" type="info" @click="varietyDialog = true">新增品系</van-button>
     <van-dialog
       v-model="varietyDialog"

@@ -90,7 +90,7 @@
       v-model="filterDialog"
       title="筛选"
       position="bottom"
-      :style="{ height: '40%' }"
+      :style="{ height: '50%' }"
       closeable
       get-container="body"
     >
@@ -181,36 +181,38 @@
 
         </div>
         <div class="w-100 df s-jcsb filter__col">
-          <van-select
-            btn-type="button"
-            btn-width-class="w150"
-            :cur-val-arr.sync="weekRange"
-            btn-text="周龄"
-            :columns="[
-              {
-                label: '4周以下',
-                value: JSON.stringify([null, 4])
-              },
-              {
-                label: '4-8周',
-                value: JSON.stringify([4, 8])
-              },
-              {
-                label: '8-12周',
-                value: JSON.stringify([8, 12])
-              },
-              {
-                label: '12周以上',
-                value: JSON.stringify([12, null])
-              },
-              {
-                label: '自定义',
-                value: JSON.stringify(['custom'])
-              }
-            ]"
-            @confirm="selectWeekRange"
-          />
-          <span v-if="weekRange[0] === 'custom'" class="fs12">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
+          <div class="df s-jcfs s-aic">
+            <van-select
+              btn-type="button"
+              btn-width-class="w150"
+              :cur-val-arr.sync="weekRange"
+              btn-text="周龄"
+              :columns="[
+                {
+                  label: '4周以下',
+                  value: JSON.stringify([null, 4])
+                },
+                {
+                  label: '4-8周',
+                  value: JSON.stringify([4, 8])
+                },
+                {
+                  label: '8-12周',
+                  value: JSON.stringify([8, 12])
+                },
+                {
+                  label: '12周以上',
+                  value: JSON.stringify([12, null])
+                },
+                {
+                  label: '自定义',
+                  value: JSON.stringify(['custom'])
+                }
+              ]"
+              @confirm="selectWeekRange"
+            />
+            <span v-if="weekRange[0] === 'custom'" class="fs12 ml10">自定义周龄：{{ weekRangeForm.startWeek }}-{{ weekRangeForm.endWeek }}周</span>
+          </div>
         </div>
       </div>
       <div class="bottom-btn df s-jcsa s-aic">
@@ -445,7 +447,10 @@ export default {
         expt: 'exptMouseForm'
       }
       const val = JSON.parse(value)
+      this.$set(this, 'weekRange', val)
       if (val[0] === 'custom') {
+        this.weekRangeForm.startWeek = 0
+        this.weekRangeForm.endWeek = 0
         this.weekRangeDialog = true
       } else {
         if (!val) {
@@ -479,6 +484,7 @@ export default {
         this.getList()
         this.weekRangeDialog = false
       }
+      console.log('自定义周龄===', this.weekRangeForm, this.weekRange)
     },
     // 获取负责人列表
     getPersons() {
@@ -556,6 +562,9 @@ export default {
     div.filter__col {
       padding: 8px 14px;
     }
+  }
+  .bottom-btn {
+    margin-top: 20px;
   }
   .test-box{
     width: 200px;

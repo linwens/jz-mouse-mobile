@@ -78,7 +78,7 @@
           <span>g</span>
         </template>
       </van-field>
-      <time-select btn-text="出生日期" :time.sync="form.birthDate">
+      <time-select btn-text="出生日期" title="选择出生日期" :time.sync="form.birthDate">
         <template slot="placeholder">
           <p>请选择出生日期</p>
         </template>
@@ -120,7 +120,7 @@
       <div class="file--span fs14">
         <span>展示颜色：00000</span>
       </div>
-      <time-select btn-text="分笼时间" :time.sync="form.separateCageRemindTime">
+      <time-select btn-text="分笼时间" title="选择分笼时间" :time.sync="form.separateCageRemindTime">
         <template slot="placeholder">
           <p>请选择分笼时间</p>
         </template>
@@ -143,7 +143,7 @@
           <p>是否开启处理时间提醒</p>
         </template>
       </van-select>
-      <time-select btn-text="表型鉴定时间" :time.sync="form.phenotypicIdentificationRemindTime">
+      <time-select btn-text="表型鉴定时间" title="选择表型鉴定时间" :time.sync="form.phenotypicIdentificationRemindTime">
         <template slot="placeholder">
           <p>请选择表型鉴定时间</p>
         </template>

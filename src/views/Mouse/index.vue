@@ -553,15 +553,27 @@ export default {
           message: '请先选择鼠笼'
         })
       } else {
-        // 如果当前鼠笼里没有小鼠(找到当前鼠笼，获取小鼠信息)
-        const thisCageNoMouse = this.cageList.filter((el) => {
+        // 当前选中的鼠笼
+        const nowCage = this.cageList.filter((el) => {
           return el.id === this.choosedCage
-        })[0].miceInfoByMiceCageQueryVO.length === 0
+        })[0];
+        // 如果当前鼠笼里没有小鼠(找到当前鼠笼，获取小鼠信息)
+        const thisCageNoMouse = nowCage.miceInfoByMiceCageQueryVO.length === 0
         if (thisCageNoMouse) {
           Toast.fail({
             message: '当前鼠笼中没有小鼠，请添加小鼠后进行操作'
           })
           return
+        }
+        // 如果选中的鼠笼中只有1雄1雌
+        const femaleAndMale = nowCage.miceInfoByMiceCageQueryVO.length === 2
+        if (femaleAndMale && nowCage.miceInfoByMiceCageQueryVO[0].gender != nowCage.miceInfoByMiceCageQueryVO[1].gender) {
+          console.log('刚好两只异性')
+          this.$set(this, 'curCageMouseList', {
+            cid: this.choosedCage,
+            mouses: nowCage.miceInfoByMiceCageQueryVO
+          })
+          console.log(this.curCageMouseList)
         }
         if (this.buildStep === 0) {
           this.isBuilding = true

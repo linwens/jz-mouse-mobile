@@ -30,7 +30,7 @@
             <p>选择时间类型</p>
           </template>
         </van-select>
-        <time-select btn-text="日期时间" :time.sync="setTimeForm.time">
+        <time-select btn-text="日期时间" title="选择日期时间" :time.sync="setTimeForm.time">
           <template slot="placeholder">
             <p>选择日期时间</p>
           </template>

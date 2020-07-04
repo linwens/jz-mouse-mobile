@@ -5,7 +5,7 @@
       <svg-icon icon-class="select-icon" class="fs10" />
     </van-button>
     <!-- 弹出 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
+    <van-popup v-model="show" get-container="body" position="bottom" :style="{ height: '30%' }">
       <van-picker
         title="标题"
         show-toolbar

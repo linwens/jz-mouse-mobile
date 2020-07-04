@@ -12,7 +12,7 @@
       <div v-else class="file--span fs14">
         <span>繁育组名称 {{ breedForm.name }}</span>
       </div>
-      <time-select :disabled="!disabled" btn-text="繁育时间" :time.sync="breedForm.breedTime">
+      <time-select :disabled="!disabled" btn-text="繁育时间" title="选择繁育时间" :time.sync="breedForm.breedTime">
         <template slot="placeholder">
           <p>选择日期时间</p>
         </template>

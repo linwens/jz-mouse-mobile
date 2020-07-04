@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="list__content">
-        <van-checkbox-group v-model="checkList" @change="taggleMouse()">
+        <van-checkbox-group v-model="checkList" @change="taggleMouse">
           <div v-if="femaleSum.length > 0" class="list__content--female df s-jcfs s-aic ofh">
             <div
               v-for="item in femaleSum"
@@ -257,6 +257,8 @@ export default {
     'choicedList.mouses'(n, o) {
       if (!n) { // 选中小鼠项情况，checkList也清空
         this.$set(this, 'checkList', [])
+      } else {
+        this.$set(this, 'checkList', n)
       }
     }
   },
@@ -324,6 +326,8 @@ export default {
     },
     // 多选框选中小鼠
     taggleMouse(val) {
+      // 避免一个笼子两个异性鼠直接选中导致的bug
+      if (val === this.choicedList.mouses) return
       console.log('cage-11---', this.checkList)
       const newOne = this.checkList[this.checkList.length - 1]
       // 如果是添加繁育组时选择实验组小鼠

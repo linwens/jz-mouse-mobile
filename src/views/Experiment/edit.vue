@@ -9,12 +9,12 @@
         :disabled="!canEdit"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
       />
-      <time-select :disabled="!canEdit" btn-text="开始时间" :time.sync="experimentForm.startTime">
+      <time-select :disabled="!canEdit" btn-text="开始时间" title="选择开始时间" :time.sync="experimentForm.startTime">
         <template slot="placeholder">
           <p>请选择开始时间</p>
         </template>
       </time-select>
-      <time-select :disabled="!canEdit" btn-text="结束时间" :time.sync="experimentForm.endTime">
+      <time-select :disabled="!canEdit" btn-text="结束时间" title="选择结束时间" :time.sync="experimentForm.endTime">
         <template slot="placeholder">
           <p>请选择结束时间</p>
         </template>

@@ -62,10 +62,17 @@ export default {
     &__content {
       padding: 10px 15px;
       font-size: 14px;
-      p:nth-child(1) {
-        min-width: 47%;
+      p {
+        width: 50%;
         line-height: 1.6;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
+      // p:nth-child(1) {
+      //   min-width: 47%;
+      //   line-height: 1.6;
+      // }
       span {
         color: #333;
       }
