@@ -1,5 +1,5 @@
 <template>
-  <div class="variety-list">
+  <div class="variety-list w-100">
     <!-- 列表 -->
     <main-list :offset="10" :is-finished="noMore" :is-loading="tableLoading" @load="getList" @refresh="getList(1)">
       <template>

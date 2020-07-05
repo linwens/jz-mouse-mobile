@@ -80,7 +80,16 @@ export default {
       cageDialog: false
     }
   },
-  created() {},
+  created() {
+    const iptHistory = JSON.parse(JSON.stringify(this.$store.getters.inputHistory))
+    const latestCageNo = iptHistory['cageNo'] ? iptHistory['cageNo'].pop() : 0
+    const latestRoomNo = iptHistory['roomNo'] ? iptHistory['roomNo'].pop() : 0
+    const latestShelvesNo = iptHistory['shelvesNo'] ? iptHistory['shelvesNo'].pop() : 0
+
+    this.addCageForm.cageNo = latestCageNo ? latestCageNo.value : '0'
+    this.addCageForm.roomNo = latestRoomNo ? latestRoomNo.value : '0'
+    this.addCageForm.shelvesNo = latestShelvesNo ? latestShelvesNo.value : '0'
+  },
   methods: {
     // 点击获取初始化笼位号
     clickGetNum() {
@@ -100,6 +109,13 @@ export default {
         state: 0
       })).then((res) => {
         if (res.data) {
+          // 存储输入过的值
+          const { cageNo, roomNo, shelvesNo } = this.addCageForm
+          this.$store.dispatch('user/setInputHistory', {
+            cageNo,
+            roomNo,
+            shelvesNo
+          })
           this.$emit('done')
         }
       })

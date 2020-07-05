@@ -105,7 +105,7 @@
       <van-button class="w90 mr14" hairline round size="small" color="#32C985" type="info" @click="addNewGroup()">新增分组</van-button>
     </div>
     <!-- 列表 -->
-    <div>
+    <div class="mb80">
       <collapse v-for="(item, index) in tableData" :key="item.id">
         <template slot="title">
           <div class="df s-aic s-jcsb">
@@ -114,13 +114,13 @@
         </template>
         <template slot="content">
           <div class="df s-aic">
-            <p>检测：<span>{{ item.testName }}</span></p>
+            <p class="w-100">检测：<span>{{ item.testName }}</span></p>
           </div>
           <div class="df s-aic">
             <p>小鼠数量：<span>{{ item.experimentGroupSelectionMiceIds.length }}</span></p>
           </div>
           <div class="df s-aic">
-            <p>小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
+            <p class="w-100">小鼠：<span class="txt-btn--green" @click="showMouses({item, index})">查看小鼠</span><span class="txt-btn--green ml18" @click="goAddMouse({item, index})">添加小鼠</span></p>
           </div>
         </template>
         <template slot="footer">
@@ -546,7 +546,12 @@ export default {
 
 <style lang="scss">
   .expt-add {
-    margin-bottom: 80px;
+    // margin-bottom: 80px;
+    overflow: hidden;
+
+    .mb80 {
+      margin-bottom: 80px;
+    }
 
     &__tags {
       padding: 0 14px;

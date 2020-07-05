@@ -1,5 +1,5 @@
 <template>
-  <div class="cage">
+  <div class="cage w-100">
     <div class="sum fs14">
       <p>剩余小鼠：<span>{{ mouseData.femaleMiceNum }}只(<i class="cl-purple">雌</i>)/{{ mouseData.maleMiceNum }}只(<i class="cl-blue">雄</i>)</span></p>
     </div>
