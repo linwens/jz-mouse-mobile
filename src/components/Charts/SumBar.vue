@@ -74,7 +74,11 @@ export default {
         const item = data[i]
         femaleSum.push(item.femaleNum)
         maleSum.push(item.maleNum)
-        xData.push(`${item.name}\n${item.varietiesName ? item.varietiesName : ''}`)
+        // xData.push(`${item.name}\n${item.varietiesName ? item.varietiesName : ''}`)
+        xData.push([
+          item.name,
+          item.varietiesName ? item.varietiesName : ''
+        ])
       }
       // var xData = (() => {
       //   var list = []
@@ -132,7 +136,25 @@ export default {
           },
           axisLabel: {
             interval: 0,
-            rotate: 30
+            rotate: 40,
+
+            formatter(value, index) {
+              // 数组拆分拼接
+              const arr = value.split(',')
+              const a = arr[0].length > 10 ? arr[0].slice(0, 10) + '...' : arr[0]
+              const b = arr[1].length > 10 ? arr[1].slice(0, 10) + '...' : arr[1]
+              return [
+                '{a|' + a + '}',
+                '{b|' + b + '}'
+              ].join('\n')
+            },
+
+            rich: {
+              a: {},
+              b: {
+                fontWeight: 'bold'
+              }
+            }
           },
           data: xData
         }],
@@ -166,7 +188,7 @@ export default {
             0
           ],
           bottom: 30,
-          start: 30,
+          start: 40,
           end: 60,
           handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
           handleSize: '110%',
