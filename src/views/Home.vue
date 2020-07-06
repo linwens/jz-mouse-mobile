@@ -217,7 +217,7 @@
       </div>
       <div class="bottom-btn df s-jcsa s-aic">
         <van-button class="w150" round color="#F6AC2D" type="info" size="small" @click="reset">重置</van-button>
-        <van-button class="w150" round color="#32C985" size="small" type="info" @click="filterDialog = false">搜索</van-button>
+        <van-button class="w150" round color="#32C985" size="small" type="info" @click="moreSearch()">搜索</van-button>
       </div>
     </van-popup>
     <!-- 自定义周龄 -->
@@ -367,7 +367,7 @@ export default {
     'myMouseForm.genotypes'(n, o) {
       this.getList(1)
     },
-    'myMouseForm.gender'(n, o) {
+    /* 'myMouseForm.gender'(n, o) {
       this.getList(1)
     },
     'myMouseForm.pureHeterozygote'(n, o) {
@@ -375,7 +375,7 @@ export default {
     },
     'myMouseForm.status'(n, o) {
       this.getList(1)
-    },
+    }, */
     'myMouseForm.operator'(n, o) {
       this.getList(1)
     },
@@ -396,7 +396,7 @@ export default {
     'exptMouseForm.genotypes'(n, o) {
       this.getList(1)
     },
-    'exptMouseForm.gender'(n, o) {
+    /* 'exptMouseForm.gender'(n, o) {
       this.getList(1)
     },
     'exptMouseForm.pureHeterozygote'(n, o) {
@@ -404,7 +404,7 @@ export default {
     },
     'exptMouseForm.status'(n, o) {
       this.getList(1)
-    },
+    }, */
     'exptMouseForm.operator'(n, o) {
       this.getList(1)
     }
@@ -420,6 +420,11 @@ export default {
     })
   },
   methods: {
+    // 更多搜索
+    moreSearch() {
+      this.filterDialog = false
+      this.getList(1)
+    },
     // 重置筛选条件
     reset() {
       const MAP = {
@@ -438,7 +443,7 @@ export default {
       }
       // 清空周龄
       this.$set(this, 'weekRange', [])
-      this.getList()
+      this.getList(1)
     },
     // 选择周龄范围
     selectWeekRange(value) {
@@ -456,7 +461,7 @@ export default {
         if (!val) {
           this[MAP[this.activeName]].startTime = null
           this[MAP[this.activeName]].endTime = null
-          this.getList()
+          // this.getList(1)
           return
         }
         const parseVal = val
@@ -464,7 +469,7 @@ export default {
         // 注意周龄是到今天算的，所以后面的值算开始时间
         this[MAP[this.activeName]].startTime = parseVal[1] ? parseVal[1] : 0
         this[MAP[this.activeName]].endTime = parseVal[0] ? parseVal[0] : 0
-        this.getList()
+        // this.getList(1)
       }
     },
     // 确定周龄范围
@@ -481,7 +486,7 @@ export default {
         const { startWeek, endWeek } = this.weekRangeForm
         this[MAP[this.activeName]].startTime = endWeek
         this[MAP[this.activeName]].endTime = startWeek
-        this.getList()
+        // this.getList(1)
         this.weekRangeDialog = false
       }
       console.log('自定义周龄===', this.weekRangeForm, this.weekRange)
@@ -495,10 +500,7 @@ export default {
     handleClick(tab, event) {
       console.log(tab, this.activeName)
       this.barType = this.activeName === 'mine' ? 'currentVarieties' : 'allVarieties'
-      this.getList()
-    },
-    handleRefreshChange() {
-      this.getList()
+      this.getList(1)
     },
     // 获取列表
     getList(page) {

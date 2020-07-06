@@ -8,12 +8,12 @@
         placeholder="请输入实验组名称"
         :rules="[{ required: true, message: '请输入实验组名称' }]"
       />
-      <time-select btn-text="开始时间" title="选择开始时间" :time.sync="experimentForm.startTime">
+      <time-select btn-text="开始时间" title="选择开始时间" :is-require="true" :time.sync="experimentForm.startTime">
         <template slot="placeholder">
           <p>请选择开始时间</p>
         </template>
       </time-select>
-      <time-select btn-text="结束时间" title="选择结束时间" :time.sync="experimentForm.endTime">
+      <time-select btn-text="结束时间" title="选择结束时间" :is-require="true" :time.sync="experimentForm.endTime">
         <template slot="placeholder">
           <p>请选择结束时间</p>
         </template>
@@ -306,7 +306,7 @@ export default {
   },
   created() {
     const cacheExpts = this.$store.getters.addingExpt
-    if (cacheExpts && cacheExpts.form.experimentId == this.$route.params.id) {
+    if (Object.keys(cacheExpts).length > 0 && cacheExpts.form.experimentId == this.$route.params.id) {
       const addingExpt = this.$store.getters.addingExpt
       this.$set(this, 'experimentForm', addingExpt.form)
       this.$set(this, 'tags', addingExpt.tags)
@@ -503,12 +503,19 @@ export default {
       const lables = this.tags.map((el) => {
         return el.label
       })
-      console.log('时间检测====', handleTime, testTime, endTime)
-      if (handleTime > endTime || testTime > endTime) {
+      if (!startTime) {
+        Toast.fail('请选择开始时间')
+        return false
+      }
+      if (!endTime) {
+        Toast.fail('请选择结束时间')
+        return false
+      }
+      if ((handleTime && handleTime > endTime) || (testTime && testTime > endTime)) { // 新增时候可以为空
         Toast.fail('检测时间或处理时间不得大于结束时间')
         return false
       }
-      if (handleTime < startTime || testTime < startTime) {
+      if ((handleTime && handleTime < startTime) || (testTime && testTime < startTime)) {
         Toast.fail('检测时间或处理时间不得小于开始时间')
         return false
       }

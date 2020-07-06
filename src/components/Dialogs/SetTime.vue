@@ -14,7 +14,7 @@
       <van-form class="mt20 mb20">
         <van-select
           btn-text="请选择类型"
-          :cur-val.sync="setTimeForm.operationType"
+          :cur-val-num.sync="setTimeForm.operationType"
           :columns="[
             {
               label: '检测时间',
@@ -90,18 +90,18 @@ export default {
       // 设置时间
       setTimeDialog: false,
       setTimeForm: {
-        operationType: null,
+        operationType: 0,
         time: null
       }
     }
   },
   methods: {
     setTime() {
-      if (this.setTimeForm.time > this.endTime) {
+      if (this.setTimeForm.time / 1000 > this.endTime) {
         Toast.fail('检测时间或处理时间不得大于结束时间')
         return false
       }
-      if (this.setTimeForm.time < this.startTime) {
+      if (this.setTimeForm.time / 1000 < this.startTime) {
         Toast.fail('检测时间或处理时间不得小于开始时间')
         return false
       }

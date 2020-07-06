@@ -24,13 +24,13 @@
               <p>小鼠数量：<span>{{ item.miceTotal }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>最新检测时间：<span>{{ item.newTestTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span></p>
+              <p class="w-100">最新检测时间：<span>{{ item.newTestTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span></p>
             </div>
             <div class="df s-aic">
-              <p>最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><expt-record v-if="item.id" :id="item.id" btn-type="text" class="ml10" /></p>
+              <p class="w-100">最新处理时间：<span>{{ item.newHandleTime * 1000 | timeFormat('yyyy-MM-dd hh:mm:ss') }}</span><expt-record v-if="item.id" :id="item.id" btn-type="text" class="ml10" /></p>
             </div>
             <div class="df s-aic">
-              <p>建模检测结果：
+              <p class="w-100">建模检测结果：
                 <view-files :id="item.id" biz-type="mice" btn-type="text" btn-text="查看" />
                 <upload-btn :id="item.id" btn-text="上传" biz-type="experiment" class="dib ml18" />
               </p>

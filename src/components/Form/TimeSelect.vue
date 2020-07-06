@@ -1,6 +1,6 @@
 <template>
   <div class="time-select">
-    <van-cell class="time-select__placeholder" :title="btnText" is-link @click="disabled ? null : showOptions()">
+    <van-cell class="time-select__placeholder" :class="{'van-cell--required': isRequire}" :title="btnText" is-link @click="disabled ? null : showOptions()">
       <template #default>
         {{ +new Date(value) | timeFormat(format) }}
       </template>
@@ -37,6 +37,10 @@ export default {
     'van-datetime-picker': DatetimePicker
   },
   props: {
+    isRequire: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       default: 'datetime'
