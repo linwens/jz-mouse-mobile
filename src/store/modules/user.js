@@ -1,12 +1,12 @@
 import { login, tokenLogin, loginUser, logout } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { setStorageItem, getStorageItem, removeStorageItem, setLocalStorageItem, getLocalStorageItem } from '@/utils/storage'
+import { setStorageItem, getStorageItem, removeStorageItem, setLocalStorageItem, getLocalStorageItem, removeLocalStorageItem } from '@/utils/storage'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    info: getStorageItem('u-info') || {},
+    info: getLocalStorageItem('u-info') || {},
     inputHistory: getLocalStorageItem('u-history') || {}
   }
 }
@@ -22,11 +22,11 @@ const mutations = {
   },
   SET_INFO: (state, info) => {
     state.info = info
-    setStorageItem('u-info', JSON.stringify(info))
+    setLocalStorageItem('u-info', JSON.stringify(info))
   },
   REMOVE_INFO: (state) => {
     state.info = {}
-    removeStorageItem('u-info')
+    removeLocalStorageItem('u-info')
   },
   SET_INPUT_HISTORY: (state, obj) => {
     console.log(obj)
