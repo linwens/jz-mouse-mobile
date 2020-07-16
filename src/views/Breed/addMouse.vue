@@ -272,9 +272,11 @@ export default {
       list.push(this.curCageMouseList)
       this.$set(this, 'cacheChoicedList', list)
       // 降维数组
-      const allMouses = list.reduce(function(total, val, idx, arr) {
-        return total.concat(val.mouses)
-      }, [])
+      // const allMouses = list.reduce(function(total, val, idx, arr) {
+      //   return total.concat(val.mouses)
+      // }, [])
+      // 取最新加入的小鼠
+      const allMouses = list[list.length - 1].mouses
       this.choicedList = allMouses
     }
   },
