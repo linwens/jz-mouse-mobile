@@ -39,10 +39,10 @@
               class="mouse__item ta-c"
               :class="{'isChoiced': (item.miceInfoId == curMouseId)}"
             >
-              <div class="pos-r">
-                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
-                <div @click.stop="taggle(item.miceInfoId)">
-                  <svg-icon icon-class="mouse" class="fs40" :style="{ 'color': item.color }" />
+              <div class="h-100 pos-r">
+                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="20px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
+                <div class="h-100 df s-fdc s-aic s-jcc" @click.stop="taggle(item.miceInfoId)">
+                  <svg-icon icon-class="mouse" class="mt10 fs40" :style="{ 'color': item.color }" />
                   <p>{{ item.geneName }}</p>
                   <span class="item__miceNo dib">{{ item.miceNo }}</span>
                   <i class="pos-a item__sign mouse__item--female">{{ item.sign }}</i>
@@ -58,10 +58,10 @@
               class="mouse__item ta-c"
               :class="{'isChoiced': (item.miceInfoId == curMouseId)}"
             >
-              <div class="pos-r">
-                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="12px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
-                <div @click.stop="taggle(item.miceInfoId)">
-                  <svg-icon icon-class="mouse" class="fs40" :style="{ 'color': item.color }" />
+              <div class="h-100 pos-r">
+                <van-checkbox shape="square" checked-color="#00CB7C" icon-size="20px" :disabled="checkBoxStatus(item.miceStatus, item.miceInfoId)" class="mouse__checkbox" :name="item" />
+                <div class="h-100 df s-fdc s-aic s-jcc" @click.stop="taggle(item.miceInfoId)">
+                  <svg-icon icon-class="mouse" class="mt10 fs40" :style="{ 'color': item.color }" />
                   <p>{{ item.geneName }}</p>
                   <span class="item__miceNo dib">{{ item.miceNo }}</span>
                   <i class="pos-a item__sign mouse__item--male">{{ item.sign }}</i>
@@ -450,7 +450,7 @@ export default {
 
     .mouse__item {
       width: 80px;
-      height: 74px;
+      height: 80px;
       padding: 0 13px;
       margin-right: 3px;
       box-sizing: border-box;
@@ -498,8 +498,8 @@ export default {
       }
 
       i.item__sign {
-        top: 17px;
-        right: -3px;
+        top: 24px;
+        right: 0px;
         width: 18px;
         height: 18px;
         line-height: 18px;

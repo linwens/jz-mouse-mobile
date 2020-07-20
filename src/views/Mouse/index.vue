@@ -502,7 +502,7 @@ export default {
         }
         if (this.transStep === 1 && this.choicedList.length === 0) {
           Toast.fail({
-            message: '请选择小鼠'
+            message: '未选择小鼠，请点击左上角勾选对应小鼠'
           })
         }
       }
@@ -610,7 +610,7 @@ export default {
 
         if (this.buildStep === 1 && this.choicedList.length === 0) {
           Toast.fail({
-            message: '请选择小鼠'
+            message: '未选择小鼠，请点击左上角勾选对应小鼠'
           })
         }
       }

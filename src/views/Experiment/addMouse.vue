@@ -309,7 +309,7 @@ export default {
     goAdd(row) {
       console.log(this.choicedList)
       if (this.choicedList.length === 0) {
-        Toast.fail('请选择小鼠')
+        Toast.fail('未选择小鼠，请点击左上角勾选对应小鼠')
         return false
       }
       // 添加到繁育组操作
