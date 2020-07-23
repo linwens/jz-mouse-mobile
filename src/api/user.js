@@ -24,10 +24,11 @@ export function getInfo(token) {
   })
 } */
 
-export function loginUser() { // 模拟普通用户
+export function loginUser(params) { // 模拟普通用户
   return request({
     url: '/token/mice/login',
-    method: 'get'
+    method: 'post',
+    params
   })
 }
 
