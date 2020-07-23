@@ -26,7 +26,7 @@ export function getInfo(token) {
 
 export function loginUser() { // 模拟普通用户
   return request({
-    url: '/token/imitateUser/login',
+    url: '/token/mice/login',
     method: 'get'
   })
 }

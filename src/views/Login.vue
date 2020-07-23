@@ -1,15 +1,15 @@
 <template>
   <div class="login-container">
     <div class="title-container">
-      <h3 class="title">Login Form</h3>
+      <h3 class="title">动物管理</h3>
     </div>
 
-    <div class="tips">
+    <!-- <div class="tips">
       <span style="margin-right:20px;">用户名: admin / editor</span>
       <span> 密码: 随意</span>
-    </div>
+    </div> -->
 
-    <van-form :show-error-message="false" @submit="handleLogin">
+    <van-form @submit="handleLogin">
       <van-field
         v-model="loginForm.username"
         required
@@ -54,8 +54,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
       },
       loading: false,
       redirect: undefined
@@ -76,7 +76,7 @@ export default {
     },
     // 校验密码
     validatePassword(value) {
-      return value.length >= 6
+      return value.length > 0
     },
     handleLogin() {
       this.loading = true
@@ -118,9 +118,9 @@ $light_gray:#eee;
     position: relative;
 
     .title {
-      font-size: 26px;
+      font-size: 24px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin: 40px auto;
       text-align: center;
       font-weight: bold;
     }
