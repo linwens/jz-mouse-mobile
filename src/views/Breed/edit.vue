@@ -12,7 +12,7 @@
       <div v-else class="file--span fs14">
         <span>繁育组名称 {{ breedForm.name }}</span>
       </div>
-      <time-select :disabled="!disabled" btn-text="繁育时间" title="选择繁育时间" :time.sync="breedForm.breedTime">
+      <time-select :disabled="!disabled" btn-text="合笼时间" title="选择合笼时间" :time.sync="breedForm.breedTime">
         <template slot="placeholder">
           <p>选择日期时间</p>
         </template>
@@ -60,7 +60,7 @@
         </template>
       </collapse>
     </div>
-    <bottom-btn :right-btn-text="canEdit ? '确定' : '编辑'" @confirm="submitForm" />
+    <bottom-btn :right-btn-text="disabled ? '确定' : '编辑'" @confirm="submitForm" />
     <!-- 设置时间弹窗 -->
     <van-dialog
       v-model="dialogVisible"
@@ -136,7 +136,8 @@ export default {
   mounted() {
     console.log(this.$route)
     // 不能用 === 0；有时0  有时'0'
-    this.type = this.$route.params.id == 0 ? 'add' : 'edit'
+    this.type = this.$route.params.id === '0' ? 'add' : 'edit'
+    console.log('type=', this.type)
     this.$route.meta.title = this.type === 'add' ? '新增' : '编辑/查看'
     // 如果是编辑，获取详情
     const cacheInfo = this.$store.getters.addingBreed
